@@ -7,9 +7,9 @@ namespace EmployeeManagementSystem.Domain
     {
         Task<IEnumerable<Employee>> GetAllEmployeesAsync();
         Task<Employee?> GetEmployeeByIdAsync(int id);
-        Task<Employee?> CreateEmployee(Employee employee);
-        Task<Employee?> UpdateEmployee(Employee employee);
+        Task<Employee?> CreateEmployeeAsync(Employee employee);
+        Task<Employee?> UpdateEmployeeAsync(Employee employee);
 
-        Task<bool?> DeleteEmployee(int id);
+        Task<bool> DeleteEmployeeAsync(int id);
     }
 }

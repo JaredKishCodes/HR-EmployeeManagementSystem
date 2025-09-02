@@ -1,6 +1,8 @@
 ﻿
 
+using EmployeeManagementSystem.Domain;
 using EmployeeManagementSystem.Infrastructure.Data;
+using EmployeeManagementSystem.Infrastructure.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -15,6 +17,8 @@ namespace EmployeeManagementSystem.Infrastructure
             {
                 options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
             });
+
+            services.AddScoped<IEmployeeRepository, EmployeeRepository>();
             return services;
         }
     }
