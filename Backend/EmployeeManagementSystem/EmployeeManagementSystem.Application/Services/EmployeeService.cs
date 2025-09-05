@@ -2,8 +2,8 @@
 
 using EmployeeManagementSystem.Application.DTOs.Employee;
 using EmployeeManagementSystem.Application.Interfaces;
-using EmployeeManagementSystem.Domain;
 using EmployeeManagementSystem.Domain.Entities;
+using EmployeeManagementSystem.Domain.Interfaces;
 
 namespace EmployeeManagementSystem.Application.Services
 {

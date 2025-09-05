@@ -9,7 +9,9 @@ namespace EmployeeManagementSystem
         {
             // Add application services here
             services.AddApplicationServices()
-                     .AddInfrastructureServices(configuration);
+                     .AddInfrastructureServices(configuration)
+                     ;
+            //error in doing the endpoint
             return services;
         }
     }

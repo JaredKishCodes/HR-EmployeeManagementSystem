@@ -1,7 +1,5 @@
-﻿
-
-using EmployeeManagementSystem.Domain;
-using EmployeeManagementSystem.Domain.Entities;
+﻿using EmployeeManagementSystem.Domain.Entities;
+using EmployeeManagementSystem.Domain.Interfaces;
 using EmployeeManagementSystem.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 

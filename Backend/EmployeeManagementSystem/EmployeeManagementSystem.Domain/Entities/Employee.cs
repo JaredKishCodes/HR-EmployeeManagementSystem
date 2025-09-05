@@ -1,5 +1,7 @@
 ﻿
 
+using EmployeeManagementSystem.Domain.Enum;
+
 namespace EmployeeManagementSystem.Domain.Entities
 {
     public class Employee
@@ -9,9 +11,9 @@ namespace EmployeeManagementSystem.Domain.Entities
         public string LastName { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
         public string PhoneNumber { get; set; } = string.Empty;
-        public string Position { get; set; } = string.Empty;
+        public Position Position { get; set; }
         public DateTime HireDate { get; set; }
-        public string Status { get; set; } = string.Empty;
+        public Status Status { get; set; }
 
         public int DepartmentId { get; set; }
         public Department? Department { get; set; } 

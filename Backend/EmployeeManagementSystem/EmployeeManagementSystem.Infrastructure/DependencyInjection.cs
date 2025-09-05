@@ -1,6 +1,4 @@
-﻿
-
-using EmployeeManagementSystem.Domain;
+﻿using EmployeeManagementSystem.Domain.Interfaces;
 using EmployeeManagementSystem.Infrastructure.Data;
 using EmployeeManagementSystem.Infrastructure.Repository;
 using Microsoft.EntityFrameworkCore;
@@ -19,6 +17,7 @@ namespace EmployeeManagementSystem.Infrastructure
             });
 
             services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+            services.AddScoped<IDepartmentRepository, DepartmentRepository>();
             return services;
         }
     }

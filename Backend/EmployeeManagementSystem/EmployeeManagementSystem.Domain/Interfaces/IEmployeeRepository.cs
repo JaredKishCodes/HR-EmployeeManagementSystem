@@ -1,7 +1,6 @@
-﻿
-using EmployeeManagementSystem.Domain.Entities;
+﻿using EmployeeManagementSystem.Domain.Entities;
 
-namespace EmployeeManagementSystem.Domain
+namespace EmployeeManagementSystem.Domain.Interfaces
 {
     public interface IEmployeeRepository
     {
