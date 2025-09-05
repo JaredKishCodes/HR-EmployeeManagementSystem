@@ -7,7 +7,7 @@ using EmployeeManagementSystem.Domain.Interfaces;
 
 namespace EmployeeManagementSystem.Application.Services
 {
-    public class EmployeeService(IEmployeeRepository _employeeRepository) : IEmployeeService
+    public class EmployeeService(IEmployeeRepository _employeeRepository,IDepartmentRepository _departmentRepository) : IEmployeeService
     {
         public async Task<EmployeeResponseDto> CreateEmployeeAsync(CreateEmployeeDto createEmployeeDto)
         {
@@ -26,6 +26,8 @@ namespace EmployeeManagementSystem.Application.Services
 
             await _employeeRepository.CreateEmployeeAsync(employee);
 
+            var department = await _departmentRepository.GetDepartmentByIdAsync(createEmployeeDto.DepartmentId);
+
             return new EmployeeResponseDto
             {
                 Id = employee.Id,
@@ -36,7 +38,7 @@ namespace EmployeeManagementSystem.Application.Services
                 Position = employee.Position,
                 HireDate = employee.HireDate,
                 Status = employee.Status,
-                DepartmentName = employee.Department?.Name
+                DepartmentName = department?.Name
             };
         }
 
@@ -113,6 +115,8 @@ namespace EmployeeManagementSystem.Application.Services
 
             var updatedEmployee = await _employeeRepository.UpdateEmployeeAsync(employee);
 
+            var department = await _departmentRepository.GetDepartmentByIdAsync(updateEmployeeDto.DepartmentId);
+
             return new EmployeeResponseDto
             {
                 Id = updatedEmployee.Id,
@@ -123,7 +127,7 @@ namespace EmployeeManagementSystem.Application.Services
                 Position = updatedEmployee.Position,
                 HireDate = updatedEmployee.HireDate,
                 Status = updatedEmployee.Status,
-                DepartmentName = updatedEmployee.Department?.Name
+                DepartmentName = department?.Name
             };
         }
     }

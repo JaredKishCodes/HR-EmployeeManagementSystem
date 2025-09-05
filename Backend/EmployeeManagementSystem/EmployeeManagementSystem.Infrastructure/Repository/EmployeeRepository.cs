@@ -35,7 +35,7 @@ namespace EmployeeManagementSystem.Infrastructure.Repository
 
         public async Task<Employee?> GetEmployeeByIdAsync(int id)
         {
-          return  await _context.Employees.FindAsync(id);
+          return  await _context.Employees.Include(d => d.Department).FirstOrDefaultAsync(x => x.Id == id);
         }
 
         public async Task<Employee?> UpdateEmployeeAsync(Employee employee)

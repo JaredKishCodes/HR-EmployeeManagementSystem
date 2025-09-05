@@ -29,7 +29,7 @@ namespace EmployeeManagementSystem.API.Controllers
         [HttpGet("{id:int}")]
         public async Task<ActionResult<EmployeeResponseDto>> GetEmployeeById(int id)
         {
-            var employee = _employeeService.GetEmployeeByIdAsync(id);
+            var employee = await _employeeService.GetEmployeeByIdAsync(id);
             return Ok(employee);
         }
 
