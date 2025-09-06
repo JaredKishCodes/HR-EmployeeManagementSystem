@@ -15,9 +15,9 @@ namespace EmployeeManagementSystem.Domain.Entities
         public string Reason { get; set; } = string.Empty;
         public LeaveRequestStatus LeaveRequestStatus { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-        public int? ApprovedBy { get; set; }
+        public ApprovedBy ApprovedBy { get; set; }
 
         public Employee? Employee { get; set; }
-        public Employee? ApprovedByEmployee { get; set; }
+        
     }
 }

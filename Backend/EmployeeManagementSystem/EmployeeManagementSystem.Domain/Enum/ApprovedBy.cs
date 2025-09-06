@@ -3,9 +3,10 @@
 namespace EmployeeManagementSystem.Domain.Enum
 {
     public enum ApprovedBy
-    {
-        Manager = 1,
-        AssistantManager = 2,
-        TeamLeader = 3,
+    {  
+        Pending = 1,
+        Manager = 2,
+        AssistantManager = 3,
+        TeamLeader = 4,
     }
 }

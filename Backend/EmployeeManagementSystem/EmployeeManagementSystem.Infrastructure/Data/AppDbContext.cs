@@ -16,16 +16,12 @@ namespace EmployeeManagementSystem.Infrastructure.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<LeaveRequest>()
-                .HasOne(lr => lr.Employee)
-                .WithMany()
-                .HasForeignKey(lr => lr.EmployeeId)
-                .OnDelete(DeleteBehavior.Restrict);
-            
+                .HasKey(lr => lr.Id);
+
             modelBuilder.Entity<LeaveRequest>()
-                .HasOne(lr => lr.ApprovedByEmployee)
-                .WithMany()
-                .HasForeignKey(lr => lr.EmployeeId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .Property(lr => lr.Id)
+                .ValueGeneratedOnAdd();
+
         }
     }
 }

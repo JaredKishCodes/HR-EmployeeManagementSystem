@@ -119,7 +119,7 @@ namespace EmployeeManagementSystem.Application.Services
 
             return new EmployeeResponseDto
             {
-                Id = updatedEmployee.Id,
+                Id = employee.Id,
                 FirstName = updatedEmployee.FirstName,
                 LastName = updatedEmployee.LastName,
                 Email = updatedEmployee.Email,

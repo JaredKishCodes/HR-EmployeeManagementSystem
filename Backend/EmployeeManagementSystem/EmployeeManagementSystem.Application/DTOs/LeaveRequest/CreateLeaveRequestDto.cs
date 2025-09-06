@@ -15,6 +15,6 @@ namespace EmployeeManagementSystem.Application.DTOs.LeaveRequest
         public DateTime EndDate { get; set; }
         public string Reason { get; set; } = string.Empty;
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-        public int? ApprovedBy { get; set; }
+        public ApprovedBy ApprovedBy { get; set; }
     }
 }

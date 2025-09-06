@@ -21,7 +21,7 @@ namespace EmployeeManagementSystem.Application.Services
                 CreatedAt = createLeaveRequestDto.CreatedAt,
 
                 LeaveRequestStatus = LeaveRequestStatus.Pending,
-                ApprovedBy = null
+                
 
             };
 
@@ -36,7 +36,7 @@ namespace EmployeeManagementSystem.Application.Services
                 Reason = leaveReq.Reason,
                 LeaveRequestStatus = leaveReq.LeaveRequestStatus,
                 CreatedAt = leaveReq.CreatedAt,
-                ApprovedBy = leaveReq.ApprovedBy,
+                ApprovedBy = ApprovedBy.Pending,
             };
         }
 
