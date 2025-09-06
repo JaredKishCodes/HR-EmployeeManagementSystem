@@ -19,6 +19,7 @@ namespace EmployeeManagementSystem.Infrastructure
             services.AddScoped<IEmployeeRepository, EmployeeRepository>();
             services.AddScoped<IDepartmentRepository, DepartmentRepository>();
             services.AddScoped<ILeaveRequestRepository, LeaveRequestRepository>();
+            services.AddScoped<IAttendanceRepository, AttendanceRepository>();
 
             return services;
         }
