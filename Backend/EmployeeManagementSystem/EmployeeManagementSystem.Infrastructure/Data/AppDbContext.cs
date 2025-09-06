@@ -11,11 +11,21 @@ namespace EmployeeManagementSystem.Infrastructure.Data
         {
         }
         public DbSet<Employee> Employees { get; set; }
-         public DbSet<Department> Departments { get; set; }
+        public DbSet<Department> Departments { get; set; }
+        public DbSet<LeaveRequest> LeaveRequests { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<LeaveRequest>()
+                .HasOne(lr => lr.Employee)
+                .WithMany()
+                .HasForeignKey(lr => lr.EmployeeId)
+                .OnDelete(DeleteBehavior.Restrict);
             
+            modelBuilder.Entity<LeaveRequest>()
+                .HasOne(lr => lr.ApprovedByEmployee)
+                .WithMany()
+                .HasForeignKey(lr => lr.EmployeeId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }
