@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
 using EmployeeManagementSystem.Application.DTOs.Department;
-using EmployeeManagementSystem.Domain.Entities;
+
 
 namespace EmployeeManagementSystem.Application.Interfaces
 {
