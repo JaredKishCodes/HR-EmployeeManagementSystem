@@ -29,6 +29,7 @@ namespace EmployeeManagementSystem.Application.Services
 
             return new LeaveRequestResponseDto
             {
+                Id = newLeaveReq.Id,
                 EmployeeId = leaveReq.EmployeeId,
                 LeaveType = leaveReq.LeaveType,
                 StartDate = leaveReq.StartDate,
@@ -58,7 +59,8 @@ namespace EmployeeManagementSystem.Application.Services
            var leaveReq = await _leaveRequestRepository.GetAllLeaveRequestsAsync();
 
             return leaveReq.Select(x => new LeaveRequestResponseDto
-            {
+            {   
+                Id = x.Id,
                 EmployeeId = x.EmployeeId,
                 LeaveType = x.LeaveType,
                 StartDate = x.StartDate,
@@ -78,7 +80,8 @@ namespace EmployeeManagementSystem.Application.Services
             if (leaveReq == null) return null;
 
             return new LeaveRequestResponseDto
-            {
+            {   
+                Id = id,
                 EmployeeId = leaveReq.EmployeeId,
                 LeaveType = leaveReq.LeaveType,
                 StartDate = leaveReq.StartDate,
@@ -108,6 +111,7 @@ namespace EmployeeManagementSystem.Application.Services
 
             return new LeaveRequestResponseDto
             {
+                Id = id,
                 EmployeeId = updatedLeaveReq.EmployeeId,
                 LeaveType = updatedLeaveReq.LeaveType,
                 StartDate = updatedLeaveReq.StartDate,
