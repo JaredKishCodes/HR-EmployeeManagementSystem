@@ -75,7 +75,7 @@ namespace EmployeeManagementSystem.Application.Services
         }
 
         public async Task<DepartmentResponse> UpdateDepartmentAsync(int id, CreateDepartment updateDepartment)
-        {   
+        {     
             var existingDepartment = await _departmentRepository.GetDepartmentByIdAsync(id);
             if (existingDepartment == null)
                 throw new Exception("Department not found");

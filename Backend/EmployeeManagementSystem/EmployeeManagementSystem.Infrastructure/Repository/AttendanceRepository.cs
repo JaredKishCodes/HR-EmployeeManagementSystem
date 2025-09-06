@@ -13,7 +13,12 @@ namespace EmployeeManagementSystem.Infrastructure.Repository
         {
            await _context.Attendances.AddAsync(attendance);
             await _context.SaveChangesAsync();
-        return attendance;
+
+            await _context.Entry(attendance)
+                  .Reference(a => a.Employee)
+                  .LoadAsync();
+
+            return attendance;
         }
 
         public async Task<bool> DeleteAttendanceAsync(int id)

@@ -13,6 +13,6 @@ namespace EmployeeManagementSystem.Application.DTOs.Attendance
         public DateTime TimeIn { get; set; }
         public DateTime? TimeOut { get; set; }
         public AttendanceStatus AttendanceStatus { get; set; }
-        public decimal TotalHours { get; set; }
+        public decimal? TotalHours { get; set; }
     }
 }
