@@ -2,34 +2,65 @@
 
 using EmployeeManagementSystem.Domain.Entities;
 using EmployeeManagementSystem.Domain.Interfaces;
+using EmployeeManagementSystem.Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace EmployeeManagementSystem.Infrastructure.Repository
 {
-    public class AttendanceRepository : IAttendanceRepository
+    public class AttendanceRepository(AppDbContext _context ) : IAttendanceRepository
     {
-        public Task<Attendance> CreateAttendanceAsync(Attendance attendance)
+        public async Task<Attendance> CreateAttendanceAsync(Attendance attendance)
         {
-            throw new NotImplementedException();
+           await _context.Attendances.AddAsync(attendance);
+            await _context.SaveChangesAsync();
+        return attendance;
         }
 
-        public Task<bool> DeleteAttendanceAsync(int id)
+        public async Task<bool> DeleteAttendanceAsync(int id)
         {
-            throw new NotImplementedException();
+            var attendance = await _context.Attendances.FindAsync(id);
+            if (attendance != null)
+            {
+                 _context.Attendances.Remove(attendance);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+
+            return false;
         }
 
-        public Task<IEnumerable<Attendance>> GetAllAttendancesAsync()
+        public async Task<IEnumerable<Attendance>> GetAllAttendancesAsync()
         {
-            throw new NotImplementedException();
+            return await _context.Attendances.AsNoTracking().Include(x => x.Employee).ToListAsync();
         }
 
-        public Task<Attendance> GetAttendanceByIdAsync(int id)
+        public async Task<Attendance> GetAttendanceByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            return await _context.Attendances.Include(x => x.Employee).FirstOrDefaultAsync(x => x.Id == id);
         }
 
-        public Task<Attendance> UpdateAttendanceAsync(Attendance attendance)
+        public async Task<Attendance> UpdateAttendanceAsync(Attendance attendance)
         {
-            throw new NotImplementedException();
+            var existingAttendance = await _context.Attendances.FirstOrDefaultAsync(x => x.Id == attendance.Id);
+            if (existingAttendance != null) 
+            {
+                existingAttendance.EmployeeId = attendance.EmployeeId;
+                existingAttendance.Date = attendance.Date;
+                existingAttendance.TimeIn = attendance.TimeIn;
+                existingAttendance.TimeOut = attendance.TimeOut;
+
+                if (attendance.TimeOut.HasValue)
+                {
+                    existingAttendance.TotalHours = (decimal)(attendance.TimeIn - attendance.TimeOut.Value).TotalHours;
+                }
+
+                _context.Attendances.Update(existingAttendance);
+                await _context.SaveChangesAsync();
+
+                return existingAttendance;
+            }
+
+            return attendance;
         }
     }
 }
