@@ -12,7 +12,7 @@ namespace EmployeeManagementSystem.Application.DTOs.LeaveRequest
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public string Reason { get; set; } = string.Empty;
-        public LeaveRequestStatus LeaveRequestStatus { get; set; }
+        public LeaveRequestStatus LeaveRequestStatus { get; set; } = LeaveRequestStatus.Pending;
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public int? ApprovedBy { get; set; }
     }

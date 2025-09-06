@@ -40,24 +40,84 @@ namespace EmployeeManagementSystem.Application.Services
             };
         }
 
-        public Task<bool> DeleteLeaveRequestByIdAsync(int id)
+        public async Task<bool> DeleteLeaveRequestByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            var leaveReq = await _leaveRequestRepository.GetLeaveRequestByIdAsync(id);
+            if(leaveReq != null)
+            {
+              await _leaveRequestRepository.DeleteLeaveRequestByIdAsync(id);
+
+                return true;
+            }
+                return false;
+            
         }
 
-        public Task<IEnumerable<LeaveRequestResponseDto>> GetAllLeaveRequestsAsync()
+        public async Task<IEnumerable<LeaveRequestResponseDto>> GetAllLeaveRequestsAsync()
         {
-            throw new NotImplementedException();
+           var leaveReq = await _leaveRequestRepository.GetAllLeaveRequestsAsync();
+
+            return leaveReq.Select(x => new LeaveRequestResponseDto
+            {
+                EmployeeId = x.EmployeeId,
+                LeaveType = x.LeaveType,
+                StartDate = x.StartDate,
+                EndDate = x.EndDate,
+                Reason = x.Reason,
+                LeaveRequestStatus = x.LeaveRequestStatus,
+                ApprovedBy = x.ApprovedBy,
+                CreatedAt = x.CreatedAt,
+
+            });
         }
 
-        public Task<LeaveRequestResponseDto> GetLeaveRequestByIdAsync(int id)
+        public async Task<LeaveRequestResponseDto> GetLeaveRequestByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            var leaveReq = await _leaveRequestRepository.GetLeaveRequestByIdAsync(id);
+
+            if (leaveReq == null) return null;
+
+            return new LeaveRequestResponseDto
+            {
+                EmployeeId = leaveReq.EmployeeId,
+                LeaveType = leaveReq.LeaveType,
+                StartDate = leaveReq.StartDate,
+                EndDate = leaveReq.EndDate,
+                Reason = leaveReq.Reason,
+                LeaveRequestStatus = leaveReq.LeaveRequestStatus,
+                ApprovedBy = leaveReq.ApprovedBy,
+                CreatedAt = leaveReq.CreatedAt,
+
+            };
         }
 
-        public Task<LeaveRequestResponseDto> UpdateLeaveRequestAsync(int id, UpdateLeaveRequestDto updateLeaveRequestDto)
+        public async Task<LeaveRequestResponseDto> UpdateLeaveRequestAsync(int id, UpdateLeaveRequestDto updateLeaveRequestDto)
         {
-            throw new NotImplementedException();
+            var existingLeaveReq = await _leaveRequestRepository.GetLeaveRequestByIdAsync(id);
+            if (existingLeaveReq == null)
+                throw new Exception("Leave request not found");
+
+            existingLeaveReq.LeaveType = updateLeaveRequestDto.LeaveType;
+            existingLeaveReq.StartDate = updateLeaveRequestDto.StartDate;
+            existingLeaveReq.EndDate = updateLeaveRequestDto.EndDate;
+            existingLeaveReq.Reason = updateLeaveRequestDto.Reason;
+            existingLeaveReq.LeaveRequestStatus = updateLeaveRequestDto.LeaveRequestStatus;
+            existingLeaveReq.ApprovedBy = updateLeaveRequestDto.ApprovedBy;
+            
+            var updatedLeaveReq = await _leaveRequestRepository.UpdateLeaveRequestAsync(existingLeaveReq);
+
+            return new LeaveRequestResponseDto
+            {
+                EmployeeId = updatedLeaveReq.EmployeeId,
+                LeaveType = updatedLeaveReq.LeaveType,
+                StartDate = updatedLeaveReq.StartDate,
+                EndDate = updatedLeaveReq.EndDate,
+                Reason = updatedLeaveReq.Reason,
+                LeaveRequestStatus = updatedLeaveReq.LeaveRequestStatus,
+                ApprovedBy = updatedLeaveReq.ApprovedBy,
+                CreatedAt = updatedLeaveReq.CreatedAt,
+            };
+
         }
     }
 }
