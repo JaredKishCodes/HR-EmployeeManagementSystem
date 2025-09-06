@@ -15,6 +15,9 @@ namespace EmployeeManagementSystem.Infrastructure.Data
         public DbSet<LeaveRequest> LeaveRequests { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
             modelBuilder.Entity<LeaveRequest>()
                 .HasKey(lr => lr.Id);
 
