@@ -1,5 +1,7 @@
 ﻿
+using EmployeeManagementSystem.Application.DTOs.Attendance;
 using EmployeeManagementSystem.Application.DTOs.LeaveRequest;
+using EmployeeManagementSystem.Application.Helper;
 using EmployeeManagementSystem.Application.Interfaces;
 using EmployeeManagementSystem.Domain.Entities;
 using EmployeeManagementSystem.Domain.Enum;
@@ -15,8 +17,8 @@ namespace EmployeeManagementSystem.Application.Services
             {
                 EmployeeId = createLeaveRequestDto.EmployeeId,
                 LeaveType = createLeaveRequestDto.LeaveType,
-                StartDate = createLeaveRequestDto.StartDate,
-                EndDate = createLeaveRequestDto.EndDate,
+                StartDate = DateTimeHelper.ConvertToPhilippineTime(createLeaveRequestDto.StartDate),
+                EndDate = DateTimeHelper.ConvertToPhilippineTime(createLeaveRequestDto.EndDate),
                 Reason = createLeaveRequestDto.Reason,
                 CreatedAt = createLeaveRequestDto.CreatedAt,
 

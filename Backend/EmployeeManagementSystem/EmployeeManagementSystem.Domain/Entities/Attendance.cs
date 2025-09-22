@@ -9,9 +9,9 @@ namespace EmployeeManagementSystem.Domain.Entities
     {
         public int Id { get; set; }
         public int EmployeeId { get; set; }
-        public DateTime Date { get; set; }
-        public DateTime TimeIn { get; set; }
-        public DateTime? TimeOut { get; set; }
+        public DateTimeOffset Date { get; set; }
+        public DateTimeOffset TimeIn { get; set; }
+        public DateTimeOffset? TimeOut { get; set; }
         public AttendanceStatus AttendanceStatus { get; set; }
         public decimal TotalHours { get; set; }
         public Employee? Employee { get; set; }
