@@ -1,35 +1,56 @@
 import { useEffect, useState, type FC } from "react";
-import type { JSX } from "react";
-import type { Employee } from "../Types/employee";
-import api from "../Api/axios";
-import { getEmployees } from "../Api/employees";
+import type { FormEvent, JSX } from "react";
+import type { EmployeeResponse } from "../Types/employee";
 import axios from "axios";
 
 const Employees: FC = (): JSX.Element => {
-  const API_URL =  "https://localhost:7273";
+  const API_URL = "https://localhost:7273";
 
+
+  const [employees, setEmployees] = useState<EmployeeResponse[]>([]);
   
-  const [employees, setEmployees] = useState<Employee[]>([]);
+  //Use State pata
 
-  useEffect(()=>{
-    const fetchEmployees = async () =>{
-      try{
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phoneNumber, setphoneNumber] = useState("");
+  const [position, setFirstName] = useState("");
+  const [status, setFirstName] = useState("");
+  const [hireDate, setFirstName] = useState("");
+  const [department, setFirstName] = useState("");
+
+
+  const [isOpen, setIsOpen] = useState(false);
+
+  useEffect(() => {
+    const fetchEmployees = async () => {
+      try {
         const response = await axios.get(`${API_URL}/api/Employee/GetAllEmployees`);
         setEmployees(response.data);
       }
-      catch(err){
+      catch (err) {
         console.error("Failed to fetch employees:", err);
       }
     }
     fetchEmployees();
-    
-  },[])
 
-  
+  }, [])
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) =>{
+    e.preventDefault();
+  }
+
+
 
   return (
     <div>
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
+     
+  
+
+        <button  onClick={() => setIsOpen(true)} type="button" className=" mb-5 m-5 cursor-pointer focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2  dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
+                 Add New</button>
         <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
           <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>
@@ -66,10 +87,13 @@ const Employees: FC = (): JSX.Element => {
               <th scope="col" className="px-6 py-3">
                 Department
               </th>
+              <th scope="col" className="px-6 py-3">
+                Action
+              </th>
             </tr>
           </thead>
-
-          <tbody>
+          {employees.map(emp => (
+                  <tbody key={emp.id}>
             <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
               <td className="w-4 p-4">
                 <div className="flex items-center">
@@ -90,13 +114,14 @@ const Employees: FC = (): JSX.Element => {
                 scope="row"
                 className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
               >
-                {employees.map(emp =>(
-                  <li>{emp.firstName}</li>
-                ))}
+                {emp.firstName} <span>{emp.lastName}</span>
               </th>
-              <td className="px-6 py-4">Silver</td>
-              <td className="px-6 py-4">Laptop</td>
-              <td className="px-6 py-4">$2999</td>
+              <td className="px-6 py-4">{emp.email}</td>
+              <td className="px-6 py-4">{emp.phoneNumber}</td>
+              <td className="px-6 py-4">{emp.position}</td>
+              <td className="px-6 py-4">{emp.hireDate}</td>
+              <td className="px-6 py-4">{emp.status}</td>
+              <td className="px-6 py-4">{emp.departmentName}</td>
               <td className="px-6 py-4">
                 <a
                   href="#"
@@ -106,8 +131,10 @@ const Employees: FC = (): JSX.Element => {
                 </a>
               </td>
             </tr>
-            {/* ... repeat other rows ... */}
+           
           </tbody>
+                ))}
+          
         </table>
 
         <nav
@@ -145,8 +172,202 @@ const Employees: FC = (): JSX.Element => {
           </ul>
         </nav>
       </div>
+
+                 {/* Main modal */}
+      {isOpen && (
+        <div className="fixed inset-0 z-50 flex justify-center items-center w-full h-full ">
+          <div className="absolute inset-0 bg-black opacity-50"></div>
+          <div
+          
+            className="relative p-4 w-full max-w-md max-h-full"
+            onClick={(e) => e.stopPropagation()} // prevent modal close when clicking inside
+          >
+            
+            {/* Modal content */}
+            <div className="relative bg-white rounded-lg shadow-sm dark:bg-gray-700">
+              {/* Modal header */}
+              <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t border-gray-200 dark:border-gray-600">
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                  Add new Employee
+                </h3>
+                <button
+                  type="button"
+                  onClick={() => setIsOpen(false)}
+                  className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                >
+                  <svg
+                    className="w-3 h-3"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 14 14"
+                  >
+                    <path
+                      stroke="currentColor"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
+                    />
+                  </svg>
+                  <span className="sr-only">Close modal</span>
+                </button>
+              </div>
+
+              {/* Modal body */}
+              <form className="p-4 md:p-5" onSubmit={handleSubmit}>
+                <div className="grid gap-4 mb-4 grid-cols-2">
+                  <div className="col-span-1">
+                    <label
+                      htmlFor="name"
+                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    >
+                     First Name
+                    </label>
+                    <input
+                      type="text"
+                      name="name"
+                      id="name"
+                      placeholder="Type first name"
+                      required
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                    />
+                  </div>
+
+                  <div className="col-span-1">
+                    <label
+                      htmlFor="name"
+                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    >
+                     Last Name
+                    </label>
+                    <input
+                      type="text"
+                      name="name"
+                      id="name"
+                      placeholder="Type last name"
+                      required
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                    />
+                  </div>
+
+                  <div className="col-span-2 sm:col-span-1">
+                    <label
+                      htmlFor="price"
+                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    >
+                      Email
+                    </label>
+                    <input
+                      type='email'
+                      name="price"
+                      id="price"
+                      placeholder="example@gmail.com"
+                      required
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                    />
+                  </div>
+
+                  <div className="col-span-2 sm:col-span-1">
+                    <label
+                      htmlFor="category"
+                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    >
+                      Phone Number
+                    </label>
+                    <input type="number" name="phoneNumber" id="phoneNumber" placeholder="112233" required
+                           className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"/>
+                  </div>
+
+                  <div className="col-span-2 sm:col-span-1">
+                    <label
+                      htmlFor="position"
+                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    >
+                      Position
+                    </label>
+                    
+                    <select name="position" id="position" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                      <option value="Manager">Manager</option>
+                      <option value="AssistantManager">Assistant Manager</option>
+                      <option value="TeamLeader">Team Leader</option>
+                      <option value="Staff">Staff</option>
+                      <option value="Intern">Intern</option>
+                    </select>
+                           
+                  </div>
+
+                  <div className="col-span-2 sm:col-span-1">
+                    <label
+                      htmlFor="status"
+                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    >
+                      Status
+                    </label>
+                    
+                    <select name="status" id="status" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                      <option value="Active">Active</option>
+                      <option value="Inactive">Inactive</option>
+                      <option value="OnLeave">On Leave</option>        
+                      <option value="Terminated">Terminated</option>
+                    </select>
+                           
+                  </div>
+
+                   <div className="col-span-2 sm:col-span-1">
+                    <label
+                      htmlFor="category"
+                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    >
+                      Hire Date
+                    </label>
+                    <input type="Date" name="hireDate" id="hireDate" required
+                           className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"/>
+                  </div>
+
+                  <div className="col-span-2 sm:col-span-1">
+                    <label
+                      htmlFor="category"
+                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    >
+                      Department
+                    </label>
+                    <input type="text" name="hireDate" id="hireDate" placeholder="type a department" required
+                           className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"/>
+                  </div>
+
+                </div>
+
+                <button
+                  type="submit"
+                  className="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                >
+                  <svg
+                    className="me-1 -ms-1 w-5 h-5"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                  Add new employee
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      )}
+
     </div>
+
+    
   );
+
+  
 };
 
 export default Employees;

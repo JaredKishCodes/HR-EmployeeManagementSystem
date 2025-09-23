@@ -11,6 +11,14 @@ namespace EmployeeManagementSystem.Application.Services
     {
         public async Task<EmployeeResponseDto> CreateEmployeeAsync(CreateEmployeeDto createEmployeeDto)
         {
+           
+            var department = await _departmentRepository.GetDepartmentByIdAsync(createEmployeeDto.DepartmentId);
+            if (department == null)
+            {
+                throw new Exception($"Department with Id {createEmployeeDto.DepartmentId} does not exist.");
+            }
+
+           
             var employee = new Employee
             {
                 FirstName = createEmployeeDto.FirstName,
@@ -21,13 +29,11 @@ namespace EmployeeManagementSystem.Application.Services
                 HireDate = createEmployeeDto.HireDate,
                 Status = createEmployeeDto.Status,
                 DepartmentId = createEmployeeDto.DepartmentId
-
             };
 
             await _employeeRepository.CreateEmployeeAsync(employee);
 
-            var department = await _departmentRepository.GetDepartmentByIdAsync(createEmployeeDto.DepartmentId);
-
+          
             return new EmployeeResponseDto
             {
                 Id = employee.Id,
@@ -38,9 +44,10 @@ namespace EmployeeManagementSystem.Application.Services
                 Position = employee.Position,
                 HireDate = employee.HireDate,
                 Status = employee.Status,
-                DepartmentName = department?.Name
+                DepartmentName = department.Name
             };
         }
+
 
         public async Task<bool> DeleteEmployeeAsync(int id)
         {

@@ -13,3 +13,15 @@ export interface Employee {
   departmentId: number;
   department?: Department; // nullable in C#
 }
+
+export interface EmployeeResponse{
+  id: number;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phoneNumber: string;
+  position: Position;
+  hireDate: string; // ISO date string (from DateTime in C#)
+  status: Status;
+  departmentName: string;
+}

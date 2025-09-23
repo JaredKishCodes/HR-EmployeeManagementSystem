@@ -3,8 +3,8 @@
 export enum Position
 {
     Manager = "Manager",
-    AssistantManager = "AssistantManager",
-    TeamLeader = "TeamLeader",
+    AssistantManager = "Assistant Manager",
+    TeamLeader = "Team Leader",
     Staff = "Staff",
     Intern = "Intern"
 }
