@@ -15,10 +15,10 @@ const Employees: FC = (): JSX.Element => {
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [phoneNumber, setphoneNumber] = useState("");
-  const [position, setFirstName] = useState("");
-  const [status, setFirstName] = useState("");
-  const [hireDate, setFirstName] = useState("");
-  const [department, setFirstName] = useState("");
+  const [position, setPosition] = useState("");
+  const [status, setStatus] = useState("");
+  const [hireDate, setHireDate] = useState("");
+  const [departmentId, setDepartmentId] = useState<Number>(0);
 
 
   const [isOpen, setIsOpen] = useState(false);
@@ -39,6 +39,42 @@ const Employees: FC = (): JSX.Element => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) =>{
     e.preventDefault();
+
+    const employee ={
+      firstName,
+      lastName,
+      email,
+      phoneNumber,
+      position,
+      status,
+      hireDate,
+      departmentId
+
+    }
+
+    try{  
+
+      console.log({
+  firstName,
+      lastName,
+      email,
+      phoneNumber,
+      position,
+      status,
+      hireDate,
+      departmentId
+});
+      const response = await axios.post(`${API_URL}/api/Employee`,employee);
+
+      console.log("Data sent successfully", response)
+    }
+    catch(err){
+      console.error("Error sending data",err)
+    }
+
+    
+
+    
   }
 
 
@@ -225,9 +261,11 @@ const Employees: FC = (): JSX.Element => {
                      First Name
                     </label>
                     <input
+                      value={firstName}
+                      onChange={(e)=>setFirstName(e.target.value)}
                       type="text"
-                      name="name"
-                      id="name"
+                      name="firstName"
+                      id="firstName"
                       placeholder="Type first name"
                       required
                       className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
@@ -242,9 +280,11 @@ const Employees: FC = (): JSX.Element => {
                      Last Name
                     </label>
                     <input
+                     value={lastName}
+                     onChange={(e) => setLastName(e.target.value)}
                       type="text"
-                      name="name"
-                      id="name"
+                      name="lastName"
+                      id="lastName"
                       placeholder="Type last name"
                       required
                       className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
@@ -259,9 +299,11 @@ const Employees: FC = (): JSX.Element => {
                       Email
                     </label>
                     <input
+                    value={email}
+                     onChange={(e) => setEmail(e.target.value)}
                       type='email'
-                      name="price"
-                      id="price"
+                      name="email"
+                      id="email"
                       placeholder="example@gmail.com"
                       required
                       className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
@@ -270,12 +312,12 @@ const Employees: FC = (): JSX.Element => {
 
                   <div className="col-span-2 sm:col-span-1">
                     <label
-                      htmlFor="category"
+                      htmlFor="phoneNumber"
                       className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                     >
                       Phone Number
                     </label>
-                    <input type="number" name="phoneNumber" id="phoneNumber" placeholder="112233" required
+                    <input  value={phoneNumber} onChange={(e) => setphoneNumber(e.target.value)} type="number" name="phoneNumber" id="phoneNumber" placeholder="112233" required
                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"/>
                   </div>
 
@@ -287,7 +329,7 @@ const Employees: FC = (): JSX.Element => {
                       Position
                     </label>
                     
-                    <select name="position" id="position" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                    <select value={position} onChange={(e) => setPosition(e.target.value)} name="position" id="position" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
                       <option value="Manager">Manager</option>
                       <option value="AssistantManager">Assistant Manager</option>
                       <option value="TeamLeader">Team Leader</option>
@@ -305,7 +347,7 @@ const Employees: FC = (): JSX.Element => {
                       Status
                     </label>
                     
-                    <select name="status" id="status" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                    <select  value={status} onChange={(e) => setStatus(e.target.value)}  name="status" id="status" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
                       <option value="Active">Active</option>
                       <option value="Inactive">Inactive</option>
                       <option value="OnLeave">On Leave</option>        
@@ -321,7 +363,7 @@ const Employees: FC = (): JSX.Element => {
                     >
                       Hire Date
                     </label>
-                    <input type="Date" name="hireDate" id="hireDate" required
+                    <input  value={hireDate} onChange={(e) => setHireDate(e.target.value)}  type="Date" name="hireDate" id="hireDate" required
                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"/>
                   </div>
 
@@ -332,7 +374,7 @@ const Employees: FC = (): JSX.Element => {
                     >
                       Department
                     </label>
-                    <input type="text" name="hireDate" id="hireDate" placeholder="type a department" required
+                    <input value={departmentId} onChange={(e) => setDepartmentId(Number(e.target.value))} type="text" name="hireDate" id="hireDate" placeholder="type a department" required
                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"/>
                   </div>
 
