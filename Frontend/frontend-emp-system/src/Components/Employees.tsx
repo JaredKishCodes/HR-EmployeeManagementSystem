@@ -1,5 +1,5 @@
 import { useEffect, useState, type FC } from "react";
-import type { FormEvent, JSX } from "react";
+import type { FormEvent, JSX, MouseEventHandler } from "react";
 import type { EmployeeResponse } from "../Types/employee";
 import axios from "axios";
 
@@ -24,7 +24,12 @@ const Employees: FC = (): JSX.Element => {
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
-    const fetchEmployees = async () => {
+   
+    fetchEmployees();
+
+  }, [])
+
+   const fetchEmployees = async () => {
       try {
         const response = await axios.get(`${API_URL}/api/Employee/GetAllEmployees`);
         setEmployees(response.data);
@@ -33,9 +38,6 @@ const Employees: FC = (): JSX.Element => {
         console.error("Failed to fetch employees:", err);
       }
     }
-    fetchEmployees();
-
-  }, [])
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) =>{
     e.preventDefault();
@@ -55,7 +57,7 @@ const Employees: FC = (): JSX.Element => {
     try{  
 
       console.log({
-  firstName,
+      firstName,
       lastName,
       email,
       phoneNumber,
@@ -67,14 +69,16 @@ const Employees: FC = (): JSX.Element => {
       const response = await axios.post(`${API_URL}/api/Employee`,employee);
 
       console.log("Data sent successfully", response)
+
+      fetchEmployees();
     }
     catch(err){
       console.error("Error sending data",err)
     }
+  }
 
-    
+   const handleEdit = (id:number) =>{
 
-    
   }
 
 
@@ -158,12 +162,20 @@ const Employees: FC = (): JSX.Element => {
               <td className="px-6 py-4">{emp.hireDate}</td>
               <td className="px-6 py-4">{emp.status}</td>
               <td className="px-6 py-4">{emp.departmentName}</td>
-              <td className="px-6 py-4">
+              <td className=" pl-7 py-4">
                 <a
-                  href="#"
+                  onClick={()=> handleEdit(emp.id)}
                   className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
                 >
                   Edit
+                </a>
+              </td>
+              <td className="pr-7 py-4">
+                <a
+                  href="#"
+                  className="font-medium text-red-600 dark:text-blue-500 hover:underline"
+                >
+                  Delete
                 </a>
               </td>
             </tr>
@@ -369,12 +381,12 @@ const Employees: FC = (): JSX.Element => {
 
                   <div className="col-span-2 sm:col-span-1">
                     <label
-                      htmlFor="category"
+                      htmlFor="departmentId"
                       className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                     >
                       Department
                     </label>
-                    <input value={departmentId} onChange={(e) => setDepartmentId(Number(e.target.value))} type="text" name="hireDate" id="hireDate" placeholder="type a department" required
+                    <input value={departmentId} onChange={(e) => setDepartmentId(Number(e.target.value))} type="text" name="departmentId" id="departmentId" placeholder="type a department" required
                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"/>
                   </div>
 
