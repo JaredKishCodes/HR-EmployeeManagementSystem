@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import type { Department } from '../Types/department';
+import { Textarea } from 'flowbite-react';
 
 type Props = {}
 
@@ -10,6 +11,8 @@ const Department = (props: Props) => {
 
     const [departments, setDepartments] = useState<Department[]>([]);
     const [isOpen , setIsOpen] = useState(false);
+    const [editMode, setEditMode] = useState(false);
+    const [editingId, setEditingId] = useState(0);
 
     const [departmentId, setDepartmentId] = useState(0);
     const [name, setName] = useState("");
@@ -34,6 +37,22 @@ const Department = (props: Props) => {
         fetchDepartments();
     },[])
     
+    const handleEdit = async (id:number) => {
+
+        const response = await axios.get(`${API_URL}/api/Department/${id}`)
+
+        const department = response.data
+
+        if(department){
+            setName(department.name)
+            setDescription(department.description)
+        }
+        
+        setEditMode(true);
+        setEditingId(id);
+        setIsOpen(true);
+
+    }
 
 
   return (
@@ -105,7 +124,7 @@ const Department = (props: Props) => {
              
               <td className=" pl-7 py-4">
                 <a
-                
+                    onClick={()=>handleEdit(department.id)}
                   className=" cursor-pointer font-medium text-blue-600 dark:text-blue-500 hover:underline"
                 >
                   Edit
@@ -226,25 +245,25 @@ const Department = (props: Props) => {
                       className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                     />
                   </div>
-
-                  <div className="col-span-4">
+                    <div className="col-span-4">
                     <label
-                      htmlFor="name"
-                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                        htmlFor="description"
+                        className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                     >
-                     Description
+                        Description
                     </label>
-                    <input
-                     value={description}
-                     onChange={(e) => setDescription(e.target.value)}
-                      type="text"
-                      name="lastName"
-                      id="lastName"
-                      placeholder=""
-                      required
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full py-10 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                    <textarea
+                        value={description}
+                        onChange={(e) => setDescription(e.target.value)}
+                        id="description"
+                        name="description"
+                        rows={4}
+                        placeholder="Enter description here..."
+                        required
+                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                     />
-                  </div>
+                    </div>
+
 
                   
                 </div>
