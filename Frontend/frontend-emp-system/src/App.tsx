@@ -4,6 +4,7 @@ import Layout from "./Components/Layout";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Department from "./Components/Department";
 import Dashboard from "./Components/Dashboard";
+import Leaves from "./Components/Leaves";
 
 export default function App() {
 
@@ -17,6 +18,7 @@ export default function App() {
         <Route path="dashboard" element={<Dashboard/>}/>
         <Route path="employees" element ={<Employees/>}/>
         <Route path="department" element = {<Department/>}/>
+        <Route path='leaves' element = {<Leaves/>}/>
         
       </Route>
     </Routes>

@@ -16,8 +16,8 @@ const Department = (props: Props) => {
     const [editingId, setEditingId] = useState(0);
 
     
-    const [name, setName] = useState<String>("");
-    const [description, setDescription] = useState<String>("");
+    const [name, setName] = useState("");
+    const [description, setDescription] = useState("");
 
      const fetchDepartments = async ()=> {
          
