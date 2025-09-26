@@ -1,7 +1,8 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import type { Department } from '../Types/department';
-import { Textarea } from 'flowbite-react';
+
+import { toast } from 'react-toastify';
 
 type Props = {}
 
@@ -14,9 +15,9 @@ const Department = (props: Props) => {
     const [editMode, setEditMode] = useState(false);
     const [editingId, setEditingId] = useState(0);
 
-    const [departmentId, setDepartmentId] = useState(0);
-    const [name, setName] = useState("");
-    const [description, setDescription] = useState("");
+    
+    const [name, setName] = useState<String>("");
+    const [description, setDescription] = useState<String>("");
 
      const fetchDepartments = async ()=> {
          
@@ -36,6 +37,33 @@ const Department = (props: Props) => {
     useEffect(()=>{
         fetchDepartments();
     },[])
+
+    const handleSubmit = async (e : React.FormEvent<HTMLFormElement>) => {
+
+      e.preventDefault();
+
+      const department = {
+        name,
+        description
+      }
+
+      if(editMode && editingId){
+        const response = await axios.put(`${API_URL}/api/Department/${editingId}`,department);
+        console.log("Department updated successfully!",response.data);
+        toast.success("Department updated successfully!");
+      }
+      else{
+        const response = await axios.post(`${API_URL}/api/Department`,department);
+        console.log("Department added successfully!",response.data);
+        toast.success("Department added successfully!");
+      }
+
+      fetchDepartments();
+      resetform();
+      setEditMode(false);
+      setEditingId(0);
+      setIsOpen(false);
+    }
     
     const handleEdit = async (id:number) => {
 
@@ -54,6 +82,32 @@ const Department = (props: Props) => {
 
     }
 
+    const handleAddButton = () => {
+      setIsOpen(true); setEditMode(false); setEditingId(0); resetform();
+    }
+
+    const handleDelete = async (id:number) =>{
+
+      const result = confirm(`Are you sure you want to delete department id ${id}? `);
+
+      if (result){
+        try{
+          const response = await axios.delete(`${API_URL}/api/Department/${id}`)
+        console.log("Department deleted successfully", response.data);
+        toast.success("Department deleted successfully!")
+        fetchDepartments();
+        }
+        catch(error){
+         
+        console.error("Department delete failed", error);
+        toast.error("Department deleted failed")
+        }
+      }
+    }
+    
+    const resetform = () => {
+      setName(""); setDescription("");
+    }
 
   return (
     
@@ -63,7 +117,7 @@ const Department = (props: Props) => {
      
   
 
-        <button onClick={()=> setIsOpen(true)}   type="button" className=" mb-5 m-5 cursor-pointer focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2  dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
+        <button onClick={()=>handleAddButton()}   type="button" className=" mb-5 m-5 cursor-pointer focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2  dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
                  Add New</button>
         <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
           <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
@@ -132,7 +186,7 @@ const Department = (props: Props) => {
               </td>
               <td className="pr-7 py-4">
                 <a
-                 
+                  onClick={()=> handleDelete(department.id)}
                   className=" cursor-pointer font-medium text-red-600 dark:text-blue-500 hover:underline"
                 >
                   Delete
@@ -198,7 +252,7 @@ const Department = (props: Props) => {
               {/* Modal header */}
               <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t border-gray-200 dark:border-gray-600">
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                  Add new Employee
+                  {editMode && editingId ? "Edit Department" : "Add new Department"}
                 </h3>
                 <button
                   type="button"
@@ -206,7 +260,7 @@ const Department = (props: Props) => {
                   className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
                 >
                   <svg
-                    className="w-3 h-3"
+                    className="w-3 h-3 cursor-pointer"
                     aria-hidden="true"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
@@ -225,7 +279,7 @@ const Department = (props: Props) => {
               </div>
 
               {/* Modal body */}
-              <form className="p-4 md:p-5" >
+              <form  onSubmit={handleSubmit} className="p-4 md:p-5" >
                 <div className="grid gap-4 mb-4 grid-cols-2">
                   <div className="col-span-2">
                     <label
@@ -283,7 +337,7 @@ const Department = (props: Props) => {
                       clipRule="evenodd"
                     />
                   </svg>
-                 adada
+                 {editingId && editMode ? "Update Department" : "Add Department"}
                 </button>
               </form>
             </div>
