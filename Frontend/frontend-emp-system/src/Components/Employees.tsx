@@ -1,7 +1,8 @@
 import { useEffect, useState, type FC } from "react";
-import type { FormEvent, JSX, MouseEventHandler } from "react";
+import type {  JSX,  } from "react";
 import type { EmployeeResponse } from "../Types/employee";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const Employees: FC = (): JSX.Element => {
   const API_URL = "https://localhost:7273";
@@ -9,7 +10,7 @@ const Employees: FC = (): JSX.Element => {
 
   const [employees, setEmployees] = useState<EmployeeResponse[]>([]);
   
-  //Use State pata
+
 
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -20,7 +21,8 @@ const Employees: FC = (): JSX.Element => {
   const [hireDate, setHireDate] = useState("");
   const [departmentId, setDepartmentId] = useState<Number>(0);
 
-
+  const [isEditMode, setIsEditMode] = useState(false);
+  const [editingId, setEditingId] = useState<number | null>(null);
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
@@ -55,30 +57,80 @@ const Employees: FC = (): JSX.Element => {
     }
 
     try{  
-
-      console.log({
-      firstName,
-      lastName,
-      email,
-      phoneNumber,
-      position,
-      status,
-      hireDate,
-      departmentId
-});
-      const response = await axios.post(`${API_URL}/api/Employee`,employee);
+      if(editingId && isEditMode){
+        const response = await axios.put(`${API_URL}/api/Employee/${editingId}`,employee)
+        console.log("Employee updated", response);
+        toast.success("Employee updated successfully!")
+      }
+      else{
+         const response = await axios.post(`${API_URL}/api/Employee`,employee);
 
       console.log("Data sent successfully", response)
+      toast.success("Employee added successfully!")
 
+      }
+     
       fetchEmployees();
+      setIsOpen(false)
+      resetForm();
     }
     catch(err){
       console.error("Error sending data",err)
+      toast.error("Error sending data")
     }
   }
 
-   const handleEdit = (id:number) =>{
+   const handleEdit = async (id:number) =>{
 
+    const response = await axios.get(`${API_URL}/api/Employee/${id}`);
+
+    const employee = response.data
+
+    if (employee){
+      setFirstName(employee.firstName);
+    setLastName(employee.lastName);
+    setEmail(employee.email);
+    setphoneNumber(employee.phoneNumber);
+    setPosition(employee.position);
+    setStatus(employee.status);
+    setHireDate(employee.hireDate);
+    setDepartmentId(employee.departmentId);
+    }
+
+    setIsEditMode(true);
+    setEditingId(id);
+    setIsOpen(true);
+
+
+
+  }
+
+  const handleDelete =  async (id:number) => {
+   const result = confirm("Are you sure you want to delete this employee?")
+
+   if(result){
+      try {
+      const response = await axios.delete(`${API_URL}/api/Employee/${id}`);
+      toast.success("Employee deleted successfully", response.data);
+      fetchEmployees(); 
+    } catch (err) {
+      toast.error("Failed to delete employee:");
+    }
+  }
+
+  }
+
+  const resetForm = () =>{
+    setFirstName("");
+  setLastName("");
+  setEmail("");
+  setphoneNumber("");
+  setPosition("");
+  setStatus("");
+  setHireDate("");
+  setDepartmentId(0);
+  setIsEditMode(false);
+  setEditingId(null);
   }
 
 
@@ -165,15 +217,15 @@ const Employees: FC = (): JSX.Element => {
               <td className=" pl-7 py-4">
                 <a
                   onClick={()=> handleEdit(emp.id)}
-                  className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+                  className=" cursor-pointer font-medium text-blue-600 dark:text-blue-500 hover:underline"
                 >
                   Edit
                 </a>
               </td>
               <td className="pr-7 py-4">
                 <a
-                  href="#"
-                  className="font-medium text-red-600 dark:text-blue-500 hover:underline"
+                  onClick={()=> handleDelete(emp.id)}
+                  className=" cursor-pointer font-medium text-red-600 dark:text-blue-500 hover:underline"
                 >
                   Delete
                 </a>
@@ -236,7 +288,7 @@ const Employees: FC = (): JSX.Element => {
               {/* Modal header */}
               <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t border-gray-200 dark:border-gray-600">
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                  Add new Employee
+                 {editingId ? "Edit employee": "Add new employee"}
                 </h3>
                 <button
                   type="button"
@@ -394,7 +446,7 @@ const Employees: FC = (): JSX.Element => {
 
                 <button
                   type="submit"
-                  className="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                  className=" cursor-pointer text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                 >
                   <svg
                     className="me-1 -ms-1 w-5 h-5"
@@ -408,7 +460,7 @@ const Employees: FC = (): JSX.Element => {
                       clipRule="evenodd"
                     />
                   </svg>
-                  Add new employee
+                  {editingId ? "Update Employee" : "Add Employee"}
                 </button>
               </form>
             </div>
