@@ -49,7 +49,7 @@ export default function Layout(): JSX.Element {
               <li>
                 <a
                   href="#"
-                  className=" block  border-b-2 bg-gray-500 lg:py-2 lg:px-5  md:p-0 text-white rounded-sm hover:bg-gray-600 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
+                  className=" border-2  bg-gray-700  px-3 py-1.5 rounded text-white font-normal hover:bg-gray-800 "
                 >
                   Logout
                 </a>
