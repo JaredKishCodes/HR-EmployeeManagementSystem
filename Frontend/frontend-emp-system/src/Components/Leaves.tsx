@@ -1,10 +1,36 @@
-import React, { useState } from 'react'
+import axios from 'axios';
+import React, { useEffect, useState } from 'react'
+import type { LeaveRequest } from '../Types/leaves';
 
 type Props = {}
 
 const Leaves = (props: Props) => {
 
+   const API_URL = "https://localhost:7273";
+
   const [isOpen , setIsOpen] = useState(false)
+  const [leaveRequests, setLeaveRequests] = useState<LeaveRequest[]>([]);
+
+  useEffect(()=>{
+    fetchLeaveRequests();
+  },[])
+
+
+  const fetchLeaveRequests = async () =>{
+
+    try{
+       const response = await axios.get(`${API_URL}/api/LeaveRequest/GetAllLeaveRequests`);
+       console.log("Leave Requests fetched successfully",response.data);
+        setLeaveRequests(response.data);
+    }
+    catch(error){
+      console.error("Error fetching leaveRequests", error)
+    }
+   
+
+  }
+
+
   return (
     <div>
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
@@ -37,6 +63,9 @@ const Leaves = (props: Props) => {
               <th scope="col" className="px-6 py-3">
                Start Date
               </th>
+              <th scope="col" className="px-6 py-3">
+               End Date
+              </th>
                <th scope="col" className="px-6 py-3">
                Reason
               </th>
@@ -56,8 +85,9 @@ const Leaves = (props: Props) => {
             </tr>
           </thead>
            
-                   <tbody>
-            <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
+              <tbody>
+                {leaveRequests.map((leaveRequest)=>(
+            <tr  key={leaveRequest.id}  className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
               <td className="w-4 p-4">
                 <div className="flex items-center">
                   <input
@@ -77,10 +107,15 @@ const Leaves = (props: Props) => {
                 scope="row"
                 className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
               >
-           
+                {leaveRequest.employeeId}
               </th>
-              <td className="px-6 py-4"></td>
-              <td className="px-6 py-4"></td>
+              <td className="px-6 py-4">{leaveRequest.leaveType}</td>
+              <td className="px-6 py-4">{leaveRequest.startDate ? new Date(leaveRequest.startDate).toLocaleDateString() : ""}</td>
+              <td className="px-6 py-4">{leaveRequest.endDate ? new Date(leaveRequest.endDate).toLocaleDateString() : ""}</td>
+              <td className="px-6 py-4">{leaveRequest.reason}</td>
+              <td className="px-6 py-4">{leaveRequest.leaveRequestStatus}</td>
+              <td className="px-6 py-4">{leaveRequest.createdAt ? new Date(leaveRequest.createdAt).toLocaleDateString() : ""}</td>
+              <td className="px-6 py-4">{leaveRequest.approvedBy}</td>
              
               <td className=" pl-7 py-4">
                 <a
@@ -99,9 +134,11 @@ const Leaves = (props: Props) => {
                 </a>
               </td>
             </tr>
-           
+            ))}
           </tbody>     
       
+          
+                 
               
             
           
