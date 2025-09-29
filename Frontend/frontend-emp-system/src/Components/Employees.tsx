@@ -19,7 +19,7 @@ const Employees: FC = (): JSX.Element => {
   const [position, setPosition] = useState("");
   const [status, setStatus] = useState("");
   const [hireDate, setHireDate] = useState("");
-  const [departmentId, setDepartmentId] = useState<Number>(0);
+  const [departmentId, setDepartmentId] = useState< string>("");
 
   const [isEditMode, setIsEditMode] = useState(false);
   const [editingId, setEditingId] = useState<number | null>(null);
@@ -52,7 +52,7 @@ const Employees: FC = (): JSX.Element => {
       position,
       status,
       hireDate,
-      departmentId
+      departmentId : Number(departmentId)
 
     }
 
@@ -94,8 +94,8 @@ const Employees: FC = (): JSX.Element => {
     setphoneNumber(employee.phoneNumber);
     setPosition(employee.position);
     setStatus(employee.status);
-    setHireDate(employee.hireDate);
-    setDepartmentId(employee.departmentId);
+    setHireDate(employee.hireDate.split("T")[0]);
+    setDepartmentId(employee.departmentId?.toString() ?? "");
     }
 
     setIsEditMode(true);
@@ -136,7 +136,7 @@ const Employees: FC = (): JSX.Element => {
   setPosition("");
   setStatus("");
   setHireDate("");
-  setDepartmentId(0);
+  setDepartmentId("");
   setIsEditMode(false);
   setEditingId(null);
   }
@@ -446,7 +446,7 @@ const Employees: FC = (): JSX.Element => {
                     >
                       Department
                     </label>
-                    <input value={departmentId} onChange={(e) => setDepartmentId(Number(e.target.value))} type="text" name="departmentId" id="departmentId" placeholder="type a department" required
+                    <input value={departmentId} onChange={(e) => setDepartmentId(e.target.value)} type="text" name="departmentId" id="departmentId" placeholder="type a department" required
                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"/>
                   </div>
 

@@ -5,21 +5,21 @@ export default function Layout(): JSX.Element {
   return (
     <div>
       {/* Navbar */}
-      <nav className="fixed top-0 left-0 z-50 w-full border-gray-200 bg-gray-50 dark:bg-gray-800 dark:border-gray-700">
+      <nav className="fixed top-0 left-0 z-50 w-full border-gray-200 bg-gray-800 dark:bg-gray-800 dark:border-gray-700">
         <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
           <a
             href="#"
             className="flex items-center space-x-3 rtl:space-x-reverse"
           >
             
-            <span className=" pr-10 text-2xl font-semibold whitespace-nowrap dark:text-white">
+            <span className=" pr-10 text-2xl font-semibold whitespace-nowrap text-white">
               HR/Employee Management System
             </span>
           </a>
           <button
             data-collapse-toggle="navbar-solid-bg"
             type="button"
-            className="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+            className="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
             aria-controls="navbar-solid-bg"
             aria-expanded="false"
           >
@@ -65,12 +65,12 @@ export default function Layout(): JSX.Element {
         className="fixed top-16 left-0 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0"
         aria-label="Sidebar"
       >
-        <div className="h-full px-3 py-4 overflow-y-auto bg-gray-50 dark:bg-gray-800">
+        <div className="h-full px-3 py-4 overflow-y-auto bg-gray-800 dark:bg-gray-800">
           <ul className="space-y-2 font-medium">
             <li>
               <Link
                 to="/dashboard"
-                className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                className="flex items-center p-2 text-gray-50 rounded-lg dark:text-white hover:bg-gray-700 dark:hover:bg-gray-700 group"
               >
                 <span className="ml-3">Dashboard</span>
               </Link>
@@ -78,7 +78,7 @@ export default function Layout(): JSX.Element {
             <li>
               <Link
                 to="/employees"
-                className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                className="flex items-center p-2 text-gray-50 rounded-lg dark:text-white hover:bg-gray-700 dark:hover:bg-gray-700 group"
               >
                 <span className="ml-3">Employees</span>
               </Link>
@@ -86,7 +86,7 @@ export default function Layout(): JSX.Element {
             <li>
               <Link
                 to="/department"
-                className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                className="flex items-center p-2 text-gray-50 rounded-lg dark:text-white hover:bg-gray-700 dark:hover:bg-gray-700 group"
               >
                 <span className="ml-3">Department</span>
               </Link>
@@ -94,7 +94,7 @@ export default function Layout(): JSX.Element {
             <li>
               <Link
                 to="/leaves"
-                className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                className="flex items-center p-2 text-gray-50 rounded-lg dark:text-white hover:bg-gray-700 dark:hover:bg-gray-700 group"
               >
                 <span className="ml-3">Leaves</span>
               </Link>
@@ -102,23 +102,23 @@ export default function Layout(): JSX.Element {
             <li>
               <Link
                 to="/products"
-                className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                className="flex items-center p-2 text-gray-50 rounded-lg dark:text-white hover:bg-gray-700 dark:hover:bg-gray-700 group"
               >
-                <span className="ml-3">Products</span>
+                <span className="ml-3">Payroll</span>
               </Link>
             </li>
             <li>
               <Link
                 to="/signin"
-                className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                className="flex items-center p-2 text-gray-50 rounded-lg dark:text-white hover:bg-gray-700 dark:hover:bg-gray-700 group"
               >
-                <span className="ml-3">Sign In</span>
+                <span className="ml-3">Attendance</span>
               </Link>
             </li>
             <li>
               <Link
                 to="/signup"
-                className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                className="flex items-center p-2 text-gray-50 rounded-lg dark:text-white hover:bg-gray-700 dark:hover:bg-gray-700 group"
               >
                 <span className="ml-3">Sign Up</span>
               </Link>
