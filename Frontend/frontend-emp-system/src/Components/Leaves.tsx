@@ -65,6 +65,29 @@ const Leaves = (props: Props) => {
     setIsOpen(true);
   }
 
+  const handleSubmit = async (e : React.FormEvent<HTMLFormElement>)=>{
+    e.preventDefault();
+
+    const leaveRequest = {
+      leaveType,
+      startDate,
+      endDate,
+      reason,
+      leaveRequestStatus,
+      approvedBy
+
+    }
+
+    try {
+      if(editMode && editingId){
+        con
+      }
+      
+    } catch (error) {
+      
+    }
+  }
+
 
   return (
     <div>
@@ -257,7 +280,7 @@ const Leaves = (props: Props) => {
               </div>
 
               {/* Modal body */}
-              <form  className="p-4 md:p-5" >
+              <form onClick={handleSubmit} className="p-4 md:p-5" >
                 <div className="grid gap-4 mb-4 grid-cols-2">
                   <div className="col-span-2">
                     <label
@@ -267,7 +290,8 @@ const Leaves = (props: Props) => {
                      Leave Type
                     </label>
                     <input
-                     onChange={}
+                    value={leaveType}
+                     onChange={(e)=> setLeaveType(e.target.value)}
                       type="text"
                       name="firstName"
                       id="firstName"
@@ -278,12 +302,13 @@ const Leaves = (props: Props) => {
                   </div>
                     <div className="col-span-1">
                     <label
+                  
                         htmlFor="description"
                         className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                     >
                         Start Date
                     </label>
-                    <input type="date" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" />
+                    <input  value={startDate} onChange={(e)=> setStartDate(e.target.value)} type="date" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" />
                     </div>
 
                      <div className="col-span-1">
@@ -293,7 +318,7 @@ const Leaves = (props: Props) => {
                     >
                         End Date
                     </label>
-                    <input type="date" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" />
+                    <input value={endDate}  onChange={(e)=> setEndDate(e.target.value)} type="date" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" />
                     </div>
 
                      <div className="col-span-2">
@@ -303,7 +328,7 @@ const Leaves = (props: Props) => {
                     >
                         Reason
                     </label>
-                    <textarea rows={3}   className="bg-gray-50 border w-[370px] border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block  p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" />
+                    <textarea value={reason}   onChange={(e)=> setReason(e.target.value)} rows={3}   className="bg-gray-50 border w-[370px] border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block  p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" />
                     </div>
 
 
