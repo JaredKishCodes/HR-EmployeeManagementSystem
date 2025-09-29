@@ -41,14 +41,22 @@ const Leaves = (props: Props) => {
   }
 
   const handleEdit = async (id:number)=> {
+    setIsOpen(true);
+    setEditMode(true);
+    setEditingId(id);
 
-    const response = await axios.put(`${API_URL}/api/LeaveRequest/${id}`)
+    const response = await axios.put(`${API_URL}/api/LeaveRequest/${editingId}`)
     console.log("Leave Requests updated successfully",response.data);
 
    const leaveRequest = response.data
 
    if(leaveRequest){
-    
+    leaveRequest.leaveType;
+    leaveRequest.startDate;
+    leaveRequest.endDate;
+    leaveRequest.reason;
+    leaveRequest.leaveRequestStatus;
+    leaveRequest.approvedBy;
    }
         
   }
@@ -222,7 +230,7 @@ const Leaves = (props: Props) => {
               {/* Modal header */}
               <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t border-gray-200 dark:border-gray-600">
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                  {}
+                  {editMode && editingId ? "Edit leave request": "Create leave request"}
                 </h3>
                 <button
                   type="button"
@@ -259,7 +267,7 @@ const Leaves = (props: Props) => {
                      Leave Type
                     </label>
                     <input
-                     
+                     onChange={}
                       type="text"
                       name="firstName"
                       id="firstName"
@@ -317,7 +325,7 @@ const Leaves = (props: Props) => {
                       clipRule="evenodd"
                     />
                   </svg>
-                 Update Department
+                 {editMode && editingId ? "Update leave request": "Create leave request"}
                 </button>
               </form>
             </div>
