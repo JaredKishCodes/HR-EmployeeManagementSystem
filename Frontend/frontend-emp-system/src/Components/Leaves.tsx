@@ -9,7 +9,17 @@ const Leaves = (props: Props) => {
    const API_URL = "https://localhost:7273";
 
   const [isOpen , setIsOpen] = useState(false)
+  const[editingId, setEditingId] = useState(0);
+  const[editMode,setEditMode] = useState(false)
   const [leaveRequests, setLeaveRequests] = useState<LeaveRequest[]>([]);
+
+  const[leaveType,setLeaveType] = useState("");
+  const[startDate, setStartDate] = useState("");
+  const[endDate,setEndDate]= useState("");
+  const[reason,setReason] = useState("");
+  const[leaveRequestStatus, setLeaveRequestStatus] = useState("");
+  const[createdAt,setCreatedAt] = useState("");
+  const [approvedBy, setApprovedBy] = useState("");
 
   useEffect(()=>{
     fetchLeaveRequests();
@@ -30,6 +40,23 @@ const Leaves = (props: Props) => {
 
   }
 
+  const handleEdit = async (id:number)=> {
+
+    const response = await axios.put(`${API_URL}/api/LeaveRequest/${id}`)
+    console.log("Leave Requests updated successfully",response.data);
+
+   const leaveRequest = response.data
+
+   if(leaveRequest){
+    
+   }
+        
+  }
+
+  const handleAddButton = ()=>{
+    setIsOpen(true);
+  }
+
 
   return (
     <div>
@@ -37,7 +64,7 @@ const Leaves = (props: Props) => {
      
   
 
-        <button   type="button" className=" mb-5 m-5 cursor-pointer focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2  dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
+        <button onClick={handleAddButton}   type="button" className=" mb-5 m-5 cursor-pointer focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2  dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
                  Add New</button>
         <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
           <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
@@ -119,7 +146,7 @@ const Leaves = (props: Props) => {
              
               <td className=" pl-7 py-4">
                 <a
-                  
+                  onClick={()=> handleEdit(leaveRequest.id)}
                   className=" cursor-pointer font-medium text-blue-600 dark:text-blue-500 hover:underline"
                 >
                   Edit
@@ -195,11 +222,11 @@ const Leaves = (props: Props) => {
               {/* Modal header */}
               <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t border-gray-200 dark:border-gray-600">
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                  Edit Department
+                  {}
                 </h3>
                 <button
                   type="button"
-                  
+                  onClick={()=>setIsOpen(false)}
                   className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
                 >
                   <svg
@@ -229,7 +256,7 @@ const Leaves = (props: Props) => {
                       htmlFor="name"
                       className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                     >
-                     Department Name
+                     Leave Type
                     </label>
                     <input
                      
@@ -241,22 +268,34 @@ const Leaves = (props: Props) => {
                       className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                     />
                   </div>
-                    <div className="col-span-4">
+                    <div className="col-span-1">
                     <label
                         htmlFor="description"
                         className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                     >
-                        Description
+                        Start Date
                     </label>
-                    <textarea
-                       
-                        id="description"
-                        name="description"
-                        rows={4}
-                        placeholder="Enter description here..."
-                        required
-                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                    />
+                    <input type="date" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" />
+                    </div>
+
+                     <div className="col-span-1">
+                    <label
+                        htmlFor="description"
+                        className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    >
+                        End Date
+                    </label>
+                    <input type="date" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" />
+                    </div>
+
+                     <div className="col-span-2">
+                    <label
+                        htmlFor="description"
+                        className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    >
+                        Reason
+                    </label>
+                    <textarea rows={3}   className="bg-gray-50 border w-[370px] border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block  p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" />
                     </div>
 
 

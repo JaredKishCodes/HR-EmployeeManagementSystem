@@ -20,11 +20,8 @@ namespace EmployeeManagementSystem.Application.Services
                 StartDate = DateTimeHelper.ConvertToPhilippineTime(createLeaveRequestDto.StartDate),
                 EndDate = DateTimeHelper.ConvertToPhilippineTime(createLeaveRequestDto.EndDate),
                 Reason = createLeaveRequestDto.Reason,
-                CreatedAt = createLeaveRequestDto.CreatedAt,
-
-                LeaveRequestStatus = LeaveRequestStatus.Pending,
-                
-
+                CreatedAt = DateTime.UtcNow, 
+                LeaveRequestStatus = LeaveRequestStatus.Pending, 
             };
 
             var newLeaveReq = await _leaveRequestRepository.CreateLeaveRequestAsync(leaveReq);
