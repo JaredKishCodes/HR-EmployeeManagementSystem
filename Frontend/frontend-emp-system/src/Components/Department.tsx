@@ -4,9 +4,9 @@ import type { Department } from '../Types/department';
 
 import { toast } from 'react-toastify';
 
-type Props = {}
 
-const Department = (props: Props) => {
+
+const Department = () => {
 
      const API_URL = "https://localhost:7273";
 

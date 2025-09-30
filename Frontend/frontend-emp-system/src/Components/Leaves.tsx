@@ -81,6 +81,8 @@ const Leaves = (props: Props) => {
 
     }
 
+   
+
     try {
       if(editMode && editingId){
         const response = await axios.put(`${API_URL}/api/LeaveRequest/${editingId}`)
@@ -98,6 +100,25 @@ const Leaves = (props: Props) => {
     }
   }
 
+   const handleDelete = async (id:number) => {
+      
+     const result =  window.confirm("Are you sure you want to delete leaveRequest?");
+
+     if (result){
+      try {
+        const response = await axios.delete(`${API_URL}/api/LeaveRequest/${id}`);
+      console.log("Leave Request deleted successfully",response.data);
+      toast.success("Leave Request deleted successfully");
+      } catch (error) {
+        console.error("Failed to delete leaveRequest",error);
+        
+      }
+      
+
+     }
+
+      
+    }
 
   return (
     <div>
@@ -195,7 +216,7 @@ const Leaves = (props: Props) => {
               </td>
               <td className="pr-7 py-4">
                 <a
-                 
+                  onClick={()=>handleDelete(leaveRequest.id)}
                   className=" cursor-pointer font-medium text-red-600 dark:text-blue-500 hover:underline"
                 >
                   Delete
