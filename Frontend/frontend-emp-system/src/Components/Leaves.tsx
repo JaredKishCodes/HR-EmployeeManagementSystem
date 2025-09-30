@@ -2,11 +2,11 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import type { LeaveRequest } from '../Types/leaves';
 import { toast } from 'react-toastify';
-import App from '../App';
 
-type Props = {}
 
-const Leaves = (props: Props) => {
+
+
+const Leaves = () => {
 
    const API_URL = "https://localhost:7273";
 
@@ -48,7 +48,7 @@ const Leaves = (props: Props) => {
     setEditMode(true);
     setEditingId(id);
 
-    const response = await axios.get(`${API_URL}/api/LeaveRequest/${editingId}`)
+    const response = await axios.get(`${API_URL}/api/LeaveRequest/${id}`)
     console.log("Leave Requests updated successfully",response.data);
 
    const leaveRequest = response.data
@@ -85,7 +85,7 @@ const Leaves = (props: Props) => {
 
     try {
       if(editMode && editingId){
-        const response = await axios.put(`${API_URL}/api/LeaveRequest/${editingId}`)
+        const response = await axios.put(`${API_URL}/api/LeaveRequest/${editingId}`,leaveRequest)
         console.log("Leave Requests updated successfully",response.data);
         toast.success("Leave Requests updated successfully");
       }
@@ -315,21 +315,26 @@ const Leaves = (props: Props) => {
                 <div className="grid gap-4 mb-4 grid-cols-2">
                   <div className="col-span-2">
                     <label
-                      htmlFor="name"
+                      htmlFor="leaveType"
                       className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                     >
                      Leave Type
                     </label>
-                    <input
-                    value={leaveType}
-                     onChange={(e)=> setLeaveType(e.target.value)}
-                      type="text"
-                      name="firstName"
-                      id="firstName"
-                      placeholder="Type department name"
-                      required
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                    />
+                    <select value={leaveType} onChange={(e)=> setLeaveType(e.target.value)} name="leaveType" id="leaveType"
+                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5
+                                       dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                      <option value="" disabled>Select a leave type</option>
+                      <option value="Vacation">Vacation</option>
+                      <option value="Sick">Sick</option>
+                      <option value="Emergency">Emergency</option>
+                      <option value="Maternity">Maternity</option>
+                      <option value="Paternity">Paternity</option>
+                      <option value="Parental">Parental</option>
+                      <option value="Bereavement">Bereavement</option>
+                      <option value="Holiday">Holiday</option>
+                      <option value="Study">Study</option>
+                      <option value="Unpaid">Unpaid</option>
+                    </select>
                   </div>
                     <div className="col-span-1">
                     <label
@@ -394,4 +399,4 @@ const Leaves = (props: Props) => {
   )
 }
 
-export default Leaves
+export default Leaves;

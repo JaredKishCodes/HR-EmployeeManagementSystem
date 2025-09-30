@@ -15,3 +15,16 @@ export enum Status {
   OnLeave = "OnLeave",
   Terminated = "Terminated"
 }
+
+export enum LeaveType {
+    Vacation = "Vacation",
+    Sick = "Sick",
+    Emergency = "Emergency",
+    Maternity = "Maternity",
+    Paternity = "Paternity",
+    Parental = "Parental",
+    Bereavement = "Bereavement",
+    Holiday = "Holiday",
+    Study = "Study",
+    Unpaid = "Unpaid"
+}
