@@ -66,19 +66,21 @@ const Leaves = () => {
 
   const handleAddButton = ()=>{
     setIsOpen(true);
+    setEditMode(false);
+    setEditingId(0);
+    resetForm();
+
   }
 
   const handleSubmit = async (e : React.FormEvent<HTMLFormElement>)=>{
     e.preventDefault();
 
     const leaveRequest = {
+      employeeId : 2,
       leaveType,
       startDate,
       endDate,
       reason,
-      leaveRequestStatus,
-      approvedBy
-
     }
 
    
@@ -90,7 +92,7 @@ const Leaves = () => {
         toast.success("Leave Requests updated successfully");
       }
       else{
-        const response = await axios.post(`${API_URL}/api/LeaveRequest`,leaveRequest)
+        const response = await axios.post(`${API_URL}/api/LeaveRequest/CreateLeaveRequest`,leaveRequest)
         console.log("Leave Requests created successfully",response.data);
         toast.success("Leave Requests created successfully");
       }
@@ -98,6 +100,11 @@ const Leaves = () => {
     } catch (error) {
       console.error("Failed to fetch data",error)
     }
+    setIsOpen(false);
+    fetchLeaveRequests();
+    setEditMode(false);
+    setEditingId(0);
+    resetForm();
   }
 
    const handleDelete = async (id:number) => {
@@ -110,19 +117,20 @@ const Leaves = () => {
       console.log("Leave Request deleted successfully",response.data);
       toast.success("Leave Request deleted successfully");
       } catch (error) {
-        console.error("Failed to delete leaveRequest",error);
-        
-      }
-      
+        console.error("Failed to delete leaveRequest",error);   
+      }}
+    }
 
-     }
-
-      
+    const resetForm = () => {
+      setLeaveType("");
+      setStartDate("");
+      setEndDate("");
+      setReason("");
     }
 
   return (
     <div>
-      <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
+      <div className="relative overflow-x-auto   shadow-md sm:rounded-lg">
      
   
 
