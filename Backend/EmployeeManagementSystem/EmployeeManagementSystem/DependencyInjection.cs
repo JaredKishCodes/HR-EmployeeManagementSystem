@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.ComponentModel;
+using System.Text.Json.Serialization;
 using EmployeeManagementSystem.Application;
 using EmployeeManagementSystem.Infrastructure;
 
@@ -22,13 +23,9 @@ namespace EmployeeManagementSystem
                 });
             });
 
-            
 
-            services.AddControllers()
-                .AddJsonOptions(options =>
-                {
-                    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
-                });
+
+            
 
             return services;
         }

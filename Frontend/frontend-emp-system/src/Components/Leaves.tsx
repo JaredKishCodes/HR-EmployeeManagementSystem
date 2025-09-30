@@ -1,6 +1,8 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import type { LeaveRequest } from '../Types/leaves';
+import { toast } from 'react-toastify';
+import App from '../App';
 
 type Props = {}
 
@@ -41,22 +43,23 @@ const Leaves = (props: Props) => {
   }
 
   const handleEdit = async (id:number)=> {
+
     setIsOpen(true);
     setEditMode(true);
     setEditingId(id);
 
-    const response = await axios.put(`${API_URL}/api/LeaveRequest/${editingId}`)
+    const response = await axios.get(`${API_URL}/api/LeaveRequest/${editingId}`)
     console.log("Leave Requests updated successfully",response.data);
 
    const leaveRequest = response.data
 
    if(leaveRequest){
-    leaveRequest.leaveType;
-    leaveRequest.startDate;
-    leaveRequest.endDate;
-    leaveRequest.reason;
-    leaveRequest.leaveRequestStatus;
-    leaveRequest.approvedBy;
+    setLeaveType(leaveRequest.leaveType);
+    setStartDate(leaveRequest.startDate);
+    setEndDate(leaveRequest.endDate);
+    setReason(leaveRequest.reason);
+    setLeaveRequestStatus(leaveRequest.leaveRequestStatus);
+    setApprovedBy(leaveRequest.approvedBy);
    }
         
   }
@@ -80,11 +83,18 @@ const Leaves = (props: Props) => {
 
     try {
       if(editMode && editingId){
-        con
+        const response = await axios.put(`${API_URL}/api/LeaveRequest/${editingId}`)
+        console.log("Leave Requests updated successfully",response.data);
+        toast.success("Leave Requests updated successfully");
+      }
+      else{
+        const response = await axios.post(`${API_URL}/api/LeaveRequest`,leaveRequest)
+        console.log("Leave Requests created successfully",response.data);
+        toast.success("Leave Requests created successfully");
       }
       
     } catch (error) {
-      
+      console.error("Failed to fetch data",error)
     }
   }
 
@@ -280,7 +290,7 @@ const Leaves = (props: Props) => {
               </div>
 
               {/* Modal body */}
-              <form onClick={handleSubmit} className="p-4 md:p-5" >
+              <form onSubmit={handleSubmit} className="p-4 md:p-5" >
                 <div className="grid gap-4 mb-4 grid-cols-2">
                   <div className="col-span-2">
                     <label
