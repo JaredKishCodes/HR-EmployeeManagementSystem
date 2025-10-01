@@ -6,7 +6,17 @@ type Props = {}
 
 const Attendance = (props: Props) => {
 
-  const{attendance,employeeId,date,timeIn,timeOut,employeeName,totalHours} = useAttendance();
+  const{attendance,employeeId,date,timeIn,timeOut,employeeName,totalHours, isEditMode,
+    setIsEditMode,
+    editingId,
+    setEditingId,
+    isOpen,
+    setIsOpen,
+
+    handleSubmit,
+    handleEdit,
+    handleAddButton,
+    handleDelete} = useAttendance();
   return (
     <div>
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg">

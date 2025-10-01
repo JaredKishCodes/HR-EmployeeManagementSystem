@@ -10,3 +10,12 @@ export interface IAttendanceResponse{
     attendanceStatus:AttendanceStatus
 }
 
+export interface IAttendanceCreateRequest{
+    employeeId: number;
+    timeIn:string;
+}
+
+export interface IAttendanceUpdateRequest{
+    timeOut:string;
+}
+
