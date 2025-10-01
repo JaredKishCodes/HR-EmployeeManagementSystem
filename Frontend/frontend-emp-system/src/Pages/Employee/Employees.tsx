@@ -1,148 +1,40 @@
-import { useEffect, useState, type FC } from "react";
-import type {  JSX,  } from "react";
-import type { EmployeeResponse } from "../../Types/employee";
-import axios from "axios";
-import { toast } from "react-toastify";
+
+import type {  FC, JSX,  } from "react";
+import { useEmployees } from "../../hooks/useEmployees";
 
 const Employees: FC = (): JSX.Element => {
   const API_URL = "https://localhost:7273";
 
+  const{employees,
+    setEmployees,
+    firstName,
+    setFirstName,
+    lastName,
+    setLastName,
+    email,
+    setEmail,
+    phoneNumber,
+    setPhoneNumber,
+    position,
+    setPosition,
+    status,
+    setStatus,
+    hireDate,
+    setHireDate,
+    departmentId,
+    setDepartmentId,
+    
+    isEditMode,
+    setIsEditMode,
+    editingId,
+    setEditingId,
+    isOpen,
+    setIsOpen,
 
-  const [employees, setEmployees] = useState<EmployeeResponse[]>([]);
-  
-
-
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState("");
-  const [phoneNumber, setphoneNumber] = useState("");
-  const [position, setPosition] = useState("");
-  const [status, setStatus] = useState("");
-  const [hireDate, setHireDate] = useState("");
-  const [departmentId, setDepartmentId] = useState< string>("");
-
-  const [isEditMode, setIsEditMode] = useState(false);
-  const [editingId, setEditingId] = useState<number | null>(null);
-  const [isOpen, setIsOpen] = useState(false);
-
-  useEffect(() => {
-   
-    fetchEmployees();
-
-  }, [])
-
-   const fetchEmployees = async () => {
-      try {
-        const response = await axios.get(`${API_URL}/api/Employee/GetAllEmployees`);
-        setEmployees(response.data);
-      }
-      catch (err) {
-        console.error("Failed to fetch employees:", err);
-      }
-    }
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) =>{
-    e.preventDefault();
-
-    const employee ={
-      firstName,
-      lastName,
-      email,
-      phoneNumber,
-      position,
-      status,
-      hireDate,
-      departmentId : Number(departmentId)
-
-    }
-
-    try{  
-      if(editingId && isEditMode){
-        const response = await axios.put(`${API_URL}/api/Employee/${editingId}`,employee)
-        console.log("Employee updated", response);
-        toast.success("Employee updated successfully!")
-      }
-      else{
-         const response = await axios.post(`${API_URL}/api/Employee`,employee);
-
-      console.log("Data sent successfully", response)
-      toast.success("Employee added successfully!")
-
-      }
-     
-      fetchEmployees();
-      setIsOpen(false);
-      setEditingId(0);
-      resetForm();
-    }
-    catch(err){
-      console.error("Error sending data",err)
-      toast.error("Error sending data")
-    }
-  }
-
-   const handleEdit = async (id:number) =>{
-
-    const response = await axios.get(`${API_URL}/api/Employee/${id}`);
-
-    const employee = response.data
-
-    if (employee){
-      setFirstName(employee.firstName);
-    setLastName(employee.lastName);
-    setEmail(employee.email);
-    setphoneNumber(employee.phoneNumber);
-    setPosition(employee.position);
-    setStatus(employee.status);
-    setHireDate(employee.hireDate.split("T")[0]);
-    setDepartmentId(employee.departmentId?.toString() ?? "");
-    }
-
-    setIsEditMode(true);
-    setEditingId(id);
-    setIsOpen(true);
-
-
-
-  }
-
-  const handleAddButton = () => {
-    setIsEditMode(false);
-    setEditingId(0);
-    setIsOpen(true);
-    resetForm();
-  }
-
-  const handleDelete =  async (id:number) => {
-   const result = confirm("Are you sure you want to delete this employee?")
-
-   if(result){
-      try {
-      const response = await axios.delete(`${API_URL}/api/Employee/${id}`);
-      toast.success("Employee deleted successfully", response.data);
-      fetchEmployees(); 
-    } catch (err) {
-      toast.error("Failed to delete employee:");
-    }
-  }
-
-  }
-
-  const resetForm = () =>{
-    setFirstName("");
-  setLastName("");
-  setEmail("");
-  setphoneNumber("");
-  setPosition("");
-  setStatus("");
-  setHireDate("");
-  setDepartmentId("");
-  setIsEditMode(false);
-  setEditingId(null);
-  }
-
-
-
+    handleSubmit,
+    handleEdit,
+    handleAddButton,
+    handleDelete} = useEmployees();
   return (
     <div>
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
@@ -389,7 +281,7 @@ const Employees: FC = (): JSX.Element => {
                     >
                       Phone Number
                     </label>
-                    <input  value={phoneNumber} onChange={(e) => setphoneNumber(e.target.value)} type="number" name="phoneNumber" id="phoneNumber" placeholder="112233" required
+                    <input  value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} type="number" name="phoneNumber" id="phoneNumber" placeholder="112233" required
                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"/>
                   </div>
 

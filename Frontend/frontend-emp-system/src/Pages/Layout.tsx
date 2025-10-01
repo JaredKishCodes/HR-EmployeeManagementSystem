@@ -101,7 +101,7 @@ export default function Layout(): JSX.Element {
             </li>
             <li>
               <Link
-                to="/products"
+                to="/payroll"
                 className="flex items-center p-2 text-gray-50 rounded-lg dark:text-white hover:bg-gray-700 dark:hover:bg-gray-700 group"
               >
                 <span className="ml-3">Payroll</span>
@@ -109,7 +109,7 @@ export default function Layout(): JSX.Element {
             </li>
             <li>
               <Link
-                to="/signin"
+                to="/attendance"
                 className="flex items-center p-2 text-gray-50 rounded-lg dark:text-white hover:bg-gray-700 dark:hover:bg-gray-700 group"
               >
                 <span className="ml-3">Attendance</span>

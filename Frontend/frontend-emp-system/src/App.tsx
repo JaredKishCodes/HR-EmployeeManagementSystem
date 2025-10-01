@@ -5,6 +5,8 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Department from "./Pages/Department";
 import Dashboard from "./Pages/Dashboard";
 import Leaves from "./Pages/Leaves";
+import Attendance from "./Pages/Attendance";
+import Payroll from "./Pages/Payroll";
 
 export default function App() {
 
@@ -19,6 +21,8 @@ export default function App() {
         <Route path="employees" element ={<Employees/>}/>
         <Route path="department" element = {<Department/>}/>
         <Route path='leaves' element = {<Leaves/>}/>
+        <Route path='payroll' element = {<Payroll/>}/>
+        <Route path='attendance' element = {<Attendance/>}/>
         
       </Route>
     </Routes>

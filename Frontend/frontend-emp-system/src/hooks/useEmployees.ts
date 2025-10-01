@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import type { EmployeeRequest, EmployeeResponse } from "../Types/employee";
 import * as EmployeeService from "../services/employeeService";
-import Employees from "../Pages/Employee/Employees";
+
 
 export function useEmployees(){
 
@@ -12,7 +12,7 @@ export function useEmployees(){
       const [firstName, setFirstName] = useState("");
       const [lastName, setLastName] = useState("");
       const [email, setEmail] = useState("");
-      const [phoneNumber, setphoneNumber] = useState(0);
+      const [phoneNumber, setPhoneNumber] = useState("");
       const [position, setPosition] = useState("");
       const [status, setStatus] = useState("");
       const [hireDate, setHireDate] = useState("");
@@ -50,12 +50,12 @@ export function useEmployees(){
       position,
       status,
       hireDate,
-      departmentId : Number(departmentId)
+      departmentId
 
     }
 
     try{  
-      if(editingId && isEditMode){
+      if(editingId  && isEditMode){
         const response = await EmployeeService.updateEmployee(editingId,payload)
         console.log("Employee updated", response);
         toast.success("Employee updated successfully!")
@@ -89,7 +89,7 @@ export function useEmployees(){
       setFirstName(employee.firstName);
     setLastName(employee.lastName);
     setEmail(employee.email);
-    setphoneNumber(employee.phoneNumber);
+    setPhoneNumber(employee.phoneNumber);
     setPosition(employee.position);
     setStatus(employee.status);
     setHireDate(employee.hireDate.split("T")[0]);
@@ -116,8 +116,9 @@ export function useEmployees(){
 
    if(result){
       try {
-      const response = await axios.delete(`${API_URL}/api/Employee/${id}`);
-      toast.success("Employee deleted successfully", response.data);
+      const response = await EmployeeService.deleteEmployee(id);
+      console.log("deleted successfully",response)
+      toast.success("Employee deleted successfully");
       fetchEmployees(); 
     } catch (err) {
       toast.error("Failed to delete employee:");
@@ -130,7 +131,7 @@ export function useEmployees(){
     setFirstName("");
   setLastName("");
   setEmail("");
-  setphoneNumber("");
+  setPhoneNumber("");
   setPosition("");
   setStatus("");
   setHireDate("");
@@ -138,4 +139,39 @@ export function useEmployees(){
   setIsEditMode(false);
   setEditingId(null);
   }
+
+  return{
+    employees,
+    setEmployees,
+    firstName,
+    setFirstName,
+    lastName,
+    setLastName,
+    email,
+    setEmail,
+    phoneNumber,
+    setPhoneNumber,
+    position,
+    setPosition,
+    status,
+    setStatus,
+    hireDate,
+    setHireDate,
+    departmentId,
+    setDepartmentId,
+    
+    isEditMode,
+    setIsEditMode,
+    editingId,
+    setEditingId,
+    isOpen,
+    setIsOpen,
+
+    handleSubmit,
+    handleEdit,
+    handleAddButton,
+    handleDelete
+
+  }
+  
 }
