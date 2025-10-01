@@ -1,10 +1,10 @@
 import { ToastContainer } from "react-toastify";
-import Employees from "./Components/Employees";
-import Layout from "./Components/Layout";
+import Employees from "./Pages/Employee/Employees";
+import Layout from "./Pages/Layout";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Department from "./Components/Department";
-import Dashboard from "./Components/Dashboard";
-import Leaves from "./Components/Leaves";
+import Department from "./Pages/Department";
+import Dashboard from "./Pages/Dashboard";
+import Leaves from "./Pages/Leaves";
 
 export default function App() {
 

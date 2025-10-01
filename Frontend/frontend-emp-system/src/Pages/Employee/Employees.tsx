@@ -1,6 +1,6 @@
 import { useEffect, useState, type FC } from "react";
 import type {  JSX,  } from "react";
-import type { EmployeeResponse } from "../Types/employee";
+import type { EmployeeResponse } from "../../Types/employee";
 import axios from "axios";
 import { toast } from "react-toastify";
 

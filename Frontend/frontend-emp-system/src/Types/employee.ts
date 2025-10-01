@@ -19,9 +19,21 @@ export interface EmployeeResponse{
   firstName: string;
   lastName: string;
   email: string;
-  phoneNumber: string;
-  position: Position;
+  phoneNumber: number;
+  position: string;
   hireDate: string; // ISO date string (from DateTime in C#)
-  status: Status;
+  status: string;
   departmentName: string;
 }
+
+ export interface EmployeeRequest{
+
+      firstName:string,
+      lastName :string,
+      email:string,
+      phoneNumber:number,
+      position :string,
+      status :string,
+      hireDate:string,
+      departmentId :number
+ }
