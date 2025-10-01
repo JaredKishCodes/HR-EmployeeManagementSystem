@@ -26,9 +26,10 @@ export function useAttendance(){
 
    const fetchAttendance = async () =>{
         const result = await AttendanceService.getAllAttendance();
-        setAttendance(result);
+        setAttendance(result);       
+   }
 
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
         const updateAttendacePayload = {
@@ -59,14 +60,24 @@ export function useAttendance(){
             toast.success("Attendance created successfully!");
             } catch (error) {
                 console.error("Failed to create Attendance");
-                toast.error("Failed to create Attendance");
-                
-            }
-            
+                toast.error("Failed to create Attendance");               
+            }      
         }
-    }
+        fetchAttendance();
+        setEditingId(0);
+        setIsOpen(false);
+        resetForm();
         
-   }
+    }
+
+   const resetForm = () => {
+        setTimeIn(""),
+        setTimeOut("");
+    }
+
+    const handleEdit = async () => {
+        
+    }
     return{
         attendance,
         employeeId,
