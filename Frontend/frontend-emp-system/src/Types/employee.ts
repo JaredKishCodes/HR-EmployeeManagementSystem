@@ -24,7 +24,7 @@ export interface EmployeeResponse{
   hireDate: string; // ISO date string (from DateTime in C#)
   status: string;
   departmentName: string;
-  departmentId: number;
+  departmentId:number
 }
 
  export interface EmployeeRequest{
@@ -36,5 +36,5 @@ export interface EmployeeResponse{
       position :string,
       status :string,
       hireDate:string,
-      departmentId :string
+      departmentId :number;
  }

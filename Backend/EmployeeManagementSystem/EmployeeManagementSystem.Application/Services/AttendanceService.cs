@@ -1,36 +1,50 @@
 ﻿using EmployeeManagementSystem.Application.DTOs.Attendance;
 using EmployeeManagementSystem.Application.Interfaces;
 using EmployeeManagementSystem.Domain.Entities;
+using EmployeeManagementSystem.Domain.Enum;
 using EmployeeManagementSystem.Domain.Interfaces;
 
 namespace EmployeeManagementSystem.Application.Services
 {
-    public class AttendanceService(IAttendanceRepository _attendanceRepository) : IAttendanceService
+    public class AttendanceService : IAttendanceService
     {
+        private readonly IAttendanceRepository _attendanceRepository;
         private static readonly TimeSpan PhilippineOffset = TimeSpan.FromHours(8);
+
+        public AttendanceService(IAttendanceRepository attendanceRepository)
+        {
+            _attendanceRepository = attendanceRepository;
+        }
 
         public async Task<AttendanceResponseDto> CreateAttendanceAsync(CreateAttendanceDto createAttendanceDto)
         {
             var attendance = new Attendance
             {
                 EmployeeId = createAttendanceDto.EmployeeId,
-                Date = createAttendanceDto.Date.DateTime, // store as DateTime
                 TimeIn = createAttendanceDto.TimeIn,
-                TimeOut = createAttendanceDto.TimeOut,
-                AttendanceStatus = createAttendanceDto.AttendanceStatus,
             };
 
-            if (attendance.TimeOut.HasValue && attendance.TimeOut.Value < attendance.TimeIn)
-            {
-                throw new ArgumentException("TimeOut cannot be earlier than TimeIn.");
-            }
+            var shiftStart = new DateTimeOffset(
+                attendance.Date.Year,
+                attendance.Date.Month,
+                attendance.Date.Day,
+                9, 0, 0, PhilippineOffset
+            );
 
-            if (attendance.TimeOut.HasValue)
+            var shiftEnd = new DateTimeOffset(
+                attendance.Date.Year,
+                attendance.Date.Month,
+                attendance.Date.Day,
+                18, 0, 0, PhilippineOffset // 6:00 PM
+            );
+
+            if (attendance.TimeIn > shiftStart.AddMinutes(5))
             {
-                // Ensure both times are in the same timezone for accurate calculation
-                var timeInUtc = attendance.TimeIn.ToUniversalTime();
-                var timeOutUtc = attendance.TimeOut.Value.ToUniversalTime();
-                attendance.TotalHours = (decimal)(timeOutUtc - timeInUtc).TotalHours;
+                attendance.AttendanceStatus = AttendanceStatus.Late;
+            }
+            else
+            {
+                attendance.AttendanceStatus = AttendanceStatus.Present;
             }
 
             var newAttendance = await _attendanceRepository.CreateAttendanceAsync(attendance);
@@ -40,9 +54,8 @@ namespace EmployeeManagementSystem.Application.Services
                 Id = newAttendance.Id,
                 EmployeeId = newAttendance.EmployeeId,
                 EmployeeName = newAttendance.Employee?.FirstName,
-                Date = newAttendance.Date.ToString("yyyy-MM-ddTHH:mm:ss"),
+                Date = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss"), // Convert DateTime to string using a format
                 TimeIn = newAttendance.TimeIn.ToOffset(PhilippineOffset).ToString("yyyy-MM-ddTHH:mm:ss"),
-                TimeOut = newAttendance.TimeOut?.ToOffset(PhilippineOffset).ToString("yyyy-MM-ddTHH:mm:ss"),
                 AttendanceStatus = newAttendance.AttendanceStatus,
                 TotalHours = newAttendance.TotalHours,
             };
@@ -105,10 +118,7 @@ namespace EmployeeManagementSystem.Application.Services
                 throw new ArgumentException("Attendance not found");
             }
 
-            existingAttendance.Date = updateAttendanceDto.Date.DateTime;
-            existingAttendance.TimeIn = updateAttendanceDto.TimeIn;
             existingAttendance.TimeOut = updateAttendanceDto.TimeOut;
-            existingAttendance.AttendanceStatus = updateAttendanceDto.AttendanceStatus;
 
             // Validate that TimeOut is not earlier than TimeIn
             if (existingAttendance.TimeOut.HasValue && existingAttendance.TimeOut.Value < existingAttendance.TimeIn)
@@ -118,10 +128,8 @@ namespace EmployeeManagementSystem.Application.Services
 
             if (existingAttendance.TimeOut.HasValue)
             {
-                // Ensure both times are in the same timezone for accurate calculation
-                var timeInUtc = existingAttendance.TimeIn.ToUniversalTime();
-                var timeOutUtc = existingAttendance.TimeOut.Value.ToUniversalTime();
-                existingAttendance.TotalHours = (decimal)(timeOutUtc - timeInUtc).TotalHours;
+                // Calculate TotalHours directly without assigning unused variables
+                existingAttendance.TotalHours = (decimal)(existingAttendance.TimeOut.Value - existingAttendance.TimeIn).TotalHours;
             }
 
             var updatedAttendance = await _attendanceRepository.UpdateAttendanceAsync(existingAttendance);

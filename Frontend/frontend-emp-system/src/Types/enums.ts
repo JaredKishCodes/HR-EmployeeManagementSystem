@@ -28,3 +28,10 @@ export enum LeaveType {
     Study = "Study",
     Unpaid = "Unpaid"
 }
+
+export enum AttendanceStatus{
+    Present = "Present",
+    Late = "Late",
+    OverTime = "OverTime"
+
+}

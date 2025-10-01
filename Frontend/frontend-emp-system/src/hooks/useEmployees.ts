@@ -50,7 +50,7 @@ export function useEmployees(){
       position,
       status,
       hireDate,
-      departmentId
+      departmentId : Number(departmentId)
 
     }
 
