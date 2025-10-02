@@ -10,5 +10,6 @@ namespace EmployeeManagementSystem.Domain.Entities
         public string? Description { get; set; }
 
         public ICollection<Employee> Employees { get; set; } = new List<Employee>();
+        public ICollection<Salary> Salaries { get; set; } = new List<Salary>();
     }
 }

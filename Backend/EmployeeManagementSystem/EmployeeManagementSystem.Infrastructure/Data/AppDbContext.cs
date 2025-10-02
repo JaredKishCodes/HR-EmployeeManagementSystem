@@ -14,6 +14,8 @@ namespace EmployeeManagementSystem.Infrastructure.Data
         public DbSet<Department> Departments { get; set; }
         public DbSet<LeaveRequest> LeaveRequests { get; set;}
         public DbSet<Attendance> Attendances { get; set; }
+
+        public DbSet<Salary> Salaries { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
