@@ -6,7 +6,7 @@ type Props = {}
 
 const Attendance = (props: Props) => {
 
-  const{attendance,employeeId,date,timeIn,timeOut,employeeName,totalHours, isEditMode,
+  const{attendance,employeeId,date,timeIn,setTimeIn,timeOut,setTimeOut,employeeName,totalHours, isEditMode,
     setIsEditMode,
     editingId,
     setEditingId,
@@ -23,7 +23,7 @@ const Attendance = (props: Props) => {
      
   
 
-        <button    type="button" className=" mb-5 m-5 cursor-pointer focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2  dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
+        <button onClick={handleAddButton}   type="button" className=" mb-5 m-5 cursor-pointer focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2  dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
                  Add New</button>
         <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
           <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
@@ -44,12 +44,27 @@ const Attendance = (props: Props) => {
                 Id 
               </th>
               <th scope="col" className="px-6 py-3">
-                Department
+                Employee Id
               </th>
               <th scope="col" className="px-6 py-3">
-               Description
+               Employee Name
               </th>
                <th scope="col" className="px-6 py-3">
+               Date
+              </th>
+              <th scope="col" className="px-6 py-3">
+               Time In
+              </th>
+              <th scope="col" className="px-6 py-3">
+               Time Out
+              </th>
+              <th scope="col" className="px-6 py-3">
+               Total Hours
+              </th>
+              <th scope="col" className="px-6 py-3">
+               Attendance Status
+              </th>
+              <th scope="col" className="px-6 py-3">
                Action
               </th>
               
@@ -80,16 +95,17 @@ const Attendance = (props: Props) => {
             {attendance.id}
               </th>
               <td className="px-6 py-4">{attendance.employeeId}</td>
-              <td className="px-6 py-4">{attendance.employeeName}</td>
+              <td className="px-6 py-4">{attendance.employeeName} </td>
               <td className="px-6 py-4">{attendance.date}</td>
               <td className="px-6 py-4">{attendance.timeIn}</td>
               <td className="px-6 py-4">{attendance.timeOut}</td>
-              <td className="px-6 py-4">{attendance.attendanceStatus}</td>
               <td className="px-6 py-4">{attendance.totalHours}</td>
+              <td className="px-6 py-4">{attendance.attendanceStatus}</td>
+              
              
               <td className=" pl-7 py-4">
                 <a
-                    onClick={()=>handleEdit(department.id)}
+                    onClick={()=>handleEdit(attendance.id)}
                   className=" cursor-pointer font-medium text-blue-600 dark:text-blue-500 hover:underline"
                 >
                   Edit
@@ -97,7 +113,7 @@ const Attendance = (props: Props) => {
               </td>
               <td className="pr-7 py-4">
                 <a
-                  onClick={()=> handleDelete(department.id)}
+                  onClick={()=> handleDelete(attendance.id)}
                   className=" cursor-pointer font-medium text-red-600 dark:text-blue-500 hover:underline"
                 >
                   Delete
@@ -163,7 +179,7 @@ const Attendance = (props: Props) => {
               {/* Modal header */}
               <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t border-gray-200 dark:border-gray-600">
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                  {editMode && editingId ? "Edit Department" : "Add new Department"}
+                  {isEditMode && editingId ? "Edit attendance" : "Add new attendance"}
                 </h3>
                 <button
                   type="button"
@@ -190,47 +206,26 @@ const Attendance = (props: Props) => {
               </div>
 
               {/* Modal body */}
-              <form  onSubmit={handleSubmit} className="p-4 md:p-5" >
+              { isEditMode ? 
+                ( <form  onSubmit={handleSubmit} className="p-4 md:p-5" >
                 <div className="grid gap-4 mb-4 grid-cols-2">
                   <div className="col-span-2">
                     <label
-                      htmlFor="name"
+                      htmlFor="timeOut"
                       className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                     >
-                     Department Name
+                      Time Out
                     </label>
                     <input
-                      value={name}
-                      onChange={(e)=>setName(e.target.value)}
-                      type="text"
-                      name="firstName"
-                      id="firstName"
-                      placeholder="Type department name"
+                      value={timeOut}
+                      onChange={(e)=>setTimeOut(e.target.value)}
+                      type="datetime-local"
+                      name="timeOut"
+                      id="timeOut"                 
                       required
                       className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                     />
-                  </div>
-                    <div className="col-span-4">
-                    <label
-                        htmlFor="description"
-                        className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                    >
-                        Description
-                    </label>
-                    <textarea
-                        value={description}
-                        onChange={(e) => setDescription(e.target.value)}
-                        id="description"
-                        name="description"
-                        rows={4}
-                        placeholder="Enter description here..."
-                        required
-                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                    />
-                    </div>
-
-
-                  
+                  </div>                 
                 </div>
                 <button
                   type="submit"
@@ -248,9 +243,53 @@ const Attendance = (props: Props) => {
                       clipRule="evenodd"
                     />
                   </svg>
-                 {editingId && editMode ? "Update Department" : "Add Department"}
+                   Update attendance
                 </button>
-              </form>
+              </form> ) : (<form  onSubmit={handleSubmit} className="p-4 md:p-5" >
+                  <div className="grid gap-4 mb-4 grid-cols-2">
+                  <div className="col-span-2">
+                    <label
+                      htmlFor="timeIn"
+                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    >
+                      Time In
+                    </label>
+                    <input
+                      value={timeIn}
+                      onChange={(e)=>setTimeIn(e.target.value)}
+                      type="datetime-local"
+                      name="timeIn"
+                      id="timeIn"                 
+                      required
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                    />
+                  </div>                 
+                </div>
+                <button
+                  type="submit"
+                  className=" cursor-pointer text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                >
+                  <svg
+                    className="me-1 -ms-1 w-5 h-5"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                   Set Time In
+                </button>
+                </form> 
+                )}
+                
+              
+               
+              
+              
             </div>
           </div>
         </div>

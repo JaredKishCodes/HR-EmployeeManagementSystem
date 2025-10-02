@@ -2,12 +2,14 @@ import type { Employee } from "./employee";
 import type { AttendanceStatus } from "./enums";
 
 export interface IAttendanceResponse{
+    id:number;
     employeeId: number;
-    employeeName:Employee;
+    employeeName:string;
     date:string;
     timeIn: string;
     timeOut:string;
     attendanceStatus:AttendanceStatus
+    totalHours: number;
 }
 
 export interface IAttendanceCreateRequest{

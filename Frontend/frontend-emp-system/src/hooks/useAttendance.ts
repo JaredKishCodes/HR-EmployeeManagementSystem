@@ -28,7 +28,7 @@ export function useAttendance(){
         const result = await AttendanceService.getAllAttendance();
         setAttendance(result);       
    }
-
+   //handle submit form
    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
@@ -37,7 +37,7 @@ export function useAttendance(){
         }
 
          const CreateAttendacePayload = {
-            employeeId,
+            employeeId : 2,
             timeIn
         }
 
@@ -69,21 +69,59 @@ export function useAttendance(){
         resetForm();
         
     }
-
+    //reset Form
    const resetForm = () => {
         setTimeIn(""),
         setTimeOut("");
     }
+    //handle edit form
+    const handleEdit = async (id:number) => {
+        const attendance = await AttendanceService.getAttendance(id);
 
-    const handleEdit = async () => {
-        
+        if(attendance){
+            setTimeIn(attendance.timeIn);
+            setTimeOut(attendance.timeOut);
+        }
+
+        setIsOpen(true);
+        setEditingId(id);
+        setIsEditMode(true);   
     }
+
+    //create attendance form
+
+    const handleAddButton = () =>{
+        setIsOpen(true);
+        setEditingId(0);
+        setIsEditMode(false);
+        resetForm();
+    }
+
+    //Delete attendance form
+    const handleDelete = async (id:number) => {
+      const result =  window.confirm("Are you sure you want to delete?");
+
+      if(result){
+        try {
+            const response = await AttendanceService.deleteAttendance(id);
+            console.log("Attendance deleted successfully",response);
+            toast.success("Attendance deleted successfully");
+            
+
+        } catch (error) {
+            toast.error("Error deleting attendance")
+        }   
+      }
+    }
+
     return{
         attendance,
         employeeId,
         date,
         timeIn,
+        setTimeIn,
         timeOut,
+        setTimeOut,
         employeeName,
         totalHours,
 
