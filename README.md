@@ -10,7 +10,7 @@ Includes features for managing employees, departments, leaves, attendance, and p
 
 📖 Introduction & Background
 
-Many organizations still rely on manual processes for handling employee records, leaves, payroll, and attendance. This leads to inefficiency, errors, and data security risks. An automated Employee Management System ensures smooth operations and accurate record-keeping.
+Many organizations still rely on manual processes for handling employee records, leaves, payroll, and attendance. This leads to inefficiency, errors, and data security risks. An Employee Management System ensures smooth operations and accurate record-keeping.
 
 ❓ Statement of the Problem
 
@@ -19,7 +19,7 @@ The lack of an integrated system makes it hard for administrators to manage empl
 🎯 Objectives of the Study
 
 General Objective
-To design and develop an Employee Management System that automates employee data management with secure role-based access.
+To design and develop an Employee Management System that handles employee data management with secure role-based access.
 
 Specific Objectives
 
@@ -27,7 +27,7 @@ Specific Objectives
 
 ✅ Track attendance and leave requests in real-time.
 
-✅ Automate payroll generation.
+
 
 ✅ Provide secure login and role-based access (Admin, Employee).
 
