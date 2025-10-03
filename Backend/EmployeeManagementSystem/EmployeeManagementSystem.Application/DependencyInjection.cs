@@ -17,6 +17,7 @@ namespace EmployeeManagementSystem.Application
             services.AddScoped<IDepartmentService, DepartmentService>();
             services.AddScoped<ILeaveRequestService, LeaveRequestService>();
             services.AddScoped<IAttendanceService, AttendanceService>();
+            services.AddScoped<ISalaryService, SalaryService>();
 
             return  services;
         }

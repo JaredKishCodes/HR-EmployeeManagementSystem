@@ -1,4 +1,5 @@
-﻿using EmployeeManagementSystem.Application.DTOs.Salary;
+﻿using EmployeeManagementSystem.Application.DTOs.Employee;
+using EmployeeManagementSystem.Application.DTOs.Salary;
 
 namespace EmployeeManagementSystem.Application.Interfaces
 {

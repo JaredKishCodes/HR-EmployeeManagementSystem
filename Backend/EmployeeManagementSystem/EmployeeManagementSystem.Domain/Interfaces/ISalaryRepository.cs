@@ -8,7 +8,7 @@ namespace EmployeeManagementSystem.Domain.Interfaces
     {
         Task<Salary> AddSalaryAsync(Salary salary);
         Task<Salary?> GetSalaryByIdAsync(int id);
-        Task<IEnumerable<Salary>> GetAllSalariesAsync();
+        Task<IEnumerable<Salary>>GetAllSalariesAsync();
         Task<Salary> UpdateSalaryAsync(Salary salary);
         Task<bool> DeleteSalaryAsync(int id);
     }

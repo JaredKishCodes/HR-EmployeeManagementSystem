@@ -20,10 +20,5 @@ public class SalaryConfig : IEntityTypeConfiguration<Salary>
        .HasForeignKey(x => x.EmployeeId)
        .OnDelete(DeleteBehavior.Restrict);
 
-        builder.HasOne(x => x.Department)
-               .WithMany(d => d.Salaries)
-               .HasForeignKey(x => x.DepartmentId)
-               .OnDelete(DeleteBehavior.Restrict);
-
     }
 }

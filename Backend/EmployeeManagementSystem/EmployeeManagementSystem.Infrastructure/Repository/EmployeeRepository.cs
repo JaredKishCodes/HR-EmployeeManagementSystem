@@ -38,6 +38,11 @@ namespace EmployeeManagementSystem.Infrastructure.Repository
           return  await _context.Employees.Include(d => d.Department).FirstOrDefaultAsync(x => x.Id == id);
         }
 
+        public async Task<Employee?> GetEmployeeWithDepartmentAsync(int employeeId)
+        {
+            return await _context.Employees.Include(x => x.Department).FirstOrDefaultAsync(e => e.Id == employeeId);
+        }
+
         public async Task<Employee?> UpdateEmployeeAsync(Employee employee)
         {
             var existingEmployee = _context.Employees.Find(employee.Id);

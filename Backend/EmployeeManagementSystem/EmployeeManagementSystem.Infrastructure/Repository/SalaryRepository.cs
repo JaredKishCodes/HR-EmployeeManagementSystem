@@ -37,12 +37,12 @@ namespace EmployeeManagementSystem.Infrastructure.Repository
 
         public async Task<IEnumerable<Salary>> GetAllSalariesAsync()
         {
-            return await _context.Salaries.AsNoTracking().Include(x => x.Employee).Include(x => x.Department).ToListAsync();
+            return await _context.Salaries.AsNoTracking().Include(x => x.Employee).ThenInclude(x => x.Department).ToListAsync();
         }
 
         public async Task<Salary?> GetSalaryByIdAsync(int id)
         {
-            var result = await _context.Salaries.FindAsync(id);
+            var result = await _context.Salaries.Include(x => x.Employee).ThenInclude(x => x.Department).FirstOrDefaultAsync(x => x.Id == id);
             return result;
         }
 
@@ -56,7 +56,7 @@ namespace EmployeeManagementSystem.Infrastructure.Repository
                 existingSalary.Allowances = salary.Allowances;
                 existingSalary.Deductions = salary.Deductions;
                 existingSalary.EmployeeId = salary.EmployeeId;
-                existingSalary.DepartmentId = salary.DepartmentId;
+             
                 _context.Salaries.Update(existingSalary);
                 await _context.SaveChangesAsync();
                 return existingSalary;
