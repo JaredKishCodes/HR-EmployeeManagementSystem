@@ -19,7 +19,7 @@ const Attendance = (props: Props) => {
     handleDelete} = useAttendance();
   return (
     <div>
-      <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
+      <div className="relative overflow-x-auto sm:rounded-lg">
      
   
 

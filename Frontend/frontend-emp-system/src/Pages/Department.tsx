@@ -113,7 +113,7 @@ const Department = () => {
     
 
     <div>
-      <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
+      <div className="relative overflow-x-auto  sm:rounded-lg">
      
   
 

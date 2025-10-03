@@ -128,11 +128,17 @@ export default function Layout(): JSX.Element {
       </aside>
 
       {/* Main Content */}
-      <div className="p-4 sm:ml-64 pt-20">
-        <div className="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700">
+          <div className="h-dvh bg-slate-100">
+      {/* Outer background */}
+      <div className="p-4  sm:ml-64 pt-20">
+        {/* Inner content box */}
+        <div className="p-4 rounded-lg bg-white shadow-lg dark:border-gray-700">
           <Outlet />
         </div>
       </div>
+    </div>
+
+     
     </div>
   );
 }
