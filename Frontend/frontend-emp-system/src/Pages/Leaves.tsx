@@ -1,179 +1,180 @@
-import axios from 'axios';
-import React, { useEffect, useState } from 'react'
-import type { LeaveRequest } from '../Types/leaves';
-import { toast } from 'react-toastify';
-
-
-
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import type { LeaveRequest } from "../Types/leaves";
+import { toast } from "react-toastify";
 
 const Leaves = () => {
+  const API_URL = "https://localhost:7273";
 
-   const API_URL = "https://localhost:7273";
-
-  const [isOpen , setIsOpen] = useState(false)
-  const[editingId, setEditingId] = useState(0);
-  const[editMode,setEditMode] = useState(false)
+  const [isOpen, setIsOpen] = useState(false);
+  const [editingId, setEditingId] = useState(0);
+  const [editMode, setEditMode] = useState(false);
   const [leaveRequests, setLeaveRequests] = useState<LeaveRequest[]>([]);
 
-  const[leaveType,setLeaveType] = useState("");
-  const[startDate, setStartDate] = useState("");
-  const[endDate,setEndDate]= useState("");
-  const[reason,setReason] = useState("");
-  const[leaveRequestStatus, setLeaveRequestStatus] = useState("");
-  const[createdAt,setCreatedAt] = useState("");
+  const [leaveType, setLeaveType] = useState("");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [reason, setReason] = useState("");
+  const [leaveRequestStatus, setLeaveRequestStatus] = useState("");
+  const [createdAt, setCreatedAt] = useState("");
   const [approvedBy, setApprovedBy] = useState("");
 
-  useEffect(()=>{
+  useEffect(() => {
     fetchLeaveRequests();
-  },[])
+  }, []);
 
-
-  const fetchLeaveRequests = async () =>{
-
-    try{
-       const response = await axios.get(`${API_URL}/api/LeaveRequest/GetAllLeaveRequests`);
-       console.log("Leave Requests fetched successfully",response.data);
-        setLeaveRequests(response.data);
+  const fetchLeaveRequests = async () => {
+    try {
+      const response = await axios.get(
+        `${API_URL}/api/LeaveRequest/GetAllLeaveRequests`,
+      );
+      console.log("Leave Requests fetched successfully", response.data);
+      setLeaveRequests(response.data);
+    } catch (error) {
+      console.error("Error fetching leaveRequests", error);
     }
-    catch(error){
-      console.error("Error fetching leaveRequests", error)
-    }
-   
+  };
 
-  }
-
-  const handleEdit = async (id:number)=> {
-
+  const handleEdit = async (id: number) => {
     setIsOpen(true);
     setEditMode(true);
     setEditingId(id);
 
-    const response = await axios.get(`${API_URL}/api/LeaveRequest/${id}`)
-    console.log("Leave Requests updated successfully",response.data);
+    const response = await axios.get(`${API_URL}/api/LeaveRequest/${id}`);
+    console.log("Leave Requests updated successfully", response.data);
 
-   const leaveRequest = response.data
+    const leaveRequest = response.data;
 
-   if(leaveRequest){
-    setLeaveType(leaveRequest.leaveType);
-    setStartDate(leaveRequest.startDate);
-    setEndDate(leaveRequest.endDate);
-    setReason(leaveRequest.reason);
-    setLeaveRequestStatus(leaveRequest.leaveRequestStatus);
-    setApprovedBy(leaveRequest.approvedBy);
-   }
-        
-  }
+    if (leaveRequest) {
+      setLeaveType(leaveRequest.leaveType);
+      setStartDate(leaveRequest.startDate);
+      setEndDate(leaveRequest.endDate);
+      setReason(leaveRequest.reason);
+      setLeaveRequestStatus(leaveRequest.leaveRequestStatus);
+      setApprovedBy(leaveRequest.approvedBy);
+    }
+  };
 
-  const handleAddButton = ()=>{
+  const handleAddButton = () => {
     setIsOpen(true);
     setEditMode(false);
     setEditingId(0);
     resetForm();
+  };
 
-  }
-
-  const handleSubmit = async (e : React.FormEvent<HTMLFormElement>)=>{
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    const cleanStartDate = new Date(startDate).toISOString();
+    const cleanEndDate = new Date(endDate).toISOString();
+
     const leaveRequest = {
-      employeeId : 2,
+      employeeId: 1003,
       leaveType,
-      startDate,
-      endDate,
+      startDate: cleanStartDate,
+      endDate: cleanEndDate,
       reason,
-    }
+    };
 
-   
+    if (editMode && editingId) {
+      const response = await axios.put(
+        `${API_URL}/api/LeaveRequest/${editingId}`,
+        leaveRequest,
+      );
+      console.log("Leave Requests updated successfully", response.data);
+      toast.success("Leave Requests updated successfully");
+    } else {
+      try {
+        console.log(leaveRequest);
 
-    try {
-      if(editMode && editingId){
-        const response = await axios.put(`${API_URL}/api/LeaveRequest/${editingId}`,leaveRequest)
-        console.log("Leave Requests updated successfully",response.data);
-        toast.success("Leave Requests updated successfully");
-      }
-      else{
-        const response = await axios.post(`${API_URL}/api/LeaveRequest/CreateLeaveRequest`,leaveRequest)
-        console.log("Leave Requests created successfully",response.data);
+        const response = await axios.post(
+          `${API_URL}/api/LeaveRequest/CreateLeaveRequest`,
+          leaveRequest,
+        );
+        console.log("Leave Requests created successfully", response.data);
         toast.success("Leave Requests created successfully");
+      } catch (error) {
+        console.error("Failed to fetch data", error);
       }
-      
-    } catch (error) {
-      console.error("Failed to fetch data",error)
     }
+
     setIsOpen(false);
     fetchLeaveRequests();
     setEditMode(false);
     setEditingId(0);
     resetForm();
-  }
+  };
 
-   const handleDelete = async (id:number) => {
-      
-     const result =  window.confirm("Are you sure you want to delete leaveRequest?");
+  const handleDelete = async (id: number) => {
+    const result = window.confirm(
+      "Are you sure you want to delete leaveRequest?",
+    );
 
-     if (result){
+    if (result) {
       try {
-        const response = await axios.delete(`${API_URL}/api/LeaveRequest/${id}`);
-      console.log("Leave Request deleted successfully",response.data);
-      toast.success("Leave Request deleted successfully");
+        const response = await axios.delete(
+          `${API_URL}/api/LeaveRequest/${id}`,
+        );
+        console.log("Leave Request deleted successfully", response.data);
+        toast.success("Leave Request deleted successfully");
       } catch (error) {
-        console.error("Failed to delete leaveRequest",error);   
-      }}
+        console.error("Failed to delete leaveRequest", error);
+      }
     }
+  };
 
-    const resetForm = () => {
-      setLeaveType("");
-      setStartDate("");
-      setEndDate("");
-      setReason("");
-    }
+  const resetForm = () => {
+    setLeaveType("");
+    setStartDate("");
+    setEndDate("");
+    setReason("");
+  };
 
-    const leaveTypeMap : Record<number,string> = {
-     0 : "Vacation",
-     1 : "Sick",
-     2 : "Emergency",
-     3 : "Maternity",
-     4 : "Paternity",
-     5 : "Parental",
-     6 : "Bereavement",
-     7 : " Holiday",
-     8 : "Study",
-     9 : "Unpaid"
-    }
+  const leaveTypeMap: Record<number, string> = {
+    0: "Vacation",
+    1: "Sick",
+    2: "Emergency",
+    3: "Maternity",
+    4: "Paternity",
+    5: "Parental",
+    6: "Bereavement",
+    7: " Holiday",
+    8: "Study",
+    9: "Unpaid",
+  };
 
-    const leaveRequestMap : Record<number,string> = {
-     0 : "Pending",
-     1 : "Approved",
-     2 : "Rejected",
-    
-    }
+  const leaveRequestMap: Record<number, string> = {
+    0: "Pending",
+    1: "Approved",
+    2: "Rejected",
+  };
 
-    const approvedByMap : Record<number,string> = {
-     0 : "Pending",
-     1 : "Manager",
-     2 : "Assistant Manager",
-     3 : "Team Leader"
-
-    
-    }
+  const approvedByMap: Record<number, string> = {
+    0: "Pending",
+    1: "Manager",
+    2: "Assistant Manager",
+    3: "Team Leader",
+  };
 
   return (
     <div>
-      <div className="relative overflow-x-auto  sm:rounded-lg">
-     
-  
-
-        <button onClick={handleAddButton}   type="button" className=" mb-5 m-5 cursor-pointer focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2  dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
-                 Add New</button>
-        <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-          <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+      <div className="relative overflow-x-auto sm:rounded-lg">
+        <button
+          onClick={handleAddButton}
+          type="button"
+          className="m-5 me-2 mb-5 cursor-pointer rounded-lg bg-green-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-green-800 focus:ring-4 focus:ring-green-300 focus:outline-none dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
+        >
+          Add New
+        </button>
+        <table className="w-full text-left text-sm text-gray-500 rtl:text-right dark:text-gray-400">
+          <thead className="bg-gray-50 text-xs text-gray-700 uppercase dark:bg-gray-700 dark:text-gray-400">
             <tr>
               <th scope="col" className="p-4">
                 <div className="flex items-center">
                   <input
                     id="checkbox-all-search"
                     type="checkbox"
-                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                    className="h-4 w-4 rounded-sm border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600 dark:focus:ring-offset-gray-800"
                   />
                   <label htmlFor="checkbox-all-search" className="sr-only">
                     checkbox
@@ -185,100 +186,117 @@ const Leaves = () => {
               </th>
               <th scope="col" className="px-6 py-3">
                 Employee Name
-              </th>            
+              </th>
               <th scope="col" className="px-6 py-3">
                 Leave Type
               </th>
               <th scope="col" className="px-6 py-3">
-               Start Date
+                Start Date
               </th>
               <th scope="col" className="px-6 py-3">
-               End Date
-              </th>
-               <th scope="col" className="px-6 py-3">
-               Reason
+                End Date
               </th>
               <th scope="col" className="px-6 py-3">
-               Leave Request Status
+                Reason
               </th>
               <th scope="col" className="px-6 py-3">
-              Created At
+                Leave Request Status
               </th>
               <th scope="col" className="px-6 py-3">
-              Approved By
+                Created At
               </th>
               <th scope="col" className="px-6 py-3">
-              Action
+                Approved By
               </th>
-              
+              <th scope="col" className="px-6 py-3">
+                Action
+              </th>
             </tr>
           </thead>
-           
-              <tbody>
-                {leaveRequests.map((leaveRequest)=>(
-            <tr  key={leaveRequest.id}  className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
-              <td className="w-4 p-4">
-                <div className="flex items-center">
-                  <input
-                    id="checkbox-table-search-1"
-                    type="checkbox"
-                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                  />
-                  <label
-                    htmlFor="checkbox-table-search-1"
-                    className="sr-only"
-                  >
-                    checkbox
-                  </label>
-                </div>
-              </td>
-              <th
-                scope="row"
-                className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+
+          <tbody>
+            {leaveRequests.map((leaveRequest) => (
+              <tr
+                key={leaveRequest.id}
+                className="border-b border-gray-200 bg-white hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-600"
               >
-                {leaveRequest.employeeId}
-              </th>
-              <td className="px-6 py-4">{leaveRequest.employeeFirstName} <span>{leaveRequest.employeeLastName}</span></td>          
-              <td className="px-6 py-4">{leaveTypeMap[Number(leaveRequest.leaveType)]}</td>
-              <td className="px-6 py-4">{leaveRequest.startDate ? new Date(leaveRequest.startDate).toLocaleDateString() : ""}</td>
-              <td className="px-6 py-4">{leaveRequest.endDate ? new Date(leaveRequest.endDate).toLocaleDateString() : ""}</td>
-              <td className="px-6 py-4">{leaveRequest.reason}</td>
-              <td className="px-6 py-4">{leaveRequestMap[Number(leaveRequest.leaveRequestStatus)]}</td>
-              <td className="px-6 py-4">{leaveRequest.createdAt ? new Date(leaveRequest.createdAt).toLocaleDateString() : ""}</td>
-              <td className="px-6 py-4">{approvedByMap[Number(leaveRequest.approvedBy)]}</td>
-             
-              <td className=" pl-7 py-4">
-                <a
-                  onClick={()=> handleEdit(leaveRequest.id)}
-                  className=" cursor-pointer font-medium text-blue-600 dark:text-blue-500 hover:underline"
+                <td className="w-4 p-4">
+                  <div className="flex items-center">
+                    <input
+                      id="checkbox-table-search-1"
+                      type="checkbox"
+                      className="h-4 w-4 rounded-sm border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600 dark:focus:ring-offset-gray-800"
+                    />
+                    <label
+                      htmlFor="checkbox-table-search-1"
+                      className="sr-only"
+                    >
+                      checkbox
+                    </label>
+                  </div>
+                </td>
+                <th
+                  scope="row"
+                  className="px-6 py-4 font-medium whitespace-nowrap text-gray-900 dark:text-white"
                 >
-                  Edit
-                </a>
-              </td>
-              <td className="pr-7 py-4">
-                <a
-                  onClick={()=>handleDelete(leaveRequest.id)}
-                  className=" cursor-pointer font-medium text-red-600 dark:text-blue-500 hover:underline"
-                >
-                  Delete
-                </a>
-              </td>
-            </tr>
+                  {leaveRequest.employeeId}
+                </th>
+                <td className="px-6 py-4">
+                  {leaveRequest.employeeFirstName}{" "}
+                  <span>{leaveRequest.employeeLastName}</span>
+                </td>
+                <td className="px-6 py-4">
+                  {leaveTypeMap[Number(leaveRequest.leaveType)]}
+                </td>
+                <td className="px-6 py-4">
+                  {leaveRequest.startDate
+                    ? new Date(leaveRequest.startDate).toLocaleDateString()
+                    : ""}
+                </td>
+                <td className="px-6 py-4">
+                  {leaveRequest.endDate
+                    ? new Date(leaveRequest.endDate).toLocaleDateString()
+                    : ""}
+                </td>
+                <td className="px-6 py-4">{leaveRequest.reason}</td>
+                <td className="px-6 py-4">
+                  {leaveRequestMap[Number(leaveRequest.leaveRequestStatus)]}
+                </td>
+                <td className="px-6 py-4">
+                  {leaveRequest.createdAt
+                    ? new Date(leaveRequest.createdAt).toLocaleDateString()
+                    : ""}
+                </td>
+                <td className="px-6 py-4">
+                  {approvedByMap[Number(leaveRequest.approvedBy)]}
+                </td>
+
+                <td className="py-4 pl-7">
+                  <a
+                    onClick={() => handleEdit(leaveRequest.id)}
+                    className="cursor-pointer font-medium text-blue-600 hover:underline dark:text-blue-500"
+                  >
+                    Edit
+                  </a>
+                </td>
+                <td className="py-4 pr-7">
+                  <a
+                    onClick={() => handleDelete(leaveRequest.id)}
+                    className="cursor-pointer font-medium text-red-600 hover:underline dark:text-blue-500"
+                  >
+                    Delete
+                  </a>
+                </td>
+              </tr>
             ))}
-          </tbody>     
-      
-          
-                 
-              
-            
-          
+          </tbody>
         </table>
 
         <nav
-          className="flex items-center flex-column flex-wrap md:flex-row justify-between pt-4"
+          className="flex-column flex flex-wrap items-center justify-between pt-4 md:flex-row"
           aria-label="Table navigation"
         >
-          <span className="text-sm font-normal text-gray-500 dark:text-gray-400 mb-4 md:mb-0 block w-full md:inline md:w-auto">
+          <span className="mb-4 block w-full text-sm font-normal text-gray-500 md:mb-0 md:inline md:w-auto dark:text-gray-400">
             Showing{" "}
             <span className="font-semibold text-gray-900 dark:text-white">
               1-10
@@ -288,11 +306,11 @@ const Leaves = () => {
               1000
             </span>
           </span>
-          <ul className="inline-flex -space-x-px rtl:space-x-reverse text-sm h-8">
+          <ul className="inline-flex h-8 -space-x-px text-sm rtl:space-x-reverse">
             <li>
               <a
                 href="#"
-                className="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                className="ms-0 flex h-8 items-center justify-center rounded-s-lg border border-gray-300 bg-white px-3 leading-tight text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
               >
                 Previous
               </a>
@@ -300,7 +318,7 @@ const Leaves = () => {
             <li>
               <a
                 href="#"
-                className="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                className="flex h-8 items-center justify-center border border-gray-300 bg-white px-3 leading-tight text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
               >
                 1
               </a>
@@ -310,30 +328,30 @@ const Leaves = () => {
         </nav>
       </div>
 
-                 {/* Main modal */}
-       {isOpen && (
-        <div className="fixed inset-0 z-50 flex justify-center items-center w-full h-full ">
+      {/* Main modal */}
+      {isOpen && (
+        <div className="fixed inset-0 z-50 flex h-full w-full items-center justify-center">
           <div className="absolute inset-0 bg-black opacity-50"></div>
           <div
-          
-            className="relative p-4 w-full max-w-md max-h-full"
+            className="relative max-h-full w-full max-w-md p-4"
             onClick={(e) => e.stopPropagation()} // prevent modal close when clicking inside
           >
-            
             {/* Modal content */}
-            <div className="relative bg-white rounded-lg shadow-sm dark:bg-gray-700">
+            <div className="relative rounded-lg bg-white shadow-sm dark:bg-gray-700">
               {/* Modal header */}
-              <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t border-gray-200 dark:border-gray-600">
+              <div className="flex items-center justify-between rounded-t border-b border-gray-200 p-4 md:p-5 dark:border-gray-600">
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                  {editMode && editingId ? "Edit leave request": "Create leave request"}
+                  {editMode && editingId
+                    ? "Edit leave request"
+                    : "Create leave request"}
                 </h3>
                 <button
                   type="button"
-                  onClick={()=>setIsOpen(false)}
-                  className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                  onClick={() => setIsOpen(false)}
+                  className="ms-auto inline-flex h-8 w-8 items-center justify-center rounded-lg bg-transparent text-sm text-gray-400 hover:bg-gray-200 hover:text-gray-900 dark:hover:bg-gray-600 dark:hover:text-white"
                 >
                   <svg
-                    className="w-3 h-3 cursor-pointer"
+                    className="h-3 w-3 cursor-pointer"
                     aria-hidden="true"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
@@ -352,19 +370,25 @@ const Leaves = () => {
               </div>
 
               {/* Modal body */}
-              <form onSubmit={handleSubmit} className="p-4 md:p-5" >
-                <div className="grid gap-4 mb-4 grid-cols-2">
+              <form onSubmit={handleSubmit} className="p-4 md:p-5">
+                <div className="mb-4 grid grid-cols-2 gap-4">
                   <div className="col-span-2">
                     <label
                       htmlFor="leaveType"
-                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                      className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
                     >
-                     Leave Type
+                      Leave Type
                     </label>
-                    <select value={leaveType} onChange={(e)=> setLeaveType(e.target.value)} name="leaveType" id="leaveType"
-                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5
-                                       dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
-                      <option value="" disabled>Select a leave type</option>
+                    <select
+                      value={leaveType}
+                      onChange={(e) => setLeaveType(e.target.value)}
+                      name="leaveType"
+                      id="leaveType"
+                      className="focus:ring-primary-500 focus:border-primary-500 dark:focus:ring-primary-500 dark:focus:border-primary-500 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 dark:border-gray-500 dark:bg-gray-600 dark:text-white dark:placeholder-gray-400"
+                    >
+                      <option value="" disabled>
+                        Select a leave type
+                      </option>
                       <option value="Vacation">Vacation</option>
                       <option value="Sick">Sick</option>
                       <option value="Emergency">Emergency</option>
@@ -377,56 +401,57 @@ const Leaves = () => {
                       <option value="Unpaid">Unpaid</option>
                     </select>
                   </div>
-                    <div className="col-span-1">
+                  <div className="col-span-1">
                     <label
-                  
-                        htmlFor="description"
-                        className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                      htmlFor="description"
+                      className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
                     >
-                        Start Date
+                      Start Date
                     </label>
-                    <input  value={startDate} onChange={(e)=> setStartDate(e.target.value)} type="date" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" />
-                    </div>
+                    <input
+                      value={startDate}
+                      onChange={(e) => setStartDate(e.target.value)}
+                      type="date"
+                      className="focus:ring-primary-600 focus:border-primary-600 dark:focus:ring-primary-500 dark:focus:border-primary-500 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 dark:border-gray-500 dark:bg-gray-600 dark:text-white dark:placeholder-gray-400"
+                    />
+                  </div>
 
-                     <div className="col-span-1">
+                  <div className="col-span-1">
                     <label
-                        htmlFor="description"
-                        className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                      htmlFor="description"
+                      className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
                     >
-                        End Date
+                      End Date
                     </label>
-                    <input value={endDate}  onChange={(e)=> setEndDate(e.target.value)} type="date" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" />
-                    </div>
+                    <input
+                      value={endDate}
+                      onChange={(e) => setEndDate(e.target.value)}
+                      type="date"
+                      className="focus:ring-primary-600 focus:border-primary-600 dark:focus:ring-primary-500 dark:focus:border-primary-500 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 dark:border-gray-500 dark:bg-gray-600 dark:text-white dark:placeholder-gray-400"
+                    />
+                  </div>
 
-                     <div className="col-span-2">
+                  <div className="col-span-2">
                     <label
-                        htmlFor="description"
-                        className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                      htmlFor="description"
+                      className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
                     >
-                        Reason
+                      Reason
                     </label>
-                    <textarea value={reason}   onChange={(e)=> setReason(e.target.value)} rows={3}   className="bg-gray-50 border w-[370px] border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block  p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" />
-                    </div>
-
-                    <div className="col-span-1">
-                    <label
-                        htmlFor="description"
-                        className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                    >
-                        End Date
-                    </label>
-                    <input value={endDate}  onChange={(e)=> setEndDate(e.target.value)} type="date" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" />
-                    </div>
-
-
-                  
+                    <textarea
+                      value={reason}
+                      onChange={(e) => setReason(e.target.value)}
+                      rows={3}
+                      className="focus:ring-primary-600 focus:border-primary-600 dark:focus:ring-primary-500 dark:focus:border-primary-500 block w-[370px] rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 dark:border-gray-500 dark:bg-gray-600 dark:text-white dark:placeholder-gray-400"
+                    />
+                  </div>
                 </div>
                 <button
                   type="submit"
-                  className=" cursor-pointer text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                  className="inline-flex cursor-pointer items-center rounded-lg bg-blue-700 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 focus:outline-none dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                 >
                   <svg
-                    className="me-1 -ms-1 w-5 h-5"
+                    className="-ms-1 me-1 h-5 w-5"
                     fill="currentColor"
                     viewBox="0 0 20 20"
                     xmlns="http://www.w3.org/2000/svg"
@@ -437,17 +462,17 @@ const Leaves = () => {
                       clipRule="evenodd"
                     />
                   </svg>
-                 {editMode && editingId ? "Update leave request": "Create leave request"}
+                  {editMode && editingId
+                    ? "Update leave request"
+                    : "Create leave request"}
                 </button>
               </form>
             </div>
           </div>
         </div>
-       )}
-
+      )}
     </div>
-
-  )
-}
+  );
+};
 
 export default Leaves;
