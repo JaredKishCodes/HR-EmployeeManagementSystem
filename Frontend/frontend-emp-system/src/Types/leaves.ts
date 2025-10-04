@@ -24,6 +24,8 @@ enum ApprovedBy {
 export interface LeaveRequest {
   id: number;
   employeeId: number;
+  employeeFirstName:string;
+   employeeLastName:string;
   leaveType: LeaveType;
   startDate: Date;
   endDate?: Date; 

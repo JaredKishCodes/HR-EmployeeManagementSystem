@@ -128,6 +128,35 @@ const Leaves = () => {
       setReason("");
     }
 
+    const leaveTypeMap : Record<number,string> = {
+     0 : "Vacation",
+     1 : "Sick",
+     2 : "Emergency",
+     3 : "Maternity",
+     4 : "Paternity",
+     5 : "Parental",
+     6 : "Bereavement",
+     7 : " Holiday",
+     8 : "Study",
+     9 : "Unpaid"
+    }
+
+    const leaveRequestMap : Record<number,string> = {
+     0 : "Pending",
+     1 : "Approved",
+     2 : "Rejected",
+    
+    }
+
+    const approvedByMap : Record<number,string> = {
+     0 : "Pending",
+     1 : "Manager",
+     2 : "Assistant Manager",
+     3 : "Team Leader"
+
+    
+    }
+
   return (
     <div>
       <div className="relative overflow-x-auto  sm:rounded-lg">
@@ -153,6 +182,12 @@ const Leaves = () => {
               </th>
               <th scope="col" className="px-6 py-3">
                 Employee Id
+              </th>
+              <th scope="col" className="px-6 py-3">
+                Employee First Name
+              </th>
+              <th scope="col" className="px-6 py-3">
+                Employee Last Name
               </th>
               <th scope="col" className="px-6 py-3">
                 Leave Type
@@ -206,13 +241,15 @@ const Leaves = () => {
               >
                 {leaveRequest.employeeId}
               </th>
-              <td className="px-6 py-4">{leaveRequest.leaveType}</td>
+              <td className="px-6 py-4">{leaveRequest.employeeFirstName}</td>
+              <td className="px-6 py-4">{leaveRequest.employeeLastName}</td>
+              <td className="px-6 py-4">{leaveTypeMap[Number(leaveRequest.leaveType)]}</td>
               <td className="px-6 py-4">{leaveRequest.startDate ? new Date(leaveRequest.startDate).toLocaleDateString() : ""}</td>
               <td className="px-6 py-4">{leaveRequest.endDate ? new Date(leaveRequest.endDate).toLocaleDateString() : ""}</td>
               <td className="px-6 py-4">{leaveRequest.reason}</td>
-              <td className="px-6 py-4">{leaveRequest.leaveRequestStatus}</td>
+              <td className="px-6 py-4">{leaveRequestMap[Number(leaveRequest.leaveRequestStatus)]}</td>
               <td className="px-6 py-4">{leaveRequest.createdAt ? new Date(leaveRequest.createdAt).toLocaleDateString() : ""}</td>
-              <td className="px-6 py-4">{leaveRequest.approvedBy}</td>
+              <td className="px-6 py-4">{approvedByMap[Number(leaveRequest.approvedBy)]}</td>
              
               <td className=" pl-7 py-4">
                 <a

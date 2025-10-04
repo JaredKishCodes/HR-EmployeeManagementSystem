@@ -7,6 +7,8 @@ namespace EmployeeManagementSystem.Application.DTOs.LeaveRequest
     {
         public int Id { get; set; }
 
+        public string EmployeeFirstName { get; set; } = string.Empty;
+        public string EmployeeLastName { get; set; } = string.Empty;
         public int EmployeeId { get; set; }
         public LeaveType LeaveType { get; set; }
         public DateTime StartDate { get; set; }

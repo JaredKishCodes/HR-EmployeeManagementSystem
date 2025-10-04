@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import type { EmployeeRequest, EmployeeResponse } from "../Types/employee";
 import * as EmployeeService from "../services/employeeService";
+import axios from "axios";
 
 
 export function useEmployees(){
@@ -17,6 +18,7 @@ export function useEmployees(){
       const [status, setStatus] = useState("");
       const [hireDate, setHireDate] = useState("");
       const [departmentId, setDepartmentId] = useState< string>("");
+      const [departments, setDepartments] = useState<{ id: number; name: string }[]>([]);
     
       const [isEditMode, setIsEditMode] = useState(false);
       const [editingId, setEditingId] = useState<number | null>(null);
@@ -26,6 +28,7 @@ export function useEmployees(){
        useEffect(() => {
    
     fetchEmployees();
+    fetchDepartments();
 
   }, [])
 
@@ -36,6 +39,16 @@ export function useEmployees(){
       }
       catch (err) {
         console.error("Failed to fetch employees:", err);
+      }
+    }
+
+    const fetchDepartments = async () => {
+      try {
+        const response = await axios.get("https://localhost:7273/api/Department");
+        setDepartments(response.data)
+      } catch (error) {
+        console.error("Failed to fetch departments:", error);
+        
       }
     }
 
@@ -159,6 +172,7 @@ export function useEmployees(){
     setHireDate,
     departmentId,
     setDepartmentId,
+    departments, setDepartments,
     
     isEditMode,
     setIsEditMode,

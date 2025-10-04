@@ -9,10 +9,15 @@ using EmployeeManagementSystem.Domain.Interfaces;
 
 namespace EmployeeManagementSystem.Application.Services
 {
-    public class LeaveRequestService(ILeaveRequestRepository _leaveRequestRepository) : ILeaveRequestService
+    public class LeaveRequestService(ILeaveRequestRepository _leaveRequestRepository,IEmployeeRepository _employeeRepository) : ILeaveRequestService
     {
         public async Task<LeaveRequestResponseDto> CreateLeaveRequestAsync(CreateLeaveRequestDto createLeaveRequestDto)
         {
+            var employee = await _employeeRepository.GetEmployeeByIdAsync(createLeaveRequestDto.EmployeeId);
+            if(employee == null)
+            {
+                throw new ArgumentNullException(nameof(employee), "employee null");
+            }
             var leaveReq = new LeaveRequest
             {
                 EmployeeId = createLeaveRequestDto.EmployeeId,
@@ -30,6 +35,8 @@ namespace EmployeeManagementSystem.Application.Services
             {
                 Id = newLeaveReq.Id,
                 EmployeeId = leaveReq.EmployeeId,
+                EmployeeFirstName = employee?.FirstName ?? "User",
+                EmployeeLastName = employee?.LastName ?? "User",
                 LeaveType = leaveReq.LeaveType,
                 StartDate = leaveReq.StartDate,
                 EndDate = leaveReq.EndDate,
@@ -58,9 +65,11 @@ namespace EmployeeManagementSystem.Application.Services
            var leaveReq = await _leaveRequestRepository.GetAllLeaveRequestsAsync();
 
             return leaveReq.Select(x => new LeaveRequestResponseDto
-            {   
+            {
                 Id = x.Id,
                 EmployeeId = x.EmployeeId,
+                EmployeeFirstName = x.Employee.FirstName,
+                EmployeeLastName = x.Employee.LastName,
                 LeaveType = x.LeaveType,
                 StartDate = x.StartDate,
                 EndDate = x.EndDate,
@@ -74,6 +83,7 @@ namespace EmployeeManagementSystem.Application.Services
 
         public async Task<LeaveRequestResponseDto> GetLeaveRequestByIdAsync(int id)
         {
+           
             var leaveReq = await _leaveRequestRepository.GetLeaveRequestByIdAsync(id);
 
             if (leaveReq == null) return null;
@@ -82,6 +92,8 @@ namespace EmployeeManagementSystem.Application.Services
             {   
                 Id = id,
                 EmployeeId = leaveReq.EmployeeId,
+                EmployeeFirstName = leaveReq.Employee?.FirstName ?? "User",
+                EmployeeLastName = leaveReq.Employee?.LastName ?? "User",
                 LeaveType = leaveReq.LeaveType,
                 StartDate = leaveReq.StartDate,
                 EndDate = leaveReq.EndDate,
@@ -112,6 +124,8 @@ namespace EmployeeManagementSystem.Application.Services
             {
                 Id = id,
                 EmployeeId = updatedLeaveReq.EmployeeId,
+                EmployeeFirstName = existingLeaveReq?.Employee.FirstName ?? "User",
+                EmployeeLastName = existingLeaveReq?.Employee.LastName ?? "User",
                 LeaveType = updatedLeaveReq.LeaveType,
                 StartDate = updatedLeaveReq.StartDate,
                 EndDate = updatedLeaveReq.EndDate,
