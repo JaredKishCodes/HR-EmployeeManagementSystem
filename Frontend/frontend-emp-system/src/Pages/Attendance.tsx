@@ -60,9 +60,6 @@ const Attendance = (props: Props) => {
                 </div>
               </th>
               <th scope="col" className="px-6 py-3">
-                Id
-              </th>
-              <th scope="col" className="px-6 py-3">
                 Employee Id
               </th>
               <th scope="col" className="px-6 py-3">
@@ -110,9 +107,9 @@ const Attendance = (props: Props) => {
                   scope="row"
                   className="px-6 py-4 font-medium whitespace-nowrap text-gray-900 dark:text-white"
                 >
-                  {attendance.id}
+                  {attendance.employeeId}
                 </th>
-                <td className="px-6 py-4">{attendance.employeeId}</td>
+              
                 <td className="px-6 py-4">
                   {attendance.employeeFirstName}{" "}
                   <span>{attendance.employeeLastName} </span>{" "}

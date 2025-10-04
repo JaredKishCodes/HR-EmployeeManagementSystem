@@ -1,98 +1,134 @@
-
+import { usePayroll } from "../hooks/usePayroll";
 
 const Payroll = () => {
-  return (
-    <div className='bg-slate-50 rounded p-10 min-h-screen flex items-center justify-center'>
-      <div className='w-full max-w-6xl'>
-        <h1 className='text-3xl font-bold mb-10 text-center'>Add New Salary</h1>
+  const {
+    departmentId,
+    setDepartmentId,
+    departments,
+    employeeId,
+    setEmployeeId,
+    employees,
+    basicSalary,
+    setBasicSalary,
+    deductions,
+    setDeductions,
+    allowances,
+    setAllowances,
+    payDate,
+    setPayDate,
+    onSubmitPayroll,
+  } = usePayroll();
 
-        <form className="w-full">
-          <div className='grid grid-cols-3 gap-8 mb-8'>
+  return (
+    <div>
+      <div className="relative overflow-x-auto sm:rounded">
+        <h1 className="text-3xl font-bold mb-10 text-center">Add New Salary</h1>
+
+        <form className="w-full" onSubmit={(e) => { e.preventDefault(); onSubmitPayroll(); }}>
+          {/* FIRST ROW */}
+          <div className="grid grid-cols-3 gap-8 mb-8">
             {/* Department */}
             <div className="flex flex-col">
-              <label htmlFor="departmentId" className="mb-2 text-lg font-medium text-gray-900 dark:text-white">
+              <label htmlFor="departmentId" className="mb-2 font-medium text-gray-900 dark:text-white">
                 Department
               </label>
-              <input
-                type="text"
+              <select
                 id="departmentId"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-lg rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-4"
-                placeholder="Department ID"
-              />
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                onChange={(e) => setDepartmentId(Number(e.target.value))}
+              >
+                <option value="">Select Department</option>
+                {departments.map((dept) => (
+                  <option value={dept.id} key={dept.id}>
+                    {dept.name}
+                  </option>
+                ))}
+              </select>
             </div>
 
             {/* Employee */}
             <div className="flex flex-col">
-              <label htmlFor="employeeId" className="mb-2 text-lg font-medium text-gray-900 dark:text-white">
+              <label htmlFor="employeeId" className="mb-2 font-medium text-gray-900 dark:text-white">
                 Employee
               </label>
-              <input
-                type="text"
+              <select
                 id="employeeId"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-lg rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-4"
-                placeholder="Employee ID"
-              />
+                className="bg-gray-50 border border-gray-300 text-gray-900 rounded focus:ring-blue-500 focus:border-blue-500 w-full py-3 px-3"
+                onChange={(e) => setEmployeeId(Number(e.target.value))}
+              >
+                <option value="">Select Employee</option>
+                {employees.map((emp) => (
+                  <option key={emp.id} value={emp.id}>
+                    {emp.firstName} {emp.lastName}
+                  </option>
+                ))}
+              </select>
             </div>
 
             {/* Basic Salary */}
             <div className="flex flex-col">
-              <label htmlFor="basicSalary" className="mb-2 text-lg font-medium text-gray-900 dark:text-white">
+              <label htmlFor="basicSalary" className="mb-2 font-medium text-gray-900 dark:text-white">
                 Basic Salary
               </label>
               <input
                 type="number"
                 id="basicSalary"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-lg rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-4"
+                className="bg-gray-50 border border-gray-300 text-gray-900 rounded focus:ring-blue-500 focus:border-blue-500 w-full py-3 px-3"
                 placeholder="0"
+                onChange={(e) => setBasicSalary(Number(e.target.value))}
               />
             </div>
           </div>
 
-          <div className='grid grid-cols-3 gap-8 mb-8'>
+          {/* SECOND ROW */}
+          <div className="grid grid-cols-3 gap-8 mb-8">
             {/* Allowances */}
             <div className="flex flex-col">
-              <label htmlFor="allowances" className="mb-2 text-lg font-medium text-gray-900 dark:text-white">
+              <label htmlFor="allowances" className="mb-2 font-medium text-gray-900 dark:text-white">
                 Allowances
               </label>
               <input
                 type="number"
                 id="allowances"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-lg rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-4"
+                className="bg-gray-50 border border-gray-300 text-gray-900 rounded focus:ring-blue-500 focus:border-blue-500 w-full py-3 px-3"
                 placeholder="0"
+                onChange={(e) => setAllowances(Number(e.target.value))}
               />
             </div>
 
             {/* Deductions */}
             <div className="flex flex-col">
-              <label htmlFor="deductions" className="mb-2 text-lg font-medium text-gray-900 dark:text-white">
+              <label htmlFor="deductions" className="mb-2 font-medium text-gray-900 dark:text-white">
                 Deductions
               </label>
               <input
                 type="number"
                 id="deductions"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-lg rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-4"
+                className="bg-gray-50 border border-gray-300 text-gray-900 rounded focus:ring-blue-500 focus:border-blue-500 w-full py-3 px-3"
                 placeholder="0"
+                onChange={(e) => setDeductions(Number(e.target.value))}
               />
             </div>
 
             {/* Pay Date */}
             <div className="flex flex-col">
-              <label htmlFor="payDate" className="mb-2 text-lg font-medium text-gray-900 dark:text-white">
+              <label htmlFor="payDate" className="mb-2 font-medium text-gray-900 dark:text-white">
                 Pay Date
               </label>
               <input
                 type="date"
                 id="payDate"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-lg rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-4"
+                className="bg-gray-50 border border-gray-300 text-gray-900 rounded focus:ring-blue-500 focus:border-blue-500 w-full py-3 px-3"
+                onChange={(e) => setPayDate(e.target.value)}
               />
             </div>
           </div>
 
           {/* Submit Button */}
-          <div className='flex justify-center'>
+          <div className="flex justify-center">
             <button
               type="submit"
-              className='bg-blue-600 text-white text-xl font-bold rounded-lg px-12 py-4 hover:bg-blue-700 transition'
+              className="bg-blue-600 text-white text-xl font-bold rounded px-10 py-2 hover:bg-blue-700 transition"
             >
               Submit
             </button>
@@ -100,7 +136,7 @@ const Payroll = () => {
         </form>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Payroll
+export default Payroll;

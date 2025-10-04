@@ -13,7 +13,7 @@ export default function Layout(): JSX.Element {
           >
             
             <span className=" pr-10 text-2xl font-semibold whitespace-nowrap text-white">
-              HR/Employee Management System
+              Employee Management System
             </span>
           </a>
           <button
@@ -114,15 +114,7 @@ export default function Layout(): JSX.Element {
               >
                 <span className="ml-3">Attendance</span>
               </Link>
-            </li>
-            <li>
-              <Link
-                to="/signup"
-                className="flex items-center p-2 text-gray-50 rounded-lg dark:text-white hover:bg-gray-700 dark:hover:bg-gray-700 group"
-              >
-                <span className="ml-3">Sign Up</span>
-              </Link>
-            </li>
+            </li>           
           </ul>
         </div>
       </aside>

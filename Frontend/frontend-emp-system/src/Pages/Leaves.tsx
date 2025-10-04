@@ -184,11 +184,8 @@ const Leaves = () => {
                 Employee Id
               </th>
               <th scope="col" className="px-6 py-3">
-                Employee First Name
-              </th>
-              <th scope="col" className="px-6 py-3">
-                Employee Last Name
-              </th>
+                Employee Name
+              </th>            
               <th scope="col" className="px-6 py-3">
                 Leave Type
               </th>
@@ -241,8 +238,7 @@ const Leaves = () => {
               >
                 {leaveRequest.employeeId}
               </th>
-              <td className="px-6 py-4">{leaveRequest.employeeFirstName}</td>
-              <td className="px-6 py-4">{leaveRequest.employeeLastName}</td>
+              <td className="px-6 py-4">{leaveRequest.employeeFirstName} <span>{leaveRequest.employeeLastName}</span></td>          
               <td className="px-6 py-4">{leaveTypeMap[Number(leaveRequest.leaveType)]}</td>
               <td className="px-6 py-4">{leaveRequest.startDate ? new Date(leaveRequest.startDate).toLocaleDateString() : ""}</td>
               <td className="px-6 py-4">{leaveRequest.endDate ? new Date(leaveRequest.endDate).toLocaleDateString() : ""}</td>
@@ -410,6 +406,16 @@ const Leaves = () => {
                         Reason
                     </label>
                     <textarea value={reason}   onChange={(e)=> setReason(e.target.value)} rows={3}   className="bg-gray-50 border w-[370px] border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block  p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" />
+                    </div>
+
+                    <div className="col-span-1">
+                    <label
+                        htmlFor="description"
+                        className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    >
+                        End Date
+                    </label>
+                    <input value={endDate}  onChange={(e)=> setEndDate(e.target.value)} type="date" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" />
                     </div>
 
 
