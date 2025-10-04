@@ -7,7 +7,8 @@ export function useAttendance(){
 
     const [attendance, setAttendance] = useState<IAttendanceResponse[]>([])
     const[employeeId,setEmployeeId] = useState(0);
-    const[employeeName,setEmployeeName] = useState("");
+    const[employeeFirstName,setEmployeeFirstName] = useState("");
+     const[employeeLastName,setEmployeeLastName] = useState("");
     const[date, setDate] = useState("");
     const[timeIn,setTimeIn] = useState("");
     const[timeOut,setTimeOut] = useState("");
@@ -122,7 +123,10 @@ export function useAttendance(){
         setTimeIn,
         timeOut,
         setTimeOut,
-        employeeName,
+        employeeFirstName,
+        setEmployeeFirstName,
+        employeeLastName,
+        setEmployeeLastName,
         totalHours,
 
         isEditMode,

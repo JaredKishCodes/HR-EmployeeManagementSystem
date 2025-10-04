@@ -8,7 +8,8 @@ namespace EmployeeManagementSystem.Application.DTOs.Attendance
     {
         public int Id { get; set; }
         public int EmployeeId { get; set; }
-        public string? EmployeeName { get; set; }
+        public string? EmployeeFirstName { get; set; }
+        public string? EmployeeLastName { get; set; }
         public string Date { get; set; }
         public string TimeIn { get; set; }
         public string? TimeOut { get; set; }

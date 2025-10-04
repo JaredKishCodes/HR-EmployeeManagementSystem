@@ -4,7 +4,8 @@ import type { AttendanceStatus } from "./enums";
 export interface IAttendanceResponse{
     id:number;
     employeeId: number;
-    employeeName:string;
+    employeeFirstName : string,
+    employeeLastName : string
     date:string;
     timeIn: string;
     timeOut:string;

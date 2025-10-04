@@ -53,7 +53,8 @@ namespace EmployeeManagementSystem.Application.Services
             {
                 Id = newAttendance.Id,
                 EmployeeId = newAttendance.EmployeeId,
-                EmployeeName = newAttendance.Employee?.FirstName,
+                EmployeeFirstName = newAttendance?.Employee?.FirstName,
+                EmployeeLastName = newAttendance?.Employee?.LastName,
                 Date = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss"), // Convert DateTime to string using a format
                 TimeIn = newAttendance.TimeIn.ToOffset(PhilippineOffset).ToString("yyyy-MM-ddTHH:mm:ss"),
                 AttendanceStatus = newAttendance.AttendanceStatus,
@@ -79,7 +80,8 @@ namespace EmployeeManagementSystem.Application.Services
             {
                 Id = x.Id,
                 EmployeeId = x.Employee.Id,
-                EmployeeName = x.Employee.FirstName,
+                EmployeeFirstName = x.Employee.FirstName,
+                EmployeeLastName = x.Employee.LastName,
                 Date = x.Date.ToString("yyyy-MM-ddTHH:mm:ss"),
                 TimeIn = x.TimeIn.ToOffset(PhilippineOffset).ToString("yyyy-MM-ddTHH:mm:ss"),
                 TimeOut = x.TimeOut?.ToOffset(PhilippineOffset).ToString("yyyy-MM-ddTHH:mm:ss"),
@@ -101,7 +103,8 @@ namespace EmployeeManagementSystem.Application.Services
             {
                 Id = attendance.Id,
                 EmployeeId = attendance.EmployeeId,
-                EmployeeName = attendance.Employee?.FirstName,
+                EmployeeFirstName = attendance?.Employee?.FirstName,
+                EmployeeLastName = attendance?.Employee?.LastName,
                 Date = attendance.Date.ToString("yyyy-MM-ddTHH:mm:ss"),
                 TimeIn = attendance.TimeIn.ToOffset(PhilippineOffset).ToString("yyyy-MM-ddTHH:mm:ss"),
                 TimeOut = attendance.TimeOut?.ToOffset(PhilippineOffset).ToString("yyyy-MM-ddTHH:mm:ss"),
@@ -138,7 +141,8 @@ namespace EmployeeManagementSystem.Application.Services
             {
                 Id = updatedAttendance.Id,
                 EmployeeId = updatedAttendance.EmployeeId,
-                EmployeeName = updatedAttendance.Employee?.FirstName,
+                EmployeeFirstName = updatedAttendance?.Employee?.FirstName,
+                EmployeeLastName = updatedAttendance?.Employee?.LastName,
                 Date = updatedAttendance.Date.ToString("yyyy-MM-ddTHH:mm:ss"),
                 TimeIn = updatedAttendance.TimeIn.ToOffset(PhilippineOffset).ToString("yyyy-MM-ddTHH:mm:ss"),
                 TimeOut = updatedAttendance.TimeOut?.ToOffset(PhilippineOffset).ToString("yyyy-MM-ddTHH:mm:ss"),
