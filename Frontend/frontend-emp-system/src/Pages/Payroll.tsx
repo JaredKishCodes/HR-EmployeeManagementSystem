@@ -1,8 +1,6 @@
-import React from 'react'
 
-type Props = {}
 
-const Payroll = (props: Props) => {
+const Payroll = () => {
   return (
     <div className='bg-slate-50 rounded p-10 min-h-screen flex items-center justify-center'>
       <div className='w-full max-w-6xl'>
