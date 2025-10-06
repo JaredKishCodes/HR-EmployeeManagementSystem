@@ -5,27 +5,26 @@ export default function Layout(): JSX.Element {
   return (
     <div>
       {/* Navbar */}
-      <nav className="fixed top-0 left-0 z-50 w-full border-gray-200 bg-gray-800 dark:bg-gray-800 dark:border-gray-700">
-        <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
+      <nav className="fixed top-0 left-0 z-50 w-full border-gray-200 bg-gray-800 dark:border-gray-700 dark:bg-gray-800">
+        <div className="mx-auto flex max-w-screen-xl flex-wrap items-center justify-between p-4">
           <a
             href="#"
             className="flex items-center space-x-3 rtl:space-x-reverse"
           >
-            
-            <span className=" pr-10 text-2xl font-semibold whitespace-nowrap text-white">
+            <span className="pr-10 text-2xl font-semibold whitespace-nowrap text-white">
               Employee Management System
             </span>
           </a>
           <button
             data-collapse-toggle="navbar-solid-bg"
             type="button"
-            className="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+            className="inline-flex h-10 w-10 items-center justify-center rounded-lg p-2 text-sm text-gray-500 hover:bg-gray-700 focus:ring-2 focus:ring-gray-200 focus:outline-none md:hidden dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
             aria-controls="navbar-solid-bg"
             aria-expanded="false"
           >
             <span className="sr-only">Open main menu</span>
             <svg
-              className="w-5 h-5"
+              className="h-5 w-5"
               aria-hidden="true"
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -44,12 +43,11 @@ export default function Layout(): JSX.Element {
             className="hidden w-full md:block md:w-auto"
             id="navbar-solid-bg"
           >
-            <ul className="flex flex-col font-medium mt-4 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-transparent dark:bg-gray-800 md:dark:bg-transparent dark:border-gray-700">
-              
+            <ul className="mt-4 flex flex-col rounded-lg bg-gray-50 font-medium md:mt-0 md:flex-row md:space-x-8 md:border-0 md:bg-transparent rtl:space-x-reverse dark:border-gray-700 dark:bg-gray-800 md:dark:bg-transparent">
               <li>
                 <a
                   href="#"
-                  className=" border-2  bg-gray-700  px-3 py-1.5 rounded text-white font-normal hover:bg-gray-800 "
+                  className="rounded border-2 bg-gray-700 px-3 py-1.5 font-normal text-white hover:bg-gray-800"
                 >
                   Logout
                 </a>
@@ -62,15 +60,15 @@ export default function Layout(): JSX.Element {
       {/* Sidebar */}
       <aside
         id="default-sidebar"
-        className="fixed top-16 left-0 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0"
+        className="fixed top-16 left-0 z-40 h-screen w-64 -translate-x-full transition-transform sm:translate-x-0"
         aria-label="Sidebar"
       >
-        <div className="h-full px-3 py-4 overflow-y-auto bg-gray-800 dark:bg-gray-800">
+        <div className="h-full overflow-y-auto bg-gray-800 px-3 py-4 dark:bg-gray-800">
           <ul className="space-y-2 font-medium">
             <li>
               <Link
                 to="/dashboard"
-                className="flex items-center p-2 text-gray-50 rounded-lg dark:text-white hover:bg-gray-700 dark:hover:bg-gray-700 group"
+                className="group flex items-center rounded-lg p-2 text-gray-50 hover:bg-gray-700 dark:text-white dark:hover:bg-gray-700"
               >
                 <span className="ml-3">Dashboard</span>
               </Link>
@@ -78,7 +76,7 @@ export default function Layout(): JSX.Element {
             <li>
               <Link
                 to="/employees"
-                className="flex items-center p-2 text-gray-50 rounded-lg dark:text-white hover:bg-gray-700 dark:hover:bg-gray-700 group"
+                className="group flex items-center rounded-lg p-2 text-gray-50 hover:bg-gray-700 dark:text-white dark:hover:bg-gray-700"
               >
                 <span className="ml-3">Employees</span>
               </Link>
@@ -86,7 +84,7 @@ export default function Layout(): JSX.Element {
             <li>
               <Link
                 to="/department"
-                className="flex items-center p-2 text-gray-50 rounded-lg dark:text-white hover:bg-gray-700 dark:hover:bg-gray-700 group"
+                className="group flex items-center rounded-lg p-2 text-gray-50 hover:bg-gray-700 dark:text-white dark:hover:bg-gray-700"
               >
                 <span className="ml-3">Department</span>
               </Link>
@@ -94,43 +92,41 @@ export default function Layout(): JSX.Element {
             <li>
               <Link
                 to="/leaves"
-                className="flex items-center p-2 text-gray-50 rounded-lg dark:text-white hover:bg-gray-700 dark:hover:bg-gray-700 group"
+                className="group flex items-center rounded-lg p-2 text-gray-50 hover:bg-gray-700 dark:text-white dark:hover:bg-gray-700"
               >
                 <span className="ml-3">Leaves</span>
               </Link>
             </li>
             <li>
               <Link
-                to="/payroll"
-                className="flex items-center p-2 text-gray-50 rounded-lg dark:text-white hover:bg-gray-700 dark:hover:bg-gray-700 group"
+                to="/attendance"
+                className="group flex items-center rounded-lg p-2 text-gray-50 hover:bg-gray-700 dark:text-white dark:hover:bg-gray-700"
               >
-                <span className="ml-3">Payroll</span>
+                <span className="ml-3">Attendance</span>
               </Link>
             </li>
             <li>
               <Link
-                to="/attendance"
-                className="flex items-center p-2 text-gray-50 rounded-lg dark:text-white hover:bg-gray-700 dark:hover:bg-gray-700 group"
+                to="/payroll"
+                className="group flex items-center rounded-lg p-2 text-gray-50 hover:bg-gray-700 dark:text-white dark:hover:bg-gray-700"
               >
-                <span className="ml-3">Attendance</span>
+                <span className="ml-3">Payroll</span>
               </Link>
-            </li>           
+            </li>
           </ul>
         </div>
       </aside>
 
       {/* Main Content */}
-          <div className="h-dvh bg-slate-100">
-      {/* Outer background */}
-      <div className="p-4  sm:ml-64 pt-20">
-        {/* Inner content box */}
-        <div className="p-4 rounded-lg bg-white shadow-lg dark:border-gray-700">
-          <Outlet />
+      <div className="h-dvh bg-slate-100">
+        {/* Outer background */}
+        <div className="p-4 pt-20 sm:ml-64">
+          {/* Inner content box */}
+          <div className="rounded-lg bg-white p-4 shadow-lg dark:border-gray-700">
+            <Outlet />
+          </div>
         </div>
       </div>
-    </div>
-
-     
     </div>
   );
 }

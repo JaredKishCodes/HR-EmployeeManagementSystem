@@ -1,19 +1,19 @@
 // Enums (you’d define them separately, similar to your C# enums)
-enum LeaveType {
+ export enum LeaveType {
   Sick = "Sick",
   Vacation ="Vacation",
   Unpaid = "Unpaid",
   Other = "Other"
 }
 
-enum LeaveRequestStatus {
+ export enum LeaveRequestStatus {
   Pending = "Pending",
   Approved = "Approved",
   Rejected = "Rejected"
 }
 
 
-enum ApprovedBy {
+export enum ApprovedBy {
    Pending = "Pending",
  Manager = "Manager",
  AssistantManager = "Assistant Manager",

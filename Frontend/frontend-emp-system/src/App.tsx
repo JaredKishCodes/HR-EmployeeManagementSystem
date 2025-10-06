@@ -9,24 +9,20 @@ import Attendance from "./Pages/Attendance";
 import Payroll from "./Pages/Payroll";
 
 export default function App() {
-
-
   return (
-   <Router>
-    <ToastContainer position="top-right" autoClose={3000} />
-    <Routes>
-      
-      <Route path="/" element={<Layout/>}>
-        <Route path="dashboard" element={<Dashboard/>}/>
-        <Route path="employees" element ={<Employees/>}/>
-        <Route path="department" element = {<Department/>}/>
-        <Route path='leaves' element = {<Leaves/>}/>
-        <Route path='payroll' element = {<Payroll/>}/>
-        <Route path='attendance' element = {<Attendance/>}/>
-        
-      </Route>
-    </Routes>
-   </Router>
-   
+    <Router>
+      <ToastContainer position="top-right" autoClose={3000} />
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          <Route index element={<Employees />} /> {/* Loads on "/" */}
+          <Route path="dashboard" element={<Dashboard />} />
+          <Route path="employees" element={<Employees />} />
+          <Route path="department" element={<Department />} />
+          <Route path="leaves" element={<Leaves />} />
+          <Route path="payroll" element={<Payroll />} />
+          <Route path="attendance" element={<Attendance />} />
+        </Route>
+      </Routes>
+    </Router>
   );
 }

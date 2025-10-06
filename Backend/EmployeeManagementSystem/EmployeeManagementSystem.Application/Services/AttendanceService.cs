@@ -22,20 +22,21 @@ namespace EmployeeManagementSystem.Application.Services
             {
                 EmployeeId = createAttendanceDto.EmployeeId,
                 TimeIn = createAttendanceDto.TimeIn,
+                Date = createAttendanceDto.TimeIn.Date  // ✅ This was missing before
             };
 
             var shiftStart = new DateTimeOffset(
-                attendance.Date.Year,
-                attendance.Date.Month,
-                attendance.Date.Day,
+                attendance.TimeIn.Year,
+                attendance.TimeIn.Month,
+                attendance.TimeIn.Day,
                 9, 0, 0, PhilippineOffset
             );
 
             var shiftEnd = new DateTimeOffset(
-                attendance.Date.Year,
-                attendance.Date.Month,
-                attendance.Date.Day,
-                18, 0, 0, PhilippineOffset // 6:00 PM
+                attendance.TimeIn.Year,
+                attendance.TimeIn.Month,
+                attendance.TimeIn.Day,
+                18, 0, 0, PhilippineOffset
             );
 
             if (attendance.TimeIn > shiftStart.AddMinutes(5))
@@ -55,12 +56,15 @@ namespace EmployeeManagementSystem.Application.Services
                 EmployeeId = newAttendance.EmployeeId,
                 EmployeeFirstName = newAttendance?.Employee?.FirstName,
                 EmployeeLastName = newAttendance?.Employee?.LastName,
-                Date = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss"), // Convert DateTime to string using a format
+                Date = newAttendance.Date.ToString("yyyy-MM-ddTHH:mm:ss"),
                 TimeIn = newAttendance.TimeIn.ToOffset(PhilippineOffset).ToString("yyyy-MM-ddTHH:mm:ss"),
+                TimeOut = null,
                 AttendanceStatus = newAttendance.AttendanceStatus,
                 TotalHours = newAttendance.TotalHours,
             };
         }
+
+
 
         public async Task<bool> DeleteAttendanceAsync(int id)
         {
@@ -123,16 +127,19 @@ namespace EmployeeManagementSystem.Application.Services
 
             existingAttendance.TimeOut = updateAttendanceDto.TimeOut;
 
-            // Validate that TimeOut is not earlier than TimeIn
-            if (existingAttendance.TimeOut.HasValue && existingAttendance.TimeOut.Value < existingAttendance.TimeIn)
-            {
-                throw new ArgumentException("TimeOut cannot be earlier than TimeIn.");
-            }
-
             if (existingAttendance.TimeOut.HasValue)
             {
-                // Calculate TotalHours directly without assigning unused variables
+                // Calculate the difference directly without timezone conversion
+                if (existingAttendance.TimeOut.Value < existingAttendance.TimeIn)
+                {
+                    throw new ArgumentException("TimeOut cannot be earlier than TimeIn.");
+                }
+
                 existingAttendance.TotalHours = (decimal)(existingAttendance.TimeOut.Value - existingAttendance.TimeIn).TotalHours;
+
+                Console.WriteLine($"TimeIn: {existingAttendance.TimeIn}");
+                Console.WriteLine($"TimeOut: {existingAttendance.TimeOut}");
+                Console.WriteLine($"TotalHours: {existingAttendance.TotalHours}");
             }
 
             var updatedAttendance = await _attendanceRepository.UpdateAttendanceAsync(existingAttendance);
@@ -150,5 +157,6 @@ namespace EmployeeManagementSystem.Application.Services
                 TotalHours = updatedAttendance.TotalHours,
             };
         }
+
     }
 }

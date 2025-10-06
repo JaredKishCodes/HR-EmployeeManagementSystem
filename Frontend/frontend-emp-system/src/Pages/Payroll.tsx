@@ -1,3 +1,4 @@
+import { all } from "axios";
 import { usePayroll } from "../hooks/usePayroll";
 
 const Payroll = () => {
@@ -55,6 +56,7 @@ const Payroll = () => {
                 id="employeeId"
                 className="bg-gray-50 border border-gray-300 text-gray-900 rounded focus:ring-blue-500 focus:border-blue-500 w-full py-3 px-3"
                 onChange={(e) => setEmployeeId(Number(e.target.value))}
+                value={employeeId}
               >
                 <option value="">Select Employee</option>
                 {employees.map((emp) => (
@@ -76,6 +78,7 @@ const Payroll = () => {
                 className="bg-gray-50 border border-gray-300 text-gray-900 rounded focus:ring-blue-500 focus:border-blue-500 w-full py-3 px-3"
                 placeholder="0"
                 onChange={(e) => setBasicSalary(Number(e.target.value))}
+                value={basicSalary}
               />
             </div>
           </div>
@@ -93,6 +96,7 @@ const Payroll = () => {
                 className="bg-gray-50 border border-gray-300 text-gray-900 rounded focus:ring-blue-500 focus:border-blue-500 w-full py-3 px-3"
                 placeholder="0"
                 onChange={(e) => setAllowances(Number(e.target.value))}
+                value={allowances}
               />
             </div>
 
@@ -107,6 +111,7 @@ const Payroll = () => {
                 className="bg-gray-50 border border-gray-300 text-gray-900 rounded focus:ring-blue-500 focus:border-blue-500 w-full py-3 px-3"
                 placeholder="0"
                 onChange={(e) => setDeductions(Number(e.target.value))}
+                value={deductions}
               />
             </div>
 
@@ -120,6 +125,7 @@ const Payroll = () => {
                 id="payDate"
                 className="bg-gray-50 border border-gray-300 text-gray-900 rounded focus:ring-blue-500 focus:border-blue-500 w-full py-3 px-3"
                 onChange={(e) => setPayDate(e.target.value)}
+                value={payDate}
               />
             </div>
           </div>

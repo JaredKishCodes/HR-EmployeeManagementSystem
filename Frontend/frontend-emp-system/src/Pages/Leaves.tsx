@@ -1,9 +1,23 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import type { LeaveRequest } from "../Types/leaves";
+import { LeaveRequestStatus, type LeaveRequest } from "../Types/leaves";
 import { toast } from "react-toastify";
 
 const Leaves = () => {
+  // Converts number from API → string for UI
+  const LeaveRequestStatusReverseMap: Record<number, string> = {
+    0: "Pending",
+    1: "Approved",
+    2: "Rejected",
+  };
+
+  // Converts string from UI → number for API
+  const LeaveRequestStatusApiMap: Record<string, number> = {
+    Pending: 0,
+    Approved: 1,
+    Rejected: 2,
+  };
+
   const API_URL = "https://localhost:7273";
 
   const [isOpen, setIsOpen] = useState(false);
@@ -16,7 +30,6 @@ const Leaves = () => {
   const [endDate, setEndDate] = useState("");
   const [reason, setReason] = useState("");
   const [leaveRequestStatus, setLeaveRequestStatus] = useState("");
-  const [createdAt, setCreatedAt] = useState("");
   const [approvedBy, setApprovedBy] = useState("");
 
   useEffect(() => {
@@ -50,7 +63,10 @@ const Leaves = () => {
       setStartDate(leaveRequest.startDate);
       setEndDate(leaveRequest.endDate);
       setReason(leaveRequest.reason);
-      setLeaveRequestStatus(leaveRequest.leaveRequestStatus);
+      setLeaveRequestStatus(
+        LeaveRequestStatusReverseMap[leaveRequest.leaveRequestStatus],
+      );
+
       setApprovedBy(leaveRequest.approvedBy);
     }
   };
@@ -68,33 +84,45 @@ const Leaves = () => {
     const cleanStartDate = new Date(startDate).toISOString();
     const cleanEndDate = new Date(endDate).toISOString();
 
-    const leaveRequest = {
-      employeeId: 1003,
+    const createLeaveRequest = {
+      employeeId: 1002,
       leaveType,
       startDate: cleanStartDate,
       endDate: cleanEndDate,
       reason,
     };
 
+    const editLeaveRequest = {
+      employeeId: 1003,
+      leaveType,
+      startDate: cleanStartDate,
+      leaveRequestStatus: LeaveRequestStatusApiMap[leaveRequestStatus],
+      approvedBy: 1,
+      endDate: cleanEndDate,
+      reason,
+    };
+
     if (editMode && editingId) {
+      console.log(editLeaveRequest);
       const response = await axios.put(
         `${API_URL}/api/LeaveRequest/${editingId}`,
-        leaveRequest,
+        editLeaveRequest,
       );
       console.log("Leave Requests updated successfully", response.data);
       toast.success("Leave Requests updated successfully");
     } else {
       try {
-        console.log(leaveRequest);
+        console.log(createLeaveRequest);
 
         const response = await axios.post(
           `${API_URL}/api/LeaveRequest/CreateLeaveRequest`,
-          leaveRequest,
+          createLeaveRequest,
         );
         console.log("Leave Requests created successfully", response.data);
         toast.success("Leave Requests created successfully");
       } catch (error) {
-        console.error("Failed to fetch data", error);
+        console.error("Failed to create attendance", error);
+        toast.error("Failed to create attendance");
       }
     }
 
@@ -446,9 +474,28 @@ const Leaves = () => {
                     />
                   </div>
                 </div>
+                {editMode ? (
+                  <select
+                    name="leaveRequestStatus"
+                    id="leaveRequestStatus"
+                    className="focus:ring-primary-600 focus:border-primary-600 dark:focus:ring-primary-500 dark:focus:border-primary-500 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 dark:border-gray-500 dark:bg-gray-600 dark:text-white dark:placeholder-gray-400"
+                    value={leaveRequestStatus}
+                    onChange={(e) => setLeaveRequestStatus(e.target.value)}
+                  >
+                    <option value="">-- Select Status --</option>
+                    {Object.values(LeaveRequestStatus).map((status) => (
+                      <option key={status} value={status}>
+                        {status}
+                      </option>
+                    ))}
+                  </select>
+                ) : (
+                  <div></div>
+                )}
+
                 <button
                   type="submit"
-                  className="inline-flex cursor-pointer items-center rounded-lg bg-blue-700 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 focus:outline-none dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                  className="mt-6 inline-flex cursor-pointer items-center rounded-lg bg-blue-700 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 focus:outline-none dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                 >
                   <svg
                     className="-ms-1 me-1 h-5 w-5"
