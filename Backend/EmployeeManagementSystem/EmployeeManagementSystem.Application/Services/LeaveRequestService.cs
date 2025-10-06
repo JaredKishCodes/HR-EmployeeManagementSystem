@@ -14,19 +14,20 @@ namespace EmployeeManagementSystem.Application.Services
         public async Task<LeaveRequestResponseDto> CreateLeaveRequestAsync(CreateLeaveRequestDto createLeaveRequestDto)
         {
             var employee = await _employeeRepository.GetEmployeeByIdAsync(createLeaveRequestDto.EmployeeId);
-            if(employee == null)
-            {
+            if (employee == null)
                 throw new ArgumentNullException(nameof(employee), "employee null");
-            }
+
+            var PhilippineOffset = TimeSpan.FromHours(8);
+
             var leaveReq = new LeaveRequest
             {
                 EmployeeId = createLeaveRequestDto.EmployeeId,
                 LeaveType = createLeaveRequestDto.LeaveType,
-                StartDate = DateTimeHelper.ConvertToPhilippineTime(createLeaveRequestDto.StartDate),
-                EndDate = DateTimeHelper.ConvertToPhilippineTime(createLeaveRequestDto.EndDate),
+                StartDate = new DateTimeOffset(createLeaveRequestDto.StartDate, PhilippineOffset).DateTime,
+                EndDate = new DateTimeOffset(createLeaveRequestDto.EndDate, PhilippineOffset).DateTime,
                 Reason = createLeaveRequestDto.Reason,
-                CreatedAt = DateTime.UtcNow, 
-                LeaveRequestStatus = LeaveRequestStatus.Pending, 
+                CreatedAt = DateTime.UtcNow,
+                LeaveRequestStatus = LeaveRequestStatus.Pending,
             };
 
             var newLeaveReq = await _leaveRequestRepository.CreateLeaveRequestAsync(leaveReq);
@@ -41,11 +42,12 @@ namespace EmployeeManagementSystem.Application.Services
                 StartDate = leaveReq.StartDate,
                 EndDate = leaveReq.EndDate,
                 Reason = leaveReq.Reason,
-                LeaveRequestStatus = leaveReq.LeaveRequestStatus,
+                LeaveRequestStatus = LeaveRequestStatus.Pending,
                 CreatedAt = leaveReq.CreatedAt,
                 ApprovedBy = ApprovedBy.Pending,
             };
         }
+
 
         public async Task<bool> DeleteLeaveRequestByIdAsync(int id)
         {

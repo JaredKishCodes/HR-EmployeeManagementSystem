@@ -85,8 +85,8 @@ const Leaves = () => {
     const cleanEndDate = new Date(endDate).toISOString();
 
     const createLeaveRequest = {
-      employeeId: 1002,
-      leaveType,
+      employeeId: 1003,
+      leaveType: leaveTypeApiMap[leaveType],
       startDate: cleanStartDate,
       endDate: cleanEndDate,
       reason,
@@ -108,6 +108,7 @@ const Leaves = () => {
         `${API_URL}/api/LeaveRequest/${editingId}`,
         editLeaveRequest,
       );
+      fetchLeaveRequests();
       console.log("Leave Requests updated successfully", response.data);
       toast.success("Leave Requests updated successfully");
     } else {
@@ -118,6 +119,7 @@ const Leaves = () => {
           `${API_URL}/api/LeaveRequest/CreateLeaveRequest`,
           createLeaveRequest,
         );
+        fetchLeaveRequests();
         console.log("Leave Requests created successfully", response.data);
         toast.success("Leave Requests created successfully");
       } catch (error) {
@@ -169,6 +171,19 @@ const Leaves = () => {
     7: " Holiday",
     8: "Study",
     9: "Unpaid",
+  };
+
+  const leaveTypeApiMap: Record<string, number> = {
+    Vacation: 0,
+    Sick: 1,
+    Emergency: 2,
+    Maternity: 3,
+    Paternity: 4,
+    Parental: 5,
+    Bereavement: 6,
+    Holiday: 7,
+    Study: 8,
+    Unpaid: 9,
   };
 
   const leaveRequestMap: Record<number, string> = {
