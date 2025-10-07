@@ -7,6 +7,7 @@ import Dashboard from "./Pages/Dashboard";
 import Leaves from "./Pages/Leaves";
 import Attendance from "./Pages/Attendance";
 import Payroll from "./Pages/Payroll";
+import EmployeeDetails from "./Pages/Employee/EmployeeDetails";
 
 export default function App() {
   return (
@@ -17,6 +18,7 @@ export default function App() {
           <Route index element={<Employees />} /> {/* Loads on "/" */}
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="employees" element={<Employees />} />
+          <Route path="/employees/:id" element={<EmployeeDetails />} />
           <Route path="department" element={<Department />} />
           <Route path="leaves" element={<Leaves />} />
           <Route path="payroll" element={<Payroll />} />

@@ -140,7 +140,7 @@ const Payroll = () => {
           <div className="flex justify-center">
             <button
               type="submit"
-              className="bg-blue-600 text-white text-xl font-bold rounded px-10 py-2 hover:bg-blue-700 transition"
+              className="bg-blue-600 cursor-pointer text-white text-xl font-bold rounded px-10 py-2 hover:bg-blue-700 transition"
             >
               Submit
             </button>

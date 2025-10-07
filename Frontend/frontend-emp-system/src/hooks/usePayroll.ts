@@ -64,7 +64,7 @@ export function usePayroll() {
 
   const onSubmitPayroll = async () => {
     const payrollObject = {
-      employeeId,
+      employeeId : 1,
       basicSalary,
       allowances,
       deductions,

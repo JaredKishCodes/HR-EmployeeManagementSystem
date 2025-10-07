@@ -14,7 +14,7 @@ export interface Employee {
   department?: Department; // nullable in C#
 }
 
-export interface EmployeeResponse{
+export interface EmployeeResponse {
   id: number;
   firstName: string;
   lastName: string;
@@ -24,17 +24,16 @@ export interface EmployeeResponse{
   hireDate: string; // ISO date string (from DateTime in C#)
   status: string;
   departmentName: string;
-  departmentId:number
+  departmentId: number;
 }
 
- export interface EmployeeRequest{
-
-      firstName:string,
-      lastName :string,
-      email:string,
-      phoneNumber:string,
-      position :string,
-      status :string,
-      hireDate:string,
-      departmentId :number;
- }
+export interface EmployeeRequest {
+  firstName: string;
+  lastName: string;
+  email: string;
+  phoneNumber: string;
+  position: number;
+  status: number;
+  hireDate: string;
+  departmentId: number;
+}

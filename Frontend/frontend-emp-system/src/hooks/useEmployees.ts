@@ -4,8 +4,12 @@ import type { EmployeeRequest, EmployeeResponse } from "../Types/employee";
 import * as EmployeeService from "../services/employeeService";
 import axios from "axios";
 import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
 
 export function useEmployees() {
+
+  const navigate = useNavigate();
+
   const [employees, setEmployees] = useState<EmployeeResponse[]>([]);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -22,6 +26,23 @@ export function useEmployees() {
   const [isEditMode, setIsEditMode] = useState(false);
   const [editingId, setEditingId] = useState<number | null>(null);
   const [isOpen, setIsOpen] = useState(false);
+
+  const positionReverseMap: Record<string, number> = {
+  "Manager": 0,
+  "Assistant Manager": 1,
+  "Team Leader": 2,
+  "Staff": 3,
+  "Intern": 4,
+};
+
+const statusReverseMap: Record<string, number> = {
+  "Active": 0,
+  "Inactive": 1,
+  "Team Leader": 2,
+  "OnLeave": 3,
+  "Terminated": 4,
+};
+
 
   useEffect(() => {
     fetchEmployees();
@@ -54,8 +75,8 @@ export function useEmployees() {
       lastName,
       email,
       phoneNumber,
-      position,
-      status,
+      position: positionReverseMap[position] ?? 0, // convert to number
+      status: statusReverseMap[status] ?? 0,
       hireDate,
       departmentId: Number(departmentId),
     };
@@ -69,10 +90,17 @@ export function useEmployees() {
         console.log("Employee updated", response);
         toast.success("Employee updated successfully!");
       } else {
-        const response = await EmployeeService.createEmployee(payload);
+        try {
+          const response = await EmployeeService.createEmployee(payload);
 
         console.log("Data sent successfully", response);
         toast.success("Employee added successfully!");
+        } catch (error) {
+          console.error(error);
+          toast.error("Error creating employee  ");
+          
+        }
+        
       }
 
       fetchEmployees();
@@ -141,6 +169,10 @@ export function useEmployees() {
     setEditingId(null);
   };
 
+ const handleViewEmployeeDetails = (id:number) =>{
+    navigate(`/employees/${id}`)
+ }
+
   return {
     employees,
     setEmployees,
@@ -174,5 +206,6 @@ export function useEmployees() {
     handleEdit,
     handleAddButton,
     handleDelete,
+    handleViewEmployeeDetails
   };
 }

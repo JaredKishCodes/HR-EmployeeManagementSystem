@@ -52,6 +52,7 @@ const Employees: FC = (): JSX.Element => {
     handleEdit,
     handleAddButton,
     handleDelete,
+    handleViewEmployeeDetails
   } = useEmployees();
   return (
     <div>
@@ -137,6 +138,14 @@ const Employees: FC = (): JSX.Element => {
                 <td className="px-6 py-4">{statusMap[Number(emp.status)]}</td>
                 <td className="px-6 py-4">{emp.departmentName}</td>
                 <td className="py-4 pl-7">
+                  <a
+                    onClick={() => handleViewEmployeeDetails(emp.id)}
+                    className="cursor-pointer font-medium text-blue-600 hover:underline dark:text-blue-500"
+                  >
+                    View
+                  </a>
+                </td>
+                <td className="py-4 pr-7">
                   <a
                     onClick={() => handleEdit(emp.id)}
                     className="cursor-pointer font-medium text-blue-600 hover:underline dark:text-blue-500"
