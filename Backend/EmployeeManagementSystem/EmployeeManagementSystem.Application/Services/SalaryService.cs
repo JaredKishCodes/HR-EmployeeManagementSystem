@@ -31,6 +31,7 @@ namespace EmployeeManagementSystem.Application.Services
                 Allowances = addSalaryDto.Allowance,
                 Deductions = addSalaryDto.Deductions,
                 PayDate = addSalaryDto.PayDate.Value,
+                TotalSalary = addSalaryDto.BasicSalary + addSalaryDto.Allowance - addSalaryDto.Deductions
             };
 
             var result = await salaryRepository.AddSalaryAsync(salary);
@@ -43,7 +44,8 @@ namespace EmployeeManagementSystem.Application.Services
                 BasicSalary = result.BasicSalary,
                 Allowance = result.Allowances,
                 Deductions = result.Deductions,
-                PayDate = addSalaryDto.PayDate?.Date ?? DateTime.Now.Date
+                PayDate = addSalaryDto.PayDate?.Date ?? DateTime.Now.Date,
+                TotalSalary = result.TotalSalary
 
             };
         }
@@ -72,7 +74,8 @@ namespace EmployeeManagementSystem.Application.Services
                 BasicSalary = x.BasicSalary,
                 Allowance = x.Allowances,
                 Deductions = x.Deductions,
-                PayDate = x.PayDate
+                PayDate = x.PayDate,
+                TotalSalary =x.TotalSalary
             });
         }
 
@@ -92,7 +95,8 @@ namespace EmployeeManagementSystem.Application.Services
                 BasicSalary = salary.BasicSalary,
                 Allowance = salary.Allowances,
                 Deductions = salary.Deductions,
-                PayDate = salary.PayDate
+                PayDate = salary.PayDate,
+                TotalSalary = salary.TotalSalary
             };
         }
 
@@ -120,7 +124,7 @@ namespace EmployeeManagementSystem.Application.Services
            
             }
 
-            
+            existingSalary.TotalSalary = updateSalaryDto.BasicSalary + updateSalaryDto.Allowance - updateSalaryDto.Deductions;
 
              var result = await salaryRepository.UpdateSalaryAsync(existingSalary);
 
@@ -131,7 +135,8 @@ namespace EmployeeManagementSystem.Application.Services
                      BasicSalary = result.BasicSalary,
                      Allowance = result.Allowances,
                      Deductions = result.Deductions,
-                     PayDate = result.PayDate
+                     PayDate = result.PayDate,
+                     TotalSalary = result.TotalSalary
                  };
         }
 

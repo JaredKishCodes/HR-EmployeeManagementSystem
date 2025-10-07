@@ -14,9 +14,12 @@ public class SalaryConfig : IEntityTypeConfiguration<Salary>
         builder.Property(x => x.BasicSalary).IsRequired().HasColumnType("decimal(18,2)");
         builder.Property(x => x.Allowances).IsRequired().HasColumnType("decimal(18,2)");
         builder.Property(x => x.Deductions).IsRequired().HasColumnType("decimal(18,2)");
+        builder.Property(x => x.PayDate).IsRequired();
+        builder.Property(x => x.TotalSalary).IsRequired().HasColumnType("decimal(18,2)");
 
         builder.HasOne(x => x.Employee)
        .WithMany(e => e.Salaries)
+       .HasForeignKey(x => x.EmployeeId)
        .HasForeignKey(x => x.EmployeeId)
        .OnDelete(DeleteBehavior.Restrict);
 

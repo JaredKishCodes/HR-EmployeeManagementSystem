@@ -11,6 +11,7 @@ namespace EmployeeManagementSystem.Domain.Entities
         public decimal Allowances { get; set; }
         public decimal Deductions { get; set; }
         public DateTime PayDate { get; set; }
+        public decimal TotalSalary { get; set; }
         public Employee? Employee { get; set; }
     }   
 }

@@ -18,6 +18,9 @@ const Payroll = () => {
     payDate,
     setPayDate,
     onSubmitPayroll,
+    selectedDepartment,
+    setSelectedDepartment,
+    handleDepartmentChange
   } = usePayroll();
 
   return (
@@ -36,7 +39,9 @@ const Payroll = () => {
               <select
                 id="departmentId"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                onChange={(e) => setDepartmentId(Number(e.target.value))}
+                onChange={ handleDepartmentChange}
+                value={selectedDepartment}
+
               >
                 <option value="">Select Department</option>
                 {departments.map((dept) => (
@@ -53,6 +58,7 @@ const Payroll = () => {
                 Employee
               </label>
               <select
+              disabled={!selectedDepartment}
                 id="employeeId"
                 className="bg-gray-50 border border-gray-300 text-gray-900 rounded focus:ring-blue-500 focus:border-blue-500 w-full py-3 px-3"
                 onChange={(e) => setEmployeeId(Number(e.target.value))}

@@ -30,12 +30,17 @@ namespace EmployeeManagementSystem.Infrastructure.Repository
 
         public async Task<IEnumerable<Employee>> GetAllEmployeesAsync()
         {
-           return await _context.Employees.Include(d => d.Department).ToListAsync();
+           return await _context.Employees.Include(d => d.Department).ThenInclude(s => s.Salaries).ToListAsync();
+        }
+
+        public async Task<IEnumerable<Employee?>> GetEmployeesByDepartment(int departmentId)
+        {
+            return await _context.Employees.Where(e => e.DepartmentId == departmentId).ToListAsync();
         }
 
         public async Task<Employee?> GetEmployeeByIdAsync(int id)
         {
-          return  await _context.Employees.Include(d => d.Department).FirstOrDefaultAsync(x => x.Id == id);
+          return  await _context.Employees.Include(d => d.Department).ThenInclude(x => x.Salaries).FirstOrDefaultAsync(x => x.Id == id);
         }
 
         public async Task<Employee?> GetEmployeeWithDepartmentAsync(int employeeId)

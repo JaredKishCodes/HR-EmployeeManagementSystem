@@ -1,5 +1,6 @@
 ﻿using EmployeeManagementSystem.Application.DTOs.Employee;
 using EmployeeManagementSystem.Application.Interfaces;
+using EmployeeManagementSystem.Domain.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,15 +11,28 @@ namespace EmployeeManagementSystem.API.Controllers
     public class EmployeeController : ControllerBase
     {
         private readonly IEmployeeService _employeeService;
-        public EmployeeController(IEmployeeService employeeService)
+        private readonly IEmployeeRepository _employeeRepository;
+        public EmployeeController(IEmployeeService employeeService,IEmployeeRepository employeeRepository)
         {
             _employeeService = employeeService;
+            _employeeRepository = employeeRepository;
         }
 
         [HttpGet("GetAllEmployees")]
         public async Task<IActionResult> GetAllEmployees()
         {
             var employees = await _employeeService.GetAllEmployeesAsync();
+            if (employees == null || !employees.Any())
+            {
+                return NotFound("Employees not found");
+            }
+            return Ok(employees);
+        }
+
+        [HttpGet("getEmployeesByDepartment")]
+        public async Task<IActionResult> GetEmployeesByDepartmentAsync(int departmentId)
+        {
+            var employees = await _employeeRepository.GetEmployeesByDepartment(departmentId);
             if (employees == null || !employees.Any())
             {
                 return NotFound("Employees not found");

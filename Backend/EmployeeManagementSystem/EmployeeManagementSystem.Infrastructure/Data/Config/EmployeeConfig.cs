@@ -27,6 +27,13 @@ namespace EmployeeManagementSystem.Infrastructure.Data.Config
                 .WithMany(e => e.Employees)
                 .HasForeignKey(x => x.DepartmentId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasMany(e => e.Salaries)
+                .WithOne(s => s.Employee)
+                .HasForeignKey(s => s.EmployeeId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+
         }
     }
 }

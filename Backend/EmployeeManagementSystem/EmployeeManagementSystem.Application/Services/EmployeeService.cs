@@ -44,7 +44,8 @@ namespace EmployeeManagementSystem.Application.Services
                 Position = employee.Position,
                 HireDate = employee.HireDate,
                 Status = employee.Status,
-                DepartmentName = department.Name
+                DepartmentName = department.Name,
+                Salary = 
             };
         }
 
@@ -73,7 +74,9 @@ namespace EmployeeManagementSystem.Application.Services
                 Position = x.Position,
                 HireDate = x.HireDate,
                 Status = x.Status,
-                DepartmentName = x.Department?.Name
+                DepartmentName = x.Department?.Name,
+                
+               
             });
         }
 
@@ -97,7 +100,8 @@ namespace EmployeeManagementSystem.Application.Services
                 Position = employee.Position,
                 HireDate = employee.HireDate,
                 Status = employee.Status,
-                DepartmentName = employee.Department?.Name
+                DepartmentName = employee.Department?.Name,
+               
             };
 
             return employeeDto;
