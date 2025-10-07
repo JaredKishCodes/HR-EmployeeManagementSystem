@@ -40,6 +40,11 @@ namespace EmployeeManagementSystem.Infrastructure.Repository
             return await _context.Salaries.AsNoTracking().Include(x => x.Employee).ThenInclude(x => x.Department).ToListAsync();
         }
 
+        public async Task<Salary?> GetLatestSalaryByEmployeeIdAsync(int employeeId)
+        {
+            return await _context.Salaries.Where(x => x.EmployeeId == employeeId).OrderByDescending(s => s.PayDate).FirstOrDefaultAsync();
+        }
+
         public async Task<Salary?> GetSalaryByIdAsync(int id)
         {
             var result = await _context.Salaries.Include(x => x.Employee).ThenInclude(x => x.Department).FirstOrDefaultAsync(x => x.Id == id);

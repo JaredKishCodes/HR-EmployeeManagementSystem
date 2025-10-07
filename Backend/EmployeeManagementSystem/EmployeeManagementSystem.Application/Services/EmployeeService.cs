@@ -7,7 +7,8 @@ using EmployeeManagementSystem.Domain.Interfaces;
 
 namespace EmployeeManagementSystem.Application.Services
 {
-    public class EmployeeService(IEmployeeRepository _employeeRepository,IDepartmentRepository _departmentRepository) : IEmployeeService
+    public class EmployeeService(IEmployeeRepository _employeeRepository,IDepartmentRepository _departmentRepository,ISalaryRepository _salaryRepository) 
+                                : IEmployeeService
     {
         public async Task<EmployeeResponseDto> CreateEmployeeAsync(CreateEmployeeDto createEmployeeDto)
         {
@@ -33,7 +34,7 @@ namespace EmployeeManagementSystem.Application.Services
 
             await _employeeRepository.CreateEmployeeAsync(employee);
 
-          
+
             return new EmployeeResponseDto
             {
                 Id = employee.Id,
@@ -45,7 +46,8 @@ namespace EmployeeManagementSystem.Application.Services
                 HireDate = employee.HireDate,
                 Status = employee.Status,
                 DepartmentName = department.Name,
-                Salary = 
+                
+
             };
         }
 
@@ -61,8 +63,9 @@ namespace EmployeeManagementSystem.Application.Services
 
 
         public async Task<IEnumerable<EmployeeResponseDto>> GetAllEmployeesAsync()
-        {
+        {   
             var employees = await _employeeRepository.GetAllEmployeesAsync();
+            
 
             return employees.Select(x => new EmployeeResponseDto
             {
@@ -84,6 +87,7 @@ namespace EmployeeManagementSystem.Application.Services
         {
             
             var employee = await _employeeRepository.GetEmployeeByIdAsync(id);
+            var salary = await _salaryRepository.GetLatestSalaryByEmployeeIdAsync(id);
 
             
             if (employee == null)
@@ -101,7 +105,8 @@ namespace EmployeeManagementSystem.Application.Services
                 HireDate = employee.HireDate,
                 Status = employee.Status,
                 DepartmentName = employee.Department?.Name,
-               
+                Salary = salary.TotalSalary
+
             };
 
             return employeeDto;
