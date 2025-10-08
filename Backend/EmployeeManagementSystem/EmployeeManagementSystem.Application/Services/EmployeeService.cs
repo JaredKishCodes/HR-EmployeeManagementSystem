@@ -105,7 +105,7 @@ namespace EmployeeManagementSystem.Application.Services
                 HireDate = employee.HireDate,
                 Status = employee.Status,
                 DepartmentName = employee.Department?.Name,
-                Salary = salary.TotalSalary
+                Salary = salary.TotalSalary 
 
             };
 
