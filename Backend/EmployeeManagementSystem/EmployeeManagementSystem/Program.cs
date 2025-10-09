@@ -1,4 +1,5 @@
 using EmployeeManagementSystem;
+using EmployeeManagementSystem.API;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,7 +28,15 @@ if (app.Environment.IsDevelopment())
     app.UseCors("AllowAll");    
 }
 
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    await SeedData.SeedRolesAndAdminAsync(services, builder.Configuration);
+}
+
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 

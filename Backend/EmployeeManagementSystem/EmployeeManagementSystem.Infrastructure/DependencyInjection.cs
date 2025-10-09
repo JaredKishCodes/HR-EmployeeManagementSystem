@@ -1,4 +1,6 @@
-﻿using EmployeeManagementSystem.Domain.Interfaces;
+﻿using EmployeeManagementSystem.Application.Interfaces.Auth;
+using EmployeeManagementSystem.Domain.Interfaces;
+using EmployeeManagementSystem.Infrastructure.Auth.Services;
 using EmployeeManagementSystem.Infrastructure.Data;
 using EmployeeManagementSystem.Infrastructure.Repository;
 using Microsoft.EntityFrameworkCore;
@@ -21,6 +23,8 @@ namespace EmployeeManagementSystem.Infrastructure
             services.AddScoped<ILeaveRequestRepository, LeaveRequestRepository>();
             services.AddScoped<IAttendanceRepository, AttendanceRepository>();
             services.AddScoped<ISalaryRepository, SalaryRepository>();
+            services.AddScoped<IAuthService,AuthService>();
+            services.AddScoped<IJwtTokenService, JwtTokenService>();
 
             return services;
         }

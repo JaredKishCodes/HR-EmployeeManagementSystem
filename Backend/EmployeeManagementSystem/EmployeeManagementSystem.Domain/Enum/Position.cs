@@ -3,10 +3,12 @@
 namespace EmployeeManagementSystem.Domain.Enum
 {
     public enum Position
-    {
+    {   
+        SystemAdministrator,
         Manager ,
         AssistantManager ,
-        TeamLeader ,
+        AdminStaff ,
+        DepartmentHeads,
         Staff ,
         Intern 
     }
