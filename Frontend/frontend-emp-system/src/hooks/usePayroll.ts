@@ -14,7 +14,7 @@ export function usePayroll() {
   const [allowances, setAllowances] = useState<number>(0);
   const [deductions, setDeductions] = useState<number>(0);
   const [payDate, setPayDate] = useState("");
-  const[selectedDepartment, setSelectedDepartment] = useState("");
+  const [selectedDepartment, setSelectedDepartment] = useState("");
 
   useEffect(() => {
     fetchDepartments();
@@ -29,42 +29,40 @@ export function usePayroll() {
 
   const fetchEmployees = async () => {
     try {
-        var response = await axios.get(`${API_URL}/Employee/GetAllEmployees`);
-        setEmployees(response.data);
-        console.log("Employee fetched successfully", response.data);
+      var response = await axios.get(`${API_URL}/Employee/GetAllEmployees`);
+      setEmployees(response.data);
+      console.log("Employee fetched successfully", response.data);
     } catch (error) {
-        console.error(console.error);
-        
-        
+      console.error(console.error);
     }
   };
 
-  const getEmployeesByDepartment = async (deptId:number) =>{
-    const response = await axios.get(`${API_URL}/Employee/getEmployeesByDepartment?departmentId=${deptId}`)
-    console.log("Employees by department fetched successfully",response.data);
-    
-    return response.data
-  
-  }
+  const getEmployeesByDepartment = async (deptId: number) => {
+    const response = await axios.get(
+      `${API_URL}/Employee/getEmployeesByDepartment?departmentId=${deptId}`,
+    );
+    console.log("Employees by department fetched successfully", response.data);
 
-  const handleDepartmentChange = async (e: React.ChangeEvent<HTMLSelectElement>)=>{
+    return response.data;
+  };
+
+  const handleDepartmentChange = async (
+    e: React.ChangeEvent<HTMLSelectElement>,
+  ) => {
     const deptId = e.target.value;
     setSelectedDepartment(deptId);
 
-    if(deptId){
-     const res = await getEmployeesByDepartment(Number(deptId))
+    if (deptId) {
+      const res = await getEmployeesByDepartment(Number(deptId));
       setEmployees(res);
-
-    }else{
-      setEmployees([])
+    } else {
+      setEmployees([]);
     }
-    
-
-  }
+  };
 
   const onSubmitPayroll = async () => {
     const payrollObject = {
-      employeeId : 1,
+      employeeId: 1,
       basicSalary,
       allowances,
       deductions,
@@ -103,6 +101,6 @@ export function usePayroll() {
     onSubmitPayroll,
     handleDepartmentChange,
     selectedDepartment,
-    setSelectedDepartment
+    setSelectedDepartment,
   };
 }
