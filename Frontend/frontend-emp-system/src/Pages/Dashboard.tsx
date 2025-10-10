@@ -1,5 +1,5 @@
-import React from "react";
-import { FaUsers, FaUserCheck, FaClock, FaMoneyBillWave } from "react-icons/fa";
+import { FaUsers, FaUserCheck, FaClock, FaMoneyBillWave } from 'react-icons/fa';
+
 
 type Props = {};
 
