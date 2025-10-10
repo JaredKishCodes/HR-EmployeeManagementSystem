@@ -6,6 +6,7 @@ using EmployeeManagementSystem.Domain.Entities;
 using EmployeeManagementSystem.Domain.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace EmployeeManagementSystem.Infrastructure.Auth.Services
 {
@@ -14,13 +15,15 @@ namespace EmployeeManagementSystem.Infrastructure.Auth.Services
         private readonly UserManager<AppUser> _userManager;
         private readonly IJwtTokenService _jwtTokenService;
         private readonly IEmployeeRepository _employeeRepository;
+        private readonly ILogger<AuthService> _logger;
        
 
-        public AuthService(UserManager<AppUser> userManager, IJwtTokenService jwtTokenService, IEmployeeRepository employeeRepository)
+        public AuthService(UserManager<AppUser> userManager, IJwtTokenService jwtTokenService, IEmployeeRepository employeeRepository,ILogger<AuthService> logger)
         {
             _userManager = userManager;
             _jwtTokenService = jwtTokenService;
             _employeeRepository = employeeRepository;
+            _logger = logger;
         }
 
         public async Task<LoginResponse> LoginAsync(LoginDto loginDto)
@@ -98,12 +101,19 @@ namespace EmployeeManagementSystem.Infrastructure.Auth.Services
                 Position = Domain.Enum.Position.User,
                 HireDate = DateTime.UtcNow,
                 Status = Domain.Enum.Status.Active,
-                DepartmentId = null,
+                DepartmentId = 1,
                 Salaries = null,
                 UserId = newUser.Id
             };
 
-           await _employeeRepository.CreateEmployeeAsync(employee);  
+            _logger.LogInformation("Creating employee: {@Employee}", employee);
+
+            var newEmployee = await _employeeRepository.CreateEmployeeAsync(employee);  
+
+            if (newEmployee == null)
+            {
+                throw new ArgumentNullException(nameof(newEmployee), "New employee is null");
+            }
 
             var roles = await _userManager.GetRolesAsync(newUser);
             // Generate JWT

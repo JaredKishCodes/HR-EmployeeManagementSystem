@@ -21,6 +21,7 @@ namespace EmployeeManagementSystem.Domain.Entities
         public ICollection<Salary> Salaries { get; set; } = new List<Salary>();
 
         public string? UserId { get; set; }
+        
 
     }
 }

@@ -34,6 +34,8 @@ namespace EmployeeManagementSystem.Infrastructure.Data.Config
                 .HasForeignKey(s => s.EmployeeId)
                 .OnDelete(DeleteBehavior.Cascade);
 
+          
+
             
 
 

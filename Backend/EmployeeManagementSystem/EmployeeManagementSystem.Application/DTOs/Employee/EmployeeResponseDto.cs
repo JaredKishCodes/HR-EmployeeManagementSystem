@@ -16,6 +16,6 @@ namespace EmployeeManagementSystem.Application.DTOs.Employee
         public DateTime HireDate { get; set; }
         public Status Status { get; set; } 
         public string? DepartmentName { get; set; }
-        public decimal Salary { get; set; }
+        public decimal? Salary { get; set; }
     }
 }
