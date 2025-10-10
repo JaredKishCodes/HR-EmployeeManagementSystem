@@ -1,18 +1,66 @@
+import axios from "axios";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const Login = () => {
+  const navigate = useNavigate();
   const [role, setRole] = useState<"user" | "admin">("user");
   const [hasAccount, setHasAccount] = useState(true);
 
-  const goToEmployeePage = () => {
-    const navigate = useNavigate();
-    return navigate("/layout");
+  const [loginPassword, setLoginPassword] = useState("");
+  const [loginEmail, setLoginEmail] = useState("");
+
+  const [registerPassword, setRegisterPassword] = useState("");
+  const [confirmRegisterPassword, setConfirmRegisterPassword] = useState("");
+  const [registerEmail, setRegisterEmail] = useState("");
+
+  const onLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    const loginForm = {
+      email: loginEmail,
+      password: loginPassword,
+    };
+
+    try {
+      const res = await axios.post(
+        "https://localhost:7273/api/Account/login",
+        loginForm,
+      );
+
+      // ✅ Save JWT token
+      localStorage.setItem("token", res.data.token);
+
+      console.log("Login successful:", res.data);
+
+      // optionally redirect
+      navigate(role === "admin" ? "/employees" : "/user-dashboard");
+    } catch (err: any) {
+      console.error("Login failed:", err.response?.data || err.message);
+    }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const onRegister = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log(`Logging in as ${role}...`);
+
+    const registerForm = {
+      email: registerEmail,
+      password: registerPassword,
+      confirmPassword: confirmRegisterPassword,
+    };
+
+    try {
+      const res = await axios.post(
+        "https://localhost:7273/api/Account/register",
+        registerForm,
+      );
+      console.log("Registration successful:", res.data);
+
+      // Optional: auto-login or show success message
+      setHasAccount(true);
+    } catch (err: any) {
+      console.error("Registration failed:", err.response?.data || err.message);
+    }
   };
 
   return (
@@ -28,7 +76,7 @@ const Login = () => {
           />
 
           <form
-            onSubmit={handleSubmit}
+            onSubmit={onLogin}
             className="flex w-full max-w-sm flex-col gap-4 rounded-2xl border border-gray-600 bg-gray-700 p-8 shadow-lg"
           >
             {/* Tabs */}
@@ -73,6 +121,8 @@ const Login = () => {
                 id="email"
                 className="rounded-lg border border-gray-600 bg-gray-800 px-4 py-2 text-gray-50 outline-none focus:border-gray-400 focus:ring-1 focus:ring-gray-400"
                 placeholder={`Enter your ${role} email`}
+                onChange={(e) => setLoginEmail(e.target.value)}
+                value={loginEmail}
               />
             </div>
 
@@ -89,14 +139,15 @@ const Login = () => {
                 id="password"
                 className="rounded-lg border border-gray-600 bg-gray-800 px-4 py-2 text-gray-50 outline-none focus:border-gray-400 focus:ring-1 focus:ring-gray-400"
                 placeholder="Enter your password"
+                onChange={(e) => setLoginPassword(e.target.value)}
+                value={loginPassword}
               />
             </div>
 
             {/* Button */}
             <button
-              onClick={goToEmployeePage}
               type="submit"
-              className="mt-2 cursor-pointer rounded-lg border border-gray-500 bg-gray-600 px-4 py-2 font-semibold text-gray-50 transition-all hover:bg-gray-500"
+              className="mt-2 cursor-pointer rounded-lg border border-gray-500 bg-gray-600 px-4 py-2 font-semibold text-gray-50 transition-all hover:bg-gray-600"
             >
               Login as {role === "admin" ? "Admin" : "User"}
             </button>
@@ -119,7 +170,7 @@ const Login = () => {
           />
 
           <form
-            onSubmit={handleSubmit}
+            onSubmit={onRegister}
             className="flex w-full max-w-sm flex-col gap-4 rounded-2xl border border-gray-600 bg-gray-700 p-8 shadow-lg"
           >
             {/* Tabs */}
@@ -155,6 +206,8 @@ const Login = () => {
                 id="email"
                 className="rounded-lg border border-gray-600 bg-gray-800 px-4 py-2 text-gray-50 outline-none focus:border-gray-400 focus:ring-1 focus:ring-gray-400"
                 placeholder={`Enter your email`}
+                onChange={(e) => setRegisterEmail(e.target.value)}
+                value={registerEmail}
               />
             </div>
 
@@ -171,10 +224,29 @@ const Login = () => {
                 id="password"
                 className="rounded-lg border border-gray-600 bg-gray-800 px-4 py-2 text-gray-50 outline-none focus:border-gray-400 focus:ring-1 focus:ring-gray-400"
                 placeholder="Enter your password"
+                onChange={(e) => setRegisterPassword(e.target.value)}
+                value={registerPassword}
               />
             </div>
 
-            {/* Button */}
+            <div className="flex flex-col text-left">
+              <label
+                htmlFor="password"
+                className="mb-1 text-sm font-medium text-gray-200"
+              >
+                Confirm Password
+              </label>
+              <input
+                type="confirmPassword"
+                id="confirmPassword"
+                className="rounded-lg border border-gray-600 bg-gray-800 px-4 py-2 text-gray-50 outline-none focus:border-gray-400 focus:ring-1 focus:ring-gray-400"
+                placeholder="Confirm your password"
+                onChange={(e) => setConfirmRegisterPassword(e.target.value)}
+                value={confirmRegisterPassword}
+              />
+            </div>
+
+            {/* Register Button */}
             <button
               onClick={() => setHasAccount(true)}
               type="submit"
