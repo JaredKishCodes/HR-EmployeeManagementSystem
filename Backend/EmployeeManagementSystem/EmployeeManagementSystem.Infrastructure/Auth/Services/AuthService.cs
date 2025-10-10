@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿
 using System.Threading.Tasks;
 using EmployeeManagementSystem.Application.DTOs.Auth;
 using EmployeeManagementSystem.Application.Interfaces.Auth;
+using EmployeeManagementSystem.Domain.Entities;
+using EmployeeManagementSystem.Domain.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,12 +13,14 @@ namespace EmployeeManagementSystem.Infrastructure.Auth.Services
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly IJwtTokenService _jwtTokenService;
+        private readonly IEmployeeRepository _employeeRepository;
        
 
-        public AuthService(UserManager<AppUser> userManager, IJwtTokenService jwtTokenService)
+        public AuthService(UserManager<AppUser> userManager, IJwtTokenService jwtTokenService, IEmployeeRepository employeeRepository)
         {
             _userManager = userManager;
             _jwtTokenService = jwtTokenService;
+            _employeeRepository = employeeRepository;
         }
 
         public async Task<LoginResponse> LoginAsync(LoginDto loginDto)
@@ -38,7 +39,8 @@ namespace EmployeeManagementSystem.Infrastructure.Auth.Services
             {
                 Id = user.Id, // adjust if Id is Guid or string
                 Email = user.Email!,
-                FullName = user.FullName
+                FirstName = user.FirstName,
+                LastName = user.LastName
             }, roles.ToList());
 
             return new LoginResponse
@@ -47,7 +49,8 @@ namespace EmployeeManagementSystem.Infrastructure.Auth.Services
                 Token = token,
                 Role = role,
                 Email = user.Email!,
-                FullName = user.FullName
+                FirstName = user.FirstName,
+                LastName = user.LastName
             };
         }
 
@@ -64,7 +67,8 @@ namespace EmployeeManagementSystem.Infrastructure.Auth.Services
             {
                 Email = registerDto.Email,
                 UserName = registerDto.Email,
-                FullName = registerDto.FullName
+                FirstName = registerDto.FirstName,
+                LastName = registerDto.LastName
             };
 
             var createdUser = await _userManager.CreateAsync(newUser, registerDto.Password);
@@ -82,11 +86,24 @@ namespace EmployeeManagementSystem.Infrastructure.Auth.Services
             }
             else
             {
-                await _userManager.AddToRoleAsync(newUser, "Customer");
+                await _userManager.AddToRoleAsync(newUser, "Employee");
             }
 
+            var employee = new Employee
+            {
+                FirstName = newUser.FirstName,
+                LastName = newUser.LastName,
+                Email = newUser.Email,
+                PhoneNumber = null,
+                Position = Domain.Enum.Position.User,
+                HireDate = DateTime.UtcNow,
+                Status = Domain.Enum.Status.Active,
+                DepartmentId = null,
+                Salaries = null,
+                UserId = newUser.Id
+            };
 
-
+           await _employeeRepository.CreateEmployeeAsync(employee);  
 
             var roles = await _userManager.GetRolesAsync(newUser);
             // Generate JWT
@@ -94,14 +111,16 @@ namespace EmployeeManagementSystem.Infrastructure.Auth.Services
             {
                 Id = newUser.Id, // Change this if your AppUser.Id is string or Guid
                 Email = newUser.Email!,
-                FullName = newUser.FullName
+                FirstName = newUser.FirstName,
+                LastName = newUser.LastName
             }, roles.ToList());
 
             return new AuthResponseDto
             {
                 Token = token,
                 Email = newUser.Email,
-                FullName = newUser.FullName
+                FirstName = newUser.FirstName,
+                LastName = newUser.LastName,
 
             };
         }

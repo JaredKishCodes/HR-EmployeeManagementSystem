@@ -18,10 +18,11 @@ namespace EmployeeManagementSystem.Infrastructure.Data.Config
             builder.Property(x => x.FirstName).IsRequired().HasMaxLength(50);
             builder.Property(x => x.LastName).IsRequired().HasMaxLength(30);
             builder.Property(x => x.Email).IsRequired().HasMaxLength(50);
-            builder.Property(x => x.PhoneNumber).IsRequired();
+            builder.Property(x => x.PhoneNumber).IsRequired(false);
             builder.Property(x => x.Position).IsRequired();
             builder.Property(x => x.HireDate).IsRequired();
             builder.Property(x => x.Status).IsRequired();
+            builder.Property(x => x.UserId).IsRequired();
 
             builder.HasOne(x => x.Department)
                 .WithMany(e => e.Employees)
@@ -32,6 +33,8 @@ namespace EmployeeManagementSystem.Infrastructure.Data.Config
                 .WithOne(s => s.Employee)
                 .HasForeignKey(s => s.EmployeeId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            
 
 
         }

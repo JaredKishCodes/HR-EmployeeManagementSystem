@@ -35,7 +35,8 @@ namespace EmployeeManagementSystem.API.Controllers
                     Message = "Registered successfully.",
                     Token = response.Token,
                     Email = response.Email,
-                    FullName = response.FullName
+                    FirstName = response.FirstName,
+                    LastName =response.LastName,
                 });
             }
             catch (ApplicationException ex)
@@ -69,7 +70,8 @@ namespace EmployeeManagementSystem.API.Controllers
                     Role = response.Role,
                     Token = response.Token,
                     Email = response.Email,
-                    FullName = response.FullName
+                    FirstName = response.FirstName,
+                    LastName = response.LastName
                 });
             }
             catch (UnauthorizedAccessException ex)

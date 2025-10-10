@@ -15,10 +15,12 @@ namespace EmployeeManagementSystem.Domain.Entities
         public DateTime HireDate { get; set; }
         public Status Status { get; set; }
 
-        public int DepartmentId { get; set; }
+        public int? DepartmentId { get; set; }
         public Department? Department { get; set; }
 
         public ICollection<Salary> Salaries { get; set; } = new List<Salary>();
+
+        public string? UserId { get; set; }
 
     }
 }

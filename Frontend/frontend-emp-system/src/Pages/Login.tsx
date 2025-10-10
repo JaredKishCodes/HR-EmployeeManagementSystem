@@ -1,15 +1,19 @@
 import axios from "axios";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Login = () => {
   const navigate = useNavigate();
-  const [role, setRole] = useState<"user" | "admin">("user");
+  const [role, setRole] = useState<"user" | "Admin">("user");
   const [hasAccount, setHasAccount] = useState(true);
 
   const [loginPassword, setLoginPassword] = useState("");
   const [loginEmail, setLoginEmail] = useState("");
 
+  const [registerFirstName, setRegisterFirstName] = useState("");
+  const [registerLastName, setRegisterLastName] = useState("");
   const [registerPassword, setRegisterPassword] = useState("");
   const [confirmRegisterPassword, setConfirmRegisterPassword] = useState("");
   const [registerEmail, setRegisterEmail] = useState("");
@@ -31,10 +35,13 @@ const Login = () => {
       // ✅ Save JWT token
       localStorage.setItem("token", res.data.token);
 
+      toast.success(`Welcome ${res.data.role}!`);
+      setTimeout(() => setHasAccount(true), 500);
+
       console.log("Login successful:", res.data);
 
       // optionally redirect
-      navigate(role === "admin" ? "/employees" : "/user-dashboard");
+      navigate(role === "Admin" ? "/employees" : "/user-dashboard");
     } catch (err: any) {
       console.error("Login failed:", err.response?.data || err.message);
     }
@@ -44,6 +51,8 @@ const Login = () => {
     e.preventDefault();
 
     const registerForm = {
+      firstName: registerFirstName,
+      lastName: registerLastName,
       email: registerEmail,
       password: registerPassword,
       confirmPassword: confirmRegisterPassword,
@@ -96,9 +105,9 @@ const Login = () => {
                 </button>
                 <button
                   type="button"
-                  onClick={() => setRole("admin")}
+                  onClick={() => setRole("Admin")}
                   className={`${
-                    role === "admin"
+                    role === "Admin"
                       ? "font-semibold text-gray-50"
                       : "cursor-pointer hover:text-gray-200"
                   }`}
@@ -149,7 +158,7 @@ const Login = () => {
               type="submit"
               className="mt-2 cursor-pointer rounded-lg border border-gray-500 bg-gray-600 px-4 py-2 font-semibold text-gray-50 transition-all hover:bg-gray-600"
             >
-              Login as {role === "admin" ? "Admin" : "User"}
+              Login as {role === "Admin" ? "Admin" : "User"}
             </button>
             <small
               onClick={() => setHasAccount(false)}
@@ -178,19 +187,43 @@ const Login = () => {
               <span className="font-semibold text-gray-200">Register</span>
             </div>
 
-            <div className="flex flex-col text-left">
-              <label
-                htmlFor="fullName"
-                className="mb-1 text-sm font-medium text-gray-200"
-              >
-                Full Name
-              </label>
-              <input
-                type="text"
-                id="fullName"
-                className="rounded-lg border border-gray-600 bg-gray-800 px-4 py-2 text-gray-50 outline-none focus:border-gray-400 focus:ring-1 focus:ring-gray-400"
-                placeholder={`Enter your full name`}
-              />
+            {/* First Name & Last Name */}
+            <div className="flex flex-col sm:flex-row sm:gap-4">
+              <div className="mb-4 flex flex-1 flex-col text-left sm:mb-0">
+                <label
+                  htmlFor="firstName"
+                  className="mb-1 text-sm font-medium text-gray-200"
+                >
+                  First Name
+                </label>
+                <input
+                  type="text"
+                  id="firstName"
+                  className="w-full rounded-lg border border-gray-600 bg-gray-800 px-4 py-2 text-gray-50 outline-none focus:border-gray-400 focus:ring-1 focus:ring-gray-400"
+                  placeholder="Enter first name"
+                  onChange={(e) => setRegisterFirstName(e.target.value)}
+                  value={registerFirstName}
+                  required
+                />
+              </div>
+
+              <div className="flex flex-1 flex-col text-left">
+                <label
+                  htmlFor="lastName"
+                  className="mb-1 text-sm font-medium text-gray-200"
+                >
+                  Last Name
+                </label>
+                <input
+                  type="text"
+                  id="lastName"
+                  className="w-full rounded-lg border border-gray-600 bg-gray-800 px-4 py-2 text-gray-50 outline-none focus:border-gray-400 focus:ring-1 focus:ring-gray-400"
+                  placeholder="Enter last name"
+                  onChange={(e) => setRegisterLastName(e.target.value)}
+                  value={registerLastName}
+                  required
+                />
+              </div>
             </div>
 
             {/* Email */}
@@ -205,9 +238,10 @@ const Login = () => {
                 type="email"
                 id="email"
                 className="rounded-lg border border-gray-600 bg-gray-800 px-4 py-2 text-gray-50 outline-none focus:border-gray-400 focus:ring-1 focus:ring-gray-400"
-                placeholder={`Enter your email`}
+                placeholder="Enter your email"
                 onChange={(e) => setRegisterEmail(e.target.value)}
                 value={registerEmail}
+                required
               />
             </div>
 
@@ -226,34 +260,37 @@ const Login = () => {
                 placeholder="Enter your password"
                 onChange={(e) => setRegisterPassword(e.target.value)}
                 value={registerPassword}
+                required
               />
             </div>
 
+            {/* Confirm Password */}
             <div className="flex flex-col text-left">
               <label
-                htmlFor="password"
+                htmlFor="confirmPassword"
                 className="mb-1 text-sm font-medium text-gray-200"
               >
                 Confirm Password
               </label>
               <input
-                type="confirmPassword"
+                type="password"
                 id="confirmPassword"
                 className="rounded-lg border border-gray-600 bg-gray-800 px-4 py-2 text-gray-50 outline-none focus:border-gray-400 focus:ring-1 focus:ring-gray-400"
                 placeholder="Confirm your password"
                 onChange={(e) => setConfirmRegisterPassword(e.target.value)}
                 value={confirmRegisterPassword}
+                required
               />
             </div>
 
             {/* Register Button */}
             <button
-              onClick={() => setHasAccount(true)}
               type="submit"
               className="mt-2 cursor-pointer rounded-lg border border-gray-500 bg-gray-600 px-4 py-2 font-semibold text-gray-50 transition-all hover:bg-gray-500"
             >
               Register
             </button>
+
             <small
               onClick={() => setHasAccount(true)}
               className="m-auto cursor-pointer hover:text-gray-300 active:text-gray-400"

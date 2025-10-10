@@ -25,7 +25,9 @@ namespace EmployeeManagementSystem.Infrastructure.Auth.Services
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 new Claim(ClaimTypes.Email, user.Email ?? string.Empty),
-                 new Claim(ClaimTypes.Name, user.FullName)
+                new Claim(ClaimTypes.Name, user.FirstName),
+                new Claim(ClaimTypes.Name, user.LastName)
+
             };
 
             // Add role claims

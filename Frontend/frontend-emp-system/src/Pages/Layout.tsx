@@ -1,7 +1,13 @@
 import type { JSX } from "react";
-import { Link, Outlet } from "react-router-dom";
+import { Link, Outlet, useNavigate } from "react-router-dom";
 
 export default function Layout(): JSX.Element {
+  const navigate = useNavigate();
+
+  const onLogout = () => {
+    localStorage.getItem("token");
+    navigate("login");
+  };
   return (
     <div>
       {/* Navbar */}
@@ -46,8 +52,8 @@ export default function Layout(): JSX.Element {
             <ul className="mt-4 flex flex-col rounded-lg bg-gray-50 font-medium md:mt-0 md:flex-row md:space-x-8 md:border-0 md:bg-transparent rtl:space-x-reverse dark:border-gray-700 dark:bg-gray-800 md:dark:bg-transparent">
               <li>
                 <a
-                  href="#"
-                  className="rounded border-2 bg-gray-700 px-3 py-1.5 font-normal text-white hover:bg-gray-800"
+                  onClick={onLogout}
+                  className="cursor-pointer rounded border-1 bg-gray-700 px-3 py-1.5 font-normal text-white hover:bg-gray-800 hover:text-red-500"
                 >
                   Logout
                 </a>
