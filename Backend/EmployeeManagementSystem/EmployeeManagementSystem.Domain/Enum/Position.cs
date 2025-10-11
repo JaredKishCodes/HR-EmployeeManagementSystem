@@ -11,6 +11,7 @@ namespace EmployeeManagementSystem.Domain.Enum
         DepartmentHeads,
         Staff ,
         Intern ,
-        User
+        User,
+        Employee,
     }
 }

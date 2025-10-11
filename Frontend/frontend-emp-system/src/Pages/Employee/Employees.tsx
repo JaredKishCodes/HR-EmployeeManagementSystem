@@ -9,6 +9,8 @@ const Employees: FC = (): JSX.Element => {
     2: "Team Leader",
     3: "Staff",
     4: "Intern",
+    5: "User",
+    6: "Employee",
   };
 
   const statusMap: Record<number, string> = {
@@ -21,7 +23,6 @@ const Employees: FC = (): JSX.Element => {
 
   const {
     employees,
-    setEmployees,
     firstName,
     setFirstName,
     lastName,
@@ -39,20 +40,14 @@ const Employees: FC = (): JSX.Element => {
     departmentId,
     setDepartmentId,
     departments,
-    setDepartments,
-
-    isEditMode,
-    setIsEditMode,
     editingId,
-    setEditingId,
     isOpen,
     setIsOpen,
-
     handleSubmit,
     handleEdit,
     handleAddButton,
     handleDelete,
-    handleViewEmployeeDetails
+    handleViewEmployeeDetails,
   } = useEmployees();
   return (
     <div>
@@ -130,9 +125,11 @@ const Employees: FC = (): JSX.Element => {
                   {emp.firstName} <span>{emp.lastName}</span>
                 </th>
                 <td className="px-6 py-4">{emp.email}</td>
-                <td className="px-6 py-4">{emp.phoneNumber}</td>
                 <td className="px-6 py-4">
-                  {positionMap[Number(emp.position)]}
+                  {emp.phoneNumber ?? "Not Assigned"}
+                </td>
+                <td className="px-6 py-4">
+                  {positionMap[Number(emp.position)] ?? "Not yet assigned"}
                 </td>
                 <td className="px-6 py-4">{emp.hireDate}</td>
                 <td className="px-6 py-4">{statusMap[Number(emp.status)]}</td>

@@ -25,6 +25,7 @@ namespace EmployeeManagementSystem.Infrastructure
             services.AddScoped<ISalaryRepository, SalaryRepository>();
             services.AddScoped<IAuthService,AuthService>();
             services.AddScoped<IJwtTokenService, JwtTokenService>();
+            services.AddScoped<IDashboardRepository, DashboardRepository>();
 
             return services;
         }
