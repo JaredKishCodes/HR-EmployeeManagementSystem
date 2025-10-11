@@ -33,7 +33,14 @@ namespace EmployeeManagementSystem.Infrastructure.Auth.Services
             if (user == null || !await _userManager.CheckPasswordAsync(user, loginDto.Password))
                 throw new UnauthorizedAccessException("Invalid credentials");
 
-          
+            var employee = await _employeeRepository.GetEmployeeByUserIdAsync(user.Id);
+
+            //_logger.LogInformation("Employee found: Id={Id}, Name={FirstName} {LastName}, UserId={UserId}, Department={DepartmentId}",
+            // employee.Id, employee.FirstName, employee.LastName, employee.UserId, employee.DepartmentId);
+
+
+            //if (employee == null)
+            //    throw new ApplicationException("Employee not found for the given user.");
 
             var roles = await _userManager.GetRolesAsync(user);
             var role = roles.FirstOrDefault();
@@ -43,18 +50,25 @@ namespace EmployeeManagementSystem.Infrastructure.Auth.Services
                 Id = user.Id, // adjust if Id is Guid or string
                 Email = user.Email!,
                 FirstName = user.FirstName,
-                LastName = user.LastName
+                LastName = user.LastName,
+                EmployeeId = employee?.Id,
             }, roles.ToList());
 
-            return new LoginResponse
+            var response = new LoginResponse
             {
-                
                 Token = token,
                 Role = role,
                 Email = user.Email!,
                 FirstName = user.FirstName,
-                LastName = user.LastName
+                LastName = user.LastName,
+                EmployeeId = employee?.Id
             };
+
+            _logger.LogInformation("LoginResponse = {@Response} EmployeeId ={EmployeeId}", response, employee.Id);
+
+
+            return response;
+
         }
 
 

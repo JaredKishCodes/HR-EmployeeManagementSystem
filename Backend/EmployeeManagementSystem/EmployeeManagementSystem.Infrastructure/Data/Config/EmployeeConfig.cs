@@ -1,6 +1,8 @@
 ﻿
 
+using System.Reflection.Emit;
 using EmployeeManagementSystem.Domain.Entities;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -36,7 +38,8 @@ namespace EmployeeManagementSystem.Infrastructure.Data.Config
 
           
 
-            
+
+
 
 
         }

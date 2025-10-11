@@ -10,10 +10,12 @@ namespace EmployeeManagementSystem.API.Controllers
     public class AccountController : ControllerBase
     {
         private readonly IAuthService _authService;
+        private readonly ILogger<AccountController> _logger;
 
-        public AccountController(IAuthService authService)
+        public AccountController(IAuthService authService,ILogger<AccountController> logger)
         {
             _authService = authService;
+            _logger = logger;
         }
 
         [HttpPost("register")]
@@ -63,7 +65,7 @@ namespace EmployeeManagementSystem.API.Controllers
             try
             {
                 var response = await _authService.LoginAsync(loginDto);
-                return Ok(new LoginResponse
+                var result = new LoginResponse
                 {
                     Success = true,
                     Message = "Login successfully.",
@@ -71,8 +73,14 @@ namespace EmployeeManagementSystem.API.Controllers
                     Token = response.Token,
                     Email = response.Email,
                     FirstName = response.FirstName,
-                    LastName = response.LastName
-                });
+                    LastName = response.LastName,
+                    EmployeeId = response.EmployeeId
+                };
+
+                _logger.LogInformation("Employee Id:{EmployeeId}",result.EmployeeId);
+
+                return Ok(result);
+
             }
             catch (UnauthorizedAccessException ex)
             {

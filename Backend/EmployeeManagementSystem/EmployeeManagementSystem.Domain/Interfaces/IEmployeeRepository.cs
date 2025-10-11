@@ -6,6 +6,8 @@ namespace EmployeeManagementSystem.Domain.Interfaces
     {
         Task<IEnumerable<Employee>> GetAllEmployeesAsync();
         Task<Employee?> GetEmployeeByIdAsync(int id);
+
+        Task<Employee?> GetEmployeeByUserIdAsync(string userId);
         Task<Employee?> GetEmployeeWithDepartmentAsync(int employeeId);
         Task<IEnumerable<Employee?>> GetEmployeesByDepartment(int departmentId);
         Task<Employee?> CreateEmployeeAsync(Employee employee);

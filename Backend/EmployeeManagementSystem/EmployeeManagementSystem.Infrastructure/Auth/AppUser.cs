@@ -1,5 +1,6 @@
 ﻿
 using System.ComponentModel.DataAnnotations;
+using EmployeeManagementSystem.Domain.Entities;
 using Microsoft.AspNetCore.Identity;
 
 namespace EmployeeManagementSystem.Infrastructure.Auth
@@ -11,5 +12,6 @@ namespace EmployeeManagementSystem.Infrastructure.Auth
         [Required]
         public string LastName { get; set; } = string.Empty;
         public int EmployeeId { get; set; }
+        
     }
 }

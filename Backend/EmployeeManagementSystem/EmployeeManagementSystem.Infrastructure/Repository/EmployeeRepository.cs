@@ -72,5 +72,12 @@ namespace EmployeeManagementSystem.Infrastructure.Repository
             return employee;
 
         }
+
+        public async Task<Employee?> GetEmployeeByUserIdAsync(string userId)
+        {
+            return await _context.Employees
+                .FirstOrDefaultAsync(e => e.UserId == userId);
+        }
+
     }
 }
