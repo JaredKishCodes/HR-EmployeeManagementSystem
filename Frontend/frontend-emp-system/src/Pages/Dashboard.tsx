@@ -1,9 +1,9 @@
 import { FaUsers, FaUserCheck, FaClock, FaMoneyBillWave } from 'react-icons/fa';
 
 
-type Props = {};
 
-const Dashboard = (props: Props) => {
+
+const Dashboard = () => {
   return (
     <div className="min-h-screen bg-gray-100 p-6">
       <h1 className="mb-6 text-3xl font-bold text-gray-800">

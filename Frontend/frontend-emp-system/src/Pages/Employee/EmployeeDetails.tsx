@@ -1,17 +1,16 @@
-import axios from "axios";
-import React, { useEffect, useState } from "react";
+
+import  { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import api from "../../api";
 
-type Props = {};
 
-const EmployeeDetails = (props: Props) => {
+
+const EmployeeDetails = () => {
   const { id } = useParams<{ id: string }>();
   const [employee, setEmployee] = useState<any>(null);
 
   useEffect(() => {
-    axios
-      .get(`https://localhost:7273/api/Employee/${id}`)
-      .then((res) => setEmployee(res.data));
+    api.get(`/Employee/${id}`).then((res) => setEmployee(res.data));
   }, [id]);
 
   if (!employee) {

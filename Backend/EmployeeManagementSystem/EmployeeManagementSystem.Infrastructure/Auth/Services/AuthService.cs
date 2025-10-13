@@ -64,8 +64,6 @@ namespace EmployeeManagementSystem.Infrastructure.Auth.Services
                 EmployeeId = employee?.Id
             };
 
-            _logger.LogInformation("LoginResponse = {@Response} EmployeeId ={EmployeeId}", response, employee.Id);
-
 
             return response;
 

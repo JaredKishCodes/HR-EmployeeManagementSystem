@@ -8,6 +8,27 @@ export default function Layout(): JSX.Element {
     localStorage.getItem("token");
     navigate("login");
   };
+
+  type MenuItem = {
+    path: string;
+    label: string;
+    roles: string[];
+  };
+
+  const menuItems: MenuItem[] = [
+    { path: "/dashboard", label: "Dashboard", roles: ["Admin"] },
+    { path: "/employees", label: "Employees", roles: ["Admin", "Employee"] },
+    { path: "/department", label: "Department", roles: ["Admin"] },
+    { path: "/leaves", label: "Leaves", roles: ["Admin", "Employee"] },
+    { path: "/attendance", label: "Attendance", roles: ["Admin", "Employee"] },
+    {
+      path: "/payroll",
+      label: "Payroll",
+      roles: ["Admin", "Employee", "Employee"],
+    },
+  ];
+
+  const role = localStorage.getItem("role");
   return (
     <div>
       {/* Navbar */}
@@ -71,54 +92,18 @@ export default function Layout(): JSX.Element {
       >
         <div className="h-full overflow-y-auto bg-gray-800 px-3 py-4 dark:bg-gray-800">
           <ul className="space-y-2 font-medium">
-            <li>
-              <Link
-                to="/dashboard"
-                className="group flex items-center rounded-lg p-2 text-gray-50 hover:bg-gray-700 dark:text-white dark:hover:bg-gray-700"
-              >
-                <span className="ml-3">Dashboard</span>
-              </Link>
-            </li>
-            <li>
-              <Link
-                to="/employees"
-                className="group flex items-center rounded-lg p-2 text-gray-50 hover:bg-gray-700 dark:text-white dark:hover:bg-gray-700"
-              >
-                <span className="ml-3">Employees</span>
-              </Link>
-            </li>
-            <li>
-              <Link
-                to="/department"
-                className="group flex items-center rounded-lg p-2 text-gray-50 hover:bg-gray-700 dark:text-white dark:hover:bg-gray-700"
-              >
-                <span className="ml-3">Department</span>
-              </Link>
-            </li>
-            <li>
-              <Link
-                to="/leaves"
-                className="group flex items-center rounded-lg p-2 text-gray-50 hover:bg-gray-700 dark:text-white dark:hover:bg-gray-700"
-              >
-                <span className="ml-3">Leaves</span>
-              </Link>
-            </li>
-            <li>
-              <Link
-                to="/attendance"
-                className="group flex items-center rounded-lg p-2 text-gray-50 hover:bg-gray-700 dark:text-white dark:hover:bg-gray-700"
-              >
-                <span className="ml-3">Attendance</span>
-              </Link>
-            </li>
-            <li>
-              <Link
-                to="/payroll"
-                className="group flex items-center rounded-lg p-2 text-gray-50 hover:bg-gray-700 dark:text-white dark:hover:bg-gray-700"
-              >
-                <span className="ml-3">Payroll</span>
-              </Link>
-            </li>
+            {menuItems
+              .filter((item) => item.roles.includes(role ?? "")) // filter by role
+              .map((item) => (
+                <li key={item.path}>
+                  <Link
+                    to={item.path}
+                    className="group flex items-center rounded-lg p-2 text-gray-50 hover:bg-gray-700 dark:text-white dark:hover:bg-gray-700"
+                  >
+                    <span className="ml-3">{item.label}</span>
+                  </Link>
+                </li>
+              ))}
           </ul>
         </div>
       </aside>

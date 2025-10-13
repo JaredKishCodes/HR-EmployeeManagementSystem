@@ -3,6 +3,7 @@ using EmployeeManagementSystem.Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Authorization;
 
 namespace EmployeeManagementSystem.API.Controllers
 {
@@ -29,6 +30,7 @@ namespace EmployeeManagementSystem.API.Controllers
         }
 
         // GET: api/Department
+        [Authorize (Roles ="Admin")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<DepartmentResponse>>> GetAllDepartments()
         {

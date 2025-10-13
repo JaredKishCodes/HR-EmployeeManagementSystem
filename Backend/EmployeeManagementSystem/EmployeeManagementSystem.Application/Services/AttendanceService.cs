@@ -64,8 +64,6 @@ namespace EmployeeManagementSystem.Application.Services
             };
         }
 
-
-
         public async Task<bool> DeleteAttendanceAsync(int id)
         {
             var attendance = await _attendanceRepository.GetAttendanceByIdAsync(id);

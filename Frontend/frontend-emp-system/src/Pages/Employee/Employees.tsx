@@ -1,6 +1,7 @@
-import type { FC, JSX } from "react";
+import { useEffect, type FC, type JSX } from "react";
 import { useEmployees } from "../../hooks/useEmployees";
 import { Position } from "../../Types/enums";
+import { useNavigate } from "react-router-dom";
 
 const Employees: FC = (): JSX.Element => {
   const positionMap: Record<number, string> = {
@@ -20,6 +21,15 @@ const Employees: FC = (): JSX.Element => {
     3: "OnLeave",
     4: "Terminated",
   };
+  const navigate = useNavigate();
+  const role = localStorage.getItem("role");
+  const employeeId = localStorage.getItem("employeeId");
+
+  useEffect(()=>{
+    if(role != "Admin" && employeeId){
+      navigate(`/employees/${employeeId}`)
+    }
+  },[role,employeeId,navigate])
 
   const {
     employees,
@@ -51,7 +61,8 @@ const Employees: FC = (): JSX.Element => {
   } = useEmployees();
   return (
     <div>
-      <div className="relative overflow-x-auto sm:rounded-lg">
+      {role === "Admin" && (
+        <div className="relative overflow-x-auto sm:rounded-lg">
         <button
           onClick={handleAddButton}
           type="button"
@@ -198,6 +209,8 @@ const Employees: FC = (): JSX.Element => {
           </ul>
         </nav>
       </div>
+      )}
+      
 
       {/* Main modal */}
       {isOpen && (

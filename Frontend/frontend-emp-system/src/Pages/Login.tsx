@@ -34,12 +34,14 @@ const Login = () => {
 
       // ✅ Save JWT token
       localStorage.setItem("token", res.data.token);
+      localStorage.setItem("role", res.data.role);
+      localStorage.setItem("employeeId", res.data.employeeId);
 
       {
         res.data.role === "Admin"
           ? toast.success(`Welcome ${res.data.role}!`)
           : toast.success(
-              `Welcome ${res.data.firstName} ${res.data.lastName} !`,
+              `Welcome ${res.data.firstName} ${res.data.lastName}!`,
             );
       }
       setTimeout(() => setHasAccount(true), 500);
@@ -52,6 +54,7 @@ const Login = () => {
       );
     } catch (err: any) {
       console.error("Login failed:", err.response?.data || err.message);
+      toast.error("Login failed", err.response?.data || err.message);
     }
   };
 

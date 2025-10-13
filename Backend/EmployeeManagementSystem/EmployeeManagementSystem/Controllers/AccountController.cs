@@ -77,7 +77,7 @@ namespace EmployeeManagementSystem.API.Controllers
                     EmployeeId = response.EmployeeId
                 };
 
-                _logger.LogInformation("Employee Id:{EmployeeId}",result.EmployeeId);
+        
 
                 return Ok(result);
 

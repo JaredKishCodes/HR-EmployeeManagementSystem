@@ -1,6 +1,7 @@
 ﻿using EmployeeManagementSystem.Application.DTOs.Employee;
 using EmployeeManagementSystem.Application.Interfaces;
 using EmployeeManagementSystem.Domain.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,12 +13,12 @@ namespace EmployeeManagementSystem.API.Controllers
     {
         private readonly IEmployeeService _employeeService;
         private readonly IEmployeeRepository _employeeRepository;
-        public EmployeeController(IEmployeeService employeeService,IEmployeeRepository employeeRepository)
+        public EmployeeController(IEmployeeService employeeService, IEmployeeRepository employeeRepository)
         {
             _employeeService = employeeService;
             _employeeRepository = employeeRepository;
         }
-
+        [Authorize(Roles = "Admin")]
         [HttpGet("GetAllEmployees")]
         public async Task<IActionResult> GetAllEmployees()
         {
@@ -28,7 +29,7 @@ namespace EmployeeManagementSystem.API.Controllers
             }
             return Ok(employees);
         }
-
+        [Authorize(Roles = "Admin, Employee, SystemAdministrator, AdminStaff, DepartmentHeads,")]
         [HttpGet("getEmployeesByDepartment")]
         public async Task<IActionResult> GetEmployeesByDepartmentAsync(int departmentId)
         {
@@ -39,14 +40,14 @@ namespace EmployeeManagementSystem.API.Controllers
             }
             return Ok(employees);
         }
-
+        [Authorize(Roles = "Admin, Employee, SystemAdministrator, AdminStaff, DepartmentHeads,")]
         [HttpGet("{id:int}")]
         public async Task<ActionResult<EmployeeResponseDto>> GetEmployeeById(int id)
         {
             var employee = await _employeeService.GetEmployeeByIdAsync(id);
             return Ok(employee);
         }
-
+        [Authorize(Roles = "Admin, SystemAdministrator, AdminStaff, DepartmentHeads,")]
         [HttpPost]
         public async Task<ActionResult<EmployeeResponseDto>> CreateEmployee(CreateEmployeeDto createEmployeeDto)
         {
@@ -62,7 +63,7 @@ namespace EmployeeManagementSystem.API.Controllers
             }
             return Ok(employee);
         }
-
+        [Authorize(Roles = "Admin, Employee, SystemAdministrator, AdminStaff, DepartmentHeads,")]
         [HttpPut("{id}")]
         public async Task<ActionResult<EmployeeResponseDto>> UpdateEmployee(int id, UpdateEmployeeDto updateEmployeeDto)
         {
@@ -81,7 +82,7 @@ namespace EmployeeManagementSystem.API.Controllers
                 return NotFound(ex.Message);
             }
         }
-
+        [Authorize(Roles = "Admin, SystemAdministrator, AdminStaff, DepartmentHeads,")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteEmployee(int id)
         {

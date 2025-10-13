@@ -5,9 +5,9 @@ import * as EmployeeService from "../services/employeeService";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
+import api from "../api";
 
 export function useEmployees() {
-
   const navigate = useNavigate();
 
   const [employees, setEmployees] = useState<EmployeeResponse[]>([]);
@@ -28,21 +28,20 @@ export function useEmployees() {
   const [isOpen, setIsOpen] = useState(false);
 
   const positionReverseMap: Record<string, number> = {
-  "Manager": 0,
-  "Assistant Manager": 1,
-  "Team Leader": 2,
-  "Staff": 3,
-  "Intern": 4,
-};
+    Manager: 0,
+    "Assistant Manager": 1,
+    "Team Leader": 2,
+    Staff: 3,
+    Intern: 4,
+  };
 
-const statusReverseMap: Record<string, number> = {
-  "Active": 0,
-  "Inactive": 1,
-  "Team Leader": 2,
-  "OnLeave": 3,
-  "Terminated": 4,
-};
-
+  const statusReverseMap: Record<string, number> = {
+    Active: 0,
+    Inactive: 1,
+    "Team Leader": 2,
+    OnLeave: 3,
+    Terminated: 4,
+  };
 
   useEffect(() => {
     fetchEmployees();
@@ -60,7 +59,7 @@ const statusReverseMap: Record<string, number> = {
 
   const fetchDepartments = async () => {
     try {
-      const response = await axios.get("https://localhost:7273/api/Department");
+      const response = await api.get("/Department");
       setDepartments(response.data);
     } catch (error) {
       console.error("Failed to fetch departments:", error);
@@ -93,14 +92,12 @@ const statusReverseMap: Record<string, number> = {
         try {
           const response = await EmployeeService.createEmployee(payload);
 
-        console.log("Data sent successfully", response);
-        toast.success("Employee added successfully!");
+          console.log("Data sent successfully", response);
+          toast.success("Employee added successfully!");
         } catch (error) {
           console.error(error);
           toast.error("Error creating employee  ");
-          
         }
-        
       }
 
       fetchEmployees();
@@ -169,9 +166,9 @@ const statusReverseMap: Record<string, number> = {
     setEditingId(null);
   };
 
- const handleViewEmployeeDetails = (id:number) =>{
-    navigate(`/employees/${id}`)
- }
+  const handleViewEmployeeDetails = (id: number) => {
+    navigate(`/employees/${id}`);
+  };
 
   return {
     employees,
@@ -206,6 +203,6 @@ const statusReverseMap: Record<string, number> = {
     handleEdit,
     handleAddButton,
     handleDelete,
-    handleViewEmployeeDetails
+    handleViewEmployeeDetails,
   };
 }
