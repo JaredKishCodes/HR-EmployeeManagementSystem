@@ -1,5 +1,7 @@
 ﻿using EmployeeManagementSystem.Application.DTOs.LeaveRequest;
 using EmployeeManagementSystem.Application.Interfaces;
+using EmployeeManagementSystem.Domain.Entities;
+using EmployeeManagementSystem.Domain.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,9 +12,11 @@ namespace EmployeeManagementSystem.API.Controllers
     public class LeaveRequestController : ControllerBase
     {
         private readonly ILeaveRequestService _leaveRequestService;
-        public LeaveRequestController(ILeaveRequestService leaveRequestService)
+        private readonly ILeaveRequestRepository _leaveRequestRepository;
+        public LeaveRequestController(ILeaveRequestService leaveRequestService,ILeaveRequestRepository leaveRequestRepository)
         {
             _leaveRequestService = leaveRequestService;
+            _leaveRequestRepository = leaveRequestRepository;
         }
 
         [HttpGet("GetAllLeaveRequests")]
@@ -22,6 +26,17 @@ namespace EmployeeManagementSystem.API.Controllers
             if (leaveRequests == null || !leaveRequests.Any())
             {
                 return NotFound("Leave Requests not found");
+            }
+            return Ok(leaveRequests);
+        }
+
+        [HttpGet("getLeaveRequestByEmployeeId/{employeeId}")]
+        public async Task<ActionResult<IEnumerable<LeaveRequestResponseDto>>> GetLeaveRequestByEmployeeId(int employeeId)
+        {
+            var leaveRequests = await _leaveRequestRepository.GetLeaveRequestsByEmployeeId(employeeId);
+            if (leaveRequests == null || !leaveRequests.Any())
+            {
+                 return Ok(new List<LeaveRequest>());
             }
             return Ok(leaveRequests);
         }

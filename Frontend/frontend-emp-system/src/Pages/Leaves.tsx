@@ -1,7 +1,8 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { LeaveRequestStatus, type LeaveRequest } from "../Types/leaves";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+import api from "../api";
 
 const Leaves = () => {
   // Converts number from API → string for UI
@@ -18,8 +19,6 @@ const Leaves = () => {
     Rejected: 2,
   };
 
-  const API_URL = "https://localhost:7273";
-
   const [isOpen, setIsOpen] = useState(false);
   const [editingId, setEditingId] = useState(0);
   const [editMode, setEditMode] = useState(false);
@@ -33,14 +32,14 @@ const Leaves = () => {
   const [approvedBy, setApprovedBy] = useState("");
 
   useEffect(() => {
-    fetchLeaveRequests();
+    if (role === "Admin") {
+      fetchLeaveRequests();
+    }
   }, []);
 
   const fetchLeaveRequests = async () => {
     try {
-      const response = await axios.get(
-        `${API_URL}/api/LeaveRequest/GetAllLeaveRequests`,
-      );
+      const response = await api.get(`/LeaveRequest/GetAllLeaveRequests`);
       console.log("Leave Requests fetched successfully", response.data);
       setLeaveRequests(response.data);
     } catch (error) {
@@ -53,7 +52,7 @@ const Leaves = () => {
     setEditMode(true);
     setEditingId(id);
 
-    const response = await axios.get(`${API_URL}/api/LeaveRequest/${id}`);
+    const response = await api.get(`/LeaveRequest/${id}`);
     console.log("Leave Requests updated successfully", response.data);
 
     const leaveRequest = response.data;
@@ -85,7 +84,7 @@ const Leaves = () => {
     const cleanEndDate = new Date(endDate).toISOString();
 
     const createLeaveRequest = {
-      employeeId: 1003,
+      employeeId: employeeId,
       leaveType: leaveTypeApiMap[leaveType],
       startDate: cleanStartDate,
       endDate: cleanEndDate,
@@ -93,7 +92,7 @@ const Leaves = () => {
     };
 
     const editLeaveRequest = {
-      employeeId: 1003,
+      employeeId: employeeId,
       leaveType,
       startDate: cleanStartDate,
       leaveRequestStatus: LeaveRequestStatusApiMap[leaveRequestStatus],
@@ -104,8 +103,8 @@ const Leaves = () => {
 
     if (editMode && editingId) {
       console.log(editLeaveRequest);
-      const response = await axios.put(
-        `${API_URL}/api/LeaveRequest/${editingId}`,
+      const response = await api.put(
+        `/LeaveRequest/${editingId}`,
         editLeaveRequest,
       );
       fetchLeaveRequests();
@@ -115,8 +114,8 @@ const Leaves = () => {
       try {
         console.log(createLeaveRequest);
 
-        const response = await axios.post(
-          `${API_URL}/api/LeaveRequest/CreateLeaveRequest`,
+        const response = await api.post(
+          `/LeaveRequest/CreateLeaveRequest`,
           createLeaveRequest,
         );
         fetchLeaveRequests();
@@ -142,9 +141,7 @@ const Leaves = () => {
 
     if (result) {
       try {
-        const response = await axios.delete(
-          `${API_URL}/api/LeaveRequest/${id}`,
-        );
+        const response = await api.delete(`/LeaveRequest/${id}`);
         console.log("Leave Request deleted successfully", response.data);
         toast.success("Leave Request deleted successfully");
       } catch (error) {
@@ -152,6 +149,20 @@ const Leaves = () => {
       }
     }
   };
+
+  const getLeaveRequestsByEmployeeId = async (employeeId: number) => {
+    const response = await api.get(
+      `/LeaveRequest/getLeaveRequestByEmployeeId/${employeeId}`,
+    );
+    setLeaveRequests(response.data);
+    console.log(response.data);
+  };
+
+  useEffect(() => {
+    if (role != "Admin" && employeeId) {
+      getLeaveRequestsByEmployeeId(Number(employeeId ?? 0));
+    }
+  }, []);
 
   const resetForm = () => {
     setLeaveType("");
@@ -199,177 +210,352 @@ const Leaves = () => {
     3: "Team Leader",
   };
 
+  const role = localStorage.getItem("role");
+  const employeeId = Number(localStorage.getItem("employeeId"));
+
   return (
     <div>
-      <div className="relative overflow-x-auto sm:rounded-lg">
-        <button
-          onClick={handleAddButton}
-          type="button"
-          className="m-5 me-2 mb-5 cursor-pointer rounded-lg bg-green-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-green-800 focus:ring-4 focus:ring-green-300 focus:outline-none dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
-        >
-          Add New
-        </button>
-        <table className="w-full text-left text-sm text-gray-500 rtl:text-right dark:text-gray-400">
-          <thead className="bg-gray-50 text-xs text-gray-700 uppercase dark:bg-gray-700 dark:text-gray-400">
-            <tr>
-              <th scope="col" className="p-4">
-                <div className="flex items-center">
-                  <input
-                    id="checkbox-all-search"
-                    type="checkbox"
-                    className="h-4 w-4 rounded-sm border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600 dark:focus:ring-offset-gray-800"
-                  />
-                  <label htmlFor="checkbox-all-search" className="sr-only">
-                    checkbox
-                  </label>
-                </div>
-              </th>
-              <th scope="col" className="px-6 py-3">
-                Employee Id
-              </th>
-              <th scope="col" className="px-6 py-3">
-                Employee Name
-              </th>
-              <th scope="col" className="px-6 py-3">
-                Leave Type
-              </th>
-              <th scope="col" className="px-6 py-3">
-                Start Date
-              </th>
-              <th scope="col" className="px-6 py-3">
-                End Date
-              </th>
-              <th scope="col" className="px-6 py-3">
-                Reason
-              </th>
-              <th scope="col" className="px-6 py-3">
-                Leave Request Status
-              </th>
-              <th scope="col" className="px-6 py-3">
-                Created At
-              </th>
-              <th scope="col" className="px-6 py-3">
-                Approved By
-              </th>
-              <th scope="col" className="px-6 py-3">
-                Action
-              </th>
-            </tr>
-          </thead>
-
-          <tbody>
-            {leaveRequests.map((leaveRequest) => (
-              <tr
-                key={leaveRequest.id}
-                className="border-b border-gray-200 bg-white hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-600"
-              >
-                <td className="w-4 p-4">
+      {role == "Admin" ? (
+        <div className="relative overflow-x-auto sm:rounded-lg">
+          <button
+            onClick={handleAddButton}
+            type="button"
+            className="m-5 me-2 mb-5 cursor-pointer rounded-lg bg-green-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-green-800 focus:ring-4 focus:ring-green-300 focus:outline-none dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
+          >
+            Add New
+          </button>
+          <table className="w-full text-left text-sm text-gray-500 rtl:text-right dark:text-gray-400">
+            <thead className="bg-gray-50 text-xs text-gray-700 uppercase dark:bg-gray-700 dark:text-gray-400">
+              <tr>
+                <th scope="col" className="p-4">
                   <div className="flex items-center">
                     <input
-                      id="checkbox-table-search-1"
+                      id="checkbox-all-search"
                       type="checkbox"
                       className="h-4 w-4 rounded-sm border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600 dark:focus:ring-offset-gray-800"
                     />
-                    <label
-                      htmlFor="checkbox-table-search-1"
-                      className="sr-only"
-                    >
+                    <label htmlFor="checkbox-all-search" className="sr-only">
                       checkbox
                     </label>
                   </div>
-                </td>
-                <th
-                  scope="row"
-                  className="px-6 py-4 font-medium whitespace-nowrap text-gray-900 dark:text-white"
-                >
-                  {leaveRequest.employeeId}
                 </th>
-                <td className="px-6 py-4">
-                  {leaveRequest.employeeFirstName}{" "}
-                  <span>{leaveRequest.employeeLastName}</span>
-                </td>
-                <td className="px-6 py-4">
-                  {leaveTypeMap[Number(leaveRequest.leaveType)]}
-                </td>
-                <td className="px-6 py-4">
-                  {leaveRequest.startDate
-                    ? new Date(leaveRequest.startDate).toLocaleDateString()
-                    : ""}
-                </td>
-                <td className="px-6 py-4">
-                  {leaveRequest.endDate
-                    ? new Date(leaveRequest.endDate).toLocaleDateString()
-                    : ""}
-                </td>
-                <td className="px-6 py-4">{leaveRequest.reason}</td>
-                <td className="px-6 py-4">
-                  {leaveRequestMap[Number(leaveRequest.leaveRequestStatus)]}
-                </td>
-                <td className="px-6 py-4">
-                  {leaveRequest.createdAt
-                    ? new Date(leaveRequest.createdAt).toLocaleDateString()
-                    : ""}
-                </td>
-                <td className="px-6 py-4">
-                  {approvedByMap[Number(leaveRequest.approvedBy)]}
-                </td>
-
-                <td className="py-4 pl-7">
-                  <a
-                    onClick={() => handleEdit(leaveRequest.id)}
-                    className="cursor-pointer font-medium text-blue-600 hover:underline dark:text-blue-500"
-                  >
-                    Edit
-                  </a>
-                </td>
-                <td className="py-4 pr-7">
-                  <a
-                    onClick={() => handleDelete(leaveRequest.id)}
-                    className="cursor-pointer font-medium text-red-600 hover:underline dark:text-blue-500"
-                  >
-                    Delete
-                  </a>
-                </td>
+                <th scope="col" className="px-6 py-3">
+                  Employee Id
+                </th>
+                <th scope="col" className="px-6 py-3">
+                  Employee Name
+                </th>
+                <th scope="col" className="px-6 py-3">
+                  Leave Type
+                </th>
+                <th scope="col" className="px-6 py-3">
+                  Start Date
+                </th>
+                <th scope="col" className="px-6 py-3">
+                  End Date
+                </th>
+                <th scope="col" className="px-6 py-3">
+                  Reason
+                </th>
+                <th scope="col" className="px-6 py-3">
+                  Leave Request Status
+                </th>
+                <th scope="col" className="px-6 py-3">
+                  Created At
+                </th>
+                <th scope="col" className="px-6 py-3">
+                  Approved By
+                </th>
+                <th scope="col" className="px-6 py-3">
+                  Action
+                </th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
 
-        <nav
-          className="flex-column flex flex-wrap items-center justify-between pt-4 md:flex-row"
-          aria-label="Table navigation"
-        >
-          <span className="mb-4 block w-full text-sm font-normal text-gray-500 md:mb-0 md:inline md:w-auto dark:text-gray-400">
-            Showing{" "}
-            <span className="font-semibold text-gray-900 dark:text-white">
-              1-10
-            </span>{" "}
-            of{" "}
-            <span className="font-semibold text-gray-900 dark:text-white">
-              1000
+            <tbody>
+              {leaveRequests.map((leaveRequest) => (
+                <tr
+                  key={leaveRequest.id}
+                  className="border-b border-gray-200 bg-white hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-600"
+                >
+                  <td className="w-4 p-4">
+                    <div className="flex items-center">
+                      <input
+                        id="checkbox-table-search-1"
+                        type="checkbox"
+                        className="h-4 w-4 rounded-sm border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600 dark:focus:ring-offset-gray-800"
+                      />
+                      <label
+                        htmlFor="checkbox-table-search-1"
+                        className="sr-only"
+                      >
+                        checkbox
+                      </label>
+                    </div>
+                  </td>
+                  <th
+                    scope="row"
+                    className="px-6 py-4 font-medium whitespace-nowrap text-gray-900 dark:text-white"
+                  >
+                    {leaveRequest.employeeId}
+                  </th>
+                  <td className="px-6 py-4">
+                    {leaveRequest.employeeFirstName}{" "}
+                    <span>{leaveRequest.employeeLastName}</span>
+                  </td>
+                  <td className="px-6 py-4">
+                    {leaveTypeMap[Number(leaveRequest.leaveType)]}
+                  </td>
+                  <td className="px-6 py-4">
+                    {leaveRequest.startDate
+                      ? new Date(leaveRequest.startDate).toLocaleDateString()
+                      : ""}
+                  </td>
+                  <td className="px-6 py-4">
+                    {leaveRequest.endDate
+                      ? new Date(leaveRequest.endDate).toLocaleDateString()
+                      : ""}
+                  </td>
+                  <td className="px-6 py-4">{leaveRequest.reason}</td>
+                  <td className="px-6 py-4">
+                    {leaveRequestMap[Number(leaveRequest.leaveRequestStatus)]}
+                  </td>
+                  <td className="px-6 py-4">
+                    {leaveRequest.createdAt
+                      ? new Date(leaveRequest.createdAt).toLocaleDateString()
+                      : ""}
+                  </td>
+                  <td className="px-6 py-4">
+                    {approvedByMap[Number(leaveRequest.approvedBy)]}
+                  </td>
+
+                  <td className="py-4 pl-7">
+                    <a
+                      onClick={() => handleEdit(leaveRequest.id)}
+                      className="cursor-pointer font-medium text-blue-600 hover:underline dark:text-blue-500"
+                    >
+                      Edit
+                    </a>
+                  </td>
+                  <td className="py-4 pr-7">
+                    <a
+                      onClick={() => handleDelete(leaveRequest.id)}
+                      className="cursor-pointer font-medium text-red-600 hover:underline dark:text-blue-500"
+                    >
+                      Delete
+                    </a>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+
+          <nav
+            className="flex-column flex flex-wrap items-center justify-between pt-4 md:flex-row"
+            aria-label="Table navigation"
+          >
+            <span className="mb-4 block w-full text-sm font-normal text-gray-500 md:mb-0 md:inline md:w-auto dark:text-gray-400">
+              Showing{" "}
+              <span className="font-semibold text-gray-900 dark:text-white">
+                1-10
+              </span>{" "}
+              of{" "}
+              <span className="font-semibold text-gray-900 dark:text-white">
+                1000
+              </span>
             </span>
-          </span>
-          <ul className="inline-flex h-8 -space-x-px text-sm rtl:space-x-reverse">
-            <li>
-              <a
-                href="#"
-                className="ms-0 flex h-8 items-center justify-center rounded-s-lg border border-gray-300 bg-white px-3 leading-tight text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-              >
-                Previous
-              </a>
-            </li>
-            <li>
-              <a
-                href="#"
-                className="flex h-8 items-center justify-center border border-gray-300 bg-white px-3 leading-tight text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-              >
-                1
-              </a>
-            </li>
-            {/* ... more pagination items ... */}
-          </ul>
-        </nav>
-      </div>
+            <ul className="inline-flex h-8 -space-x-px text-sm rtl:space-x-reverse">
+              <li>
+                <a
+                  href="#"
+                  className="ms-0 flex h-8 items-center justify-center rounded-s-lg border border-gray-300 bg-white px-3 leading-tight text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                >
+                  Previous
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#"
+                  className="flex h-8 items-center justify-center border border-gray-300 bg-white px-3 leading-tight text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                >
+                  1
+                </a>
+              </li>
+              {/* ... more pagination items ... */}
+            </ul>
+          </nav>
+        </div>
+      ) : (
+        <div className="relative overflow-x-auto sm:rounded-lg">
+          <button
+            onClick={handleAddButton}
+            type="button"
+            className="m-5 me-2 mb-5 cursor-pointer rounded-lg bg-green-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-green-800 focus:ring-4 focus:ring-green-300 focus:outline-none dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
+          >
+            Add New
+          </button>
+          <table className="w-full text-left text-sm text-gray-500 rtl:text-right dark:text-gray-400">
+            <thead className="bg-gray-50 text-xs text-gray-700 uppercase dark:bg-gray-700 dark:text-gray-400">
+              <tr>
+                <th scope="col" className="p-4">
+                  <div className="flex items-center">
+                    <input
+                      id="checkbox-all-search"
+                      type="checkbox"
+                      className="h-4 w-4 rounded-sm border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600 dark:focus:ring-offset-gray-800"
+                    />
+                    <label htmlFor="checkbox-all-search" className="sr-only">
+                      checkbox
+                    </label>
+                  </div>
+                </th>
+                <th scope="col" className="px-6 py-3">
+                  Employee Id
+                </th>
+                <th scope="col" className="px-6 py-3">
+                  Employee Name
+                </th>
+                <th scope="col" className="px-6 py-3">
+                  Leave Type
+                </th>
+                <th scope="col" className="px-6 py-3">
+                  Start Date
+                </th>
+                <th scope="col" className="px-6 py-3">
+                  End Date
+                </th>
+                <th scope="col" className="px-6 py-3">
+                  Reason
+                </th>
+                <th scope="col" className="px-6 py-3">
+                  Leave Request Status
+                </th>
+                <th scope="col" className="px-6 py-3">
+                  Created At
+                </th>
+                <th scope="col" className="px-6 py-3">
+                  Approved By
+                </th>
+                <th scope="col" className="px-6 py-3">
+                  Action
+                </th>
+              </tr>
+            </thead>
+
+            <tbody>
+              {leaveRequests.map((leaveRequest) => (
+                <tr
+                  key={leaveRequest.id}
+                  className="border-b border-gray-200 bg-white hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-600"
+                >
+                  <td className="w-4 p-4">
+                    <div className="flex items-center">
+                      <input
+                        id="checkbox-table-search-1"
+                        type="checkbox"
+                        className="h-4 w-4 rounded-sm border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600 dark:focus:ring-offset-gray-800"
+                      />
+                      <label
+                        htmlFor="checkbox-table-search-1"
+                        className="sr-only"
+                      >
+                        checkbox
+                      </label>
+                    </div>
+                  </td>
+                  <th
+                    scope="row"
+                    className="px-6 py-4 font-medium whitespace-nowrap text-gray-900 dark:text-white"
+                  >
+                    {leaveRequest.employeeId}
+                  </th>
+                  <td className="px-6 py-4">
+                    {leaveRequest.employeeFirstName}{" "}
+                    <span>{leaveRequest.employeeLastName}</span>
+                  </td>
+                  <td className="px-6 py-4">
+                    {leaveTypeMap[Number(leaveRequest.leaveType)]}
+                  </td>
+                  <td className="px-6 py-4">
+                    {leaveRequest.startDate
+                      ? new Date(leaveRequest.startDate).toLocaleDateString()
+                      : ""}
+                  </td>
+                  <td className="px-6 py-4">
+                    {leaveRequest.endDate
+                      ? new Date(leaveRequest.endDate).toLocaleDateString()
+                      : ""}
+                  </td>
+                  <td className="px-6 py-4">{leaveRequest.reason}</td>
+                  <td className="px-6 py-4">
+                    {leaveRequestMap[Number(leaveRequest.leaveRequestStatus)]}
+                  </td>
+                  <td className="px-6 py-4">
+                    {leaveRequest.createdAt
+                      ? new Date(leaveRequest.createdAt).toLocaleDateString()
+                      : ""}
+                  </td>
+                  <td className="px-6 py-4">
+                    {approvedByMap[Number(leaveRequest.approvedBy)]}
+                  </td>
+
+                  <td className="py-4 pl-7">
+                    <a
+                      onClick={() => handleEdit(leaveRequest.id)}
+                      className="cursor-pointer font-medium text-blue-600 hover:underline dark:text-blue-500"
+                    >
+                      Edit
+                    </a>
+                  </td>
+                  <td className="py-4 pr-7">
+                    <a
+                      onClick={() => handleDelete(leaveRequest.id)}
+                      className="cursor-pointer font-medium text-red-600 hover:underline dark:text-blue-500"
+                    >
+                      Delete
+                    </a>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+
+          <nav
+            className="flex-column flex flex-wrap items-center justify-between pt-4 md:flex-row"
+            aria-label="Table navigation"
+          >
+            <span className="mb-4 block w-full text-sm font-normal text-gray-500 md:mb-0 md:inline md:w-auto dark:text-gray-400">
+              Showing{" "}
+              <span className="font-semibold text-gray-900 dark:text-white">
+                1-10
+              </span>{" "}
+              of{" "}
+              <span className="font-semibold text-gray-900 dark:text-white">
+                1000
+              </span>
+            </span>
+            <ul className="inline-flex h-8 -space-x-px text-sm rtl:space-x-reverse">
+              <li>
+                <a
+                  href="#"
+                  className="ms-0 flex h-8 items-center justify-center rounded-s-lg border border-gray-300 bg-white px-3 leading-tight text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                >
+                  Previous
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#"
+                  className="flex h-8 items-center justify-center border border-gray-300 bg-white px-3 leading-tight text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                >
+                  1
+                </a>
+              </li>
+              {/* ... more pagination items ... */}
+            </ul>
+          </nav>
+        </div>
+      )}
 
       {/* Main modal */}
       {isOpen && (

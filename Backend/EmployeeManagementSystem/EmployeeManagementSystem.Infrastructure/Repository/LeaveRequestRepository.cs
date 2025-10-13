@@ -41,6 +41,17 @@ namespace EmployeeManagementSystem.Infrastructure.Repository
             return await _context.LeaveRequests.Include(e => e.Employee).FirstOrDefaultAsync(x => x.Id == id);
         }
 
+        public async Task<IEnumerable<LeaveRequest>> GetLeaveRequestsByEmployeeId(int employeeId)
+        {
+           var employee =  await _context.Employees.FirstOrDefaultAsync(x => x.Id == employeeId);
+            if (employee is not null)
+            {
+                return await _context.LeaveRequests.Where(x => x.EmployeeId == employeeId).ToListAsync();
+            }
+
+            return Enumerable.Empty<LeaveRequest>();
+        }
+
         public async Task<LeaveRequest> UpdateLeaveRequestAsync(LeaveRequest leaveRequest)
         {
             var existingLeaveReq = await _context.LeaveRequests.FindAsync(leaveRequest.Id);

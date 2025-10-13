@@ -8,7 +8,11 @@ namespace EmployeeManagementSystem.Domain.Interfaces
     {
         Task<LeaveRequest> CreateLeaveRequestAsync(LeaveRequest leaveRequest);
         Task<IEnumerable<LeaveRequest>> GetAllLeaveRequestsAsync();
+
+        Task<IEnumerable<LeaveRequest>> GetLeaveRequestsByEmployeeId(int employeeId);
         Task<LeaveRequest> GetLeaveRequestByIdAsync(int id);
+
+        
         Task<LeaveRequest> UpdateLeaveRequestAsync(LeaveRequest leaveRequest);
         Task<bool> DeleteLeaveRequestByIdAsync(int id);
     }
