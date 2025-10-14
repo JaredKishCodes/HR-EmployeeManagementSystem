@@ -5,6 +5,9 @@ import { useNavigate } from "react-router-dom";
 import api from "../api";
 
 const Leaves = () => {
+  const role = localStorage.getItem("role");
+  const employeeId = Number(localStorage.getItem("employeeId"));
+
   // Converts number from API → string for UI
   const LeaveRequestStatusReverseMap: Record<number, string> = {
     0: "Pending",
@@ -83,56 +86,64 @@ const Leaves = () => {
     const cleanStartDate = new Date(startDate).toISOString();
     const cleanEndDate = new Date(endDate).toISOString();
 
-    const createLeaveRequest = {
-      employeeId: employeeId,
-      leaveType: leaveTypeApiMap[leaveType],
-      startDate: cleanStartDate,
-      endDate: cleanEndDate,
-      reason,
-    };
+    const payload =
+      editMode && editingId
+        ? {
+            employeeId,
+            leaveType,
+            startDate: cleanStartDate,
+            endDate: cleanEndDate,
+            leaveRequestStatus: LeaveRequestStatusApiMap[leaveRequestStatus],
+            approvedBy: 1,
+            reason,
+          }
+        : {
+            employeeId,
+            leaveType: leaveTypeApiMap[leaveType],
+            startDate: cleanStartDate,
+            endDate: cleanEndDate,
+            reason,
+          };
 
-    const editLeaveRequest = {
-      employeeId: employeeId,
-      leaveType,
-      startDate: cleanStartDate,
-      leaveRequestStatus: LeaveRequestStatusApiMap[leaveRequestStatus],
-      approvedBy: 1,
-      endDate: cleanEndDate,
-      reason,
-    };
-
-    if (editMode && editingId) {
-      console.log(editLeaveRequest);
-      const response = await api.put(
-        `/LeaveRequest/${editingId}`,
-        editLeaveRequest,
-      );
-      fetchLeaveRequests();
-      console.log("Leave Requests updated successfully", response.data);
-      toast.success("Leave Requests updated successfully");
-    } else {
-      try {
-        console.log(createLeaveRequest);
-
-        const response = await api.post(
-          `/LeaveRequest/CreateLeaveRequest`,
-          createLeaveRequest,
-        );
-        fetchLeaveRequests();
-        console.log("Leave Requests created successfully", response.data);
-        toast.success("Leave Requests created successfully");
-      } catch (error) {
-        console.error("Failed to create attendance", error);
-        toast.error("Failed to create attendance");
+    try {
+      if (editMode && editingId) {
+        await api.put(`/LeaveRequest/${editingId}`, payload);
+        toast.success("Leave Request updated successfully");
+      } else {
+        await api.post(`/LeaveRequest/CreateLeaveRequest`, payload);
+        toast.success("Leave Request created successfully");
       }
-    }
 
-    setIsOpen(false);
-    fetchLeaveRequests();
-    setEditMode(false);
-    setEditingId(0);
-    resetForm();
+      // Fetch updated leave requests based on role
+      if (role === "Admin") {
+        const response = await api.get("/LeaveRequest/GetAllLeaveRequests");
+        setLeaveRequests(response.data);
+      } else {
+        const response = await api.get(
+          `/LeaveRequest/getLeaveRequestByEmployeeId/${employeeId}`,
+        );
+        setLeaveRequests(response.data);
+      }
+
+      setIsOpen(false);
+      setEditMode(false);
+      setEditingId(0);
+      resetForm();
+    } catch (error) {
+      console.error("Failed to save leave request", error);
+      toast.error("Failed to save leave request");
+    }
   };
+
+  useEffect(() => {
+    if (!employeeId) return;
+
+    if (role === "Admin") {
+      fetchLeaveRequests(); // gets all leave requests
+    } else {
+      getLeaveRequestsByEmployeeId(employeeId); // only employee's requests
+    }
+  }, [role, employeeId]);
 
   const handleDelete = async (id: number) => {
     const result = window.confirm(
@@ -209,9 +220,6 @@ const Leaves = () => {
     2: "Assistant Manager",
     3: "Team Leader",
   };
-
-  const role = localStorage.getItem("role");
-  const employeeId = Number(localStorage.getItem("employeeId"));
 
   return (
     <div>
@@ -676,7 +684,7 @@ const Leaves = () => {
                   </div>
                 </div>
                 {editMode ? (
-                  <select
+                  {role === "Admin"  ? (       <select
                     name="leaveRequestStatus"
                     id="leaveRequestStatus"
                     className="focus:ring-primary-600 focus:border-primary-600 dark:focus:ring-primary-500 dark:focus:border-primary-500 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 dark:border-gray-500 dark:bg-gray-600 dark:text-white dark:placeholder-gray-400"
@@ -689,7 +697,8 @@ const Leaves = () => {
                         {status}
                       </option>
                     ))}
-                  </select>
+                  </select>) : (<div>dad</div>)}
+
                 ) : (
                   <div></div>
                 )}
