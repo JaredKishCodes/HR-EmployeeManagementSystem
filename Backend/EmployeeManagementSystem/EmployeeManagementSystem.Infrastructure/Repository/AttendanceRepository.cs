@@ -39,6 +39,11 @@ namespace EmployeeManagementSystem.Infrastructure.Repository
             return await _context.Attendances.AsNoTracking().Include(x => x.Employee).ToListAsync();
         }
 
+        public  async Task<IEnumerable<Attendance>> GetAttendaceByEmployeeId(int employeeId)
+        {
+          return  await _context.Attendances.Where(x => x.EmployeeId == employeeId).ToListAsync();
+        }
+
         public async Task<Attendance> GetAttendanceByIdAsync(int id)
         {
             return await _context.Attendances.Include(x => x.Employee).FirstOrDefaultAsync(x => x.Id == id);

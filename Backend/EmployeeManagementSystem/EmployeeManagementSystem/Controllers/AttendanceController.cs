@@ -1,5 +1,7 @@
 ﻿using EmployeeManagementSystem.Application.DTOs.Attendance;
 using EmployeeManagementSystem.Application.Interfaces;
+using EmployeeManagementSystem.Domain.Entities;
+using EmployeeManagementSystem.Domain.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EmployeeManagementSystem.API.Controllers
@@ -9,10 +11,12 @@ namespace EmployeeManagementSystem.API.Controllers
     public class AttendanceController : ControllerBase
     {
         private readonly IAttendanceService _attendanceService;
+        private readonly IAttendanceRepository _attendanceRepository;
 
-        public AttendanceController(IAttendanceService attendanceService)
+        public AttendanceController(IAttendanceService attendanceService, IAttendanceRepository attendanceRepository)
         {
             _attendanceService = attendanceService;
+            _attendanceRepository = attendanceRepository;
         }
 
         //  GET all attendances
@@ -20,6 +24,17 @@ namespace EmployeeManagementSystem.API.Controllers
         public async Task<IActionResult> GetAllAttendances()
         {
             var attendances = await _attendanceService.GetAllAttendancesAsync();
+            return Ok(attendances);
+        }
+
+        [HttpGet("getAttendanceByEmployeeId/{employeeId}")]
+        public async Task<IActionResult> GetAttendanceByEmployeeId(int employeeId)
+        {
+            var attendances = await _attendanceRepository.GetAttendaceByEmployeeId(employeeId);
+            if (attendances == null || !attendances.Any())
+            {
+                return Ok(new List<Attendance>());
+            }
             return Ok(attendances);
         }
 

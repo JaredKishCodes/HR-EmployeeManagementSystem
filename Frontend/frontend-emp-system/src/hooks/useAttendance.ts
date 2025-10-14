@@ -2,10 +2,10 @@ import { useEffect, useState } from "react";
 import * as AttendanceService from "../services/attendanceService";
 import type { IAttendanceResponse } from "../Types/attendance";
 import { toast } from "react-toastify";
+import api from "../api";
 
 export function useAttendance() {
   const [attendance, setAttendance] = useState<IAttendanceResponse[]>([]);
-  const [employeeId, setEmployeeId] = useState(0);
   const [employeeFirstName, setEmployeeFirstName] = useState("");
   const [employeeLastName, setEmployeeLastName] = useState("");
   const [date, setDate] = useState("");
@@ -17,9 +17,22 @@ export function useAttendance() {
   const [editingId, setEditingId] = useState<number | null>(null);
   const [isOpen, setIsOpen] = useState(false);
 
+  const role = localStorage.getItem('role');
+  const employeeId = Number(localStorage.getItem('employeeId'));
   useEffect(() => {
-    fetchAttendance();
+    if(role === "Admin"){
+      fetchAttendance();
+    }
+    else{
+      getAttendanceByEmployeeid(employeeId);
+    } 
   }, []);
+
+
+  const getAttendanceByEmployeeid = async (id:number) =>{
+    const response = await api.get(`/Attendance/getAttendanceByEmployeeId/${id}`)
+    setAttendance(response.data)
+  }
 
   const fetchAttendance = async () => {
     const result = await AttendanceService.getAllAttendance();
@@ -34,7 +47,7 @@ export function useAttendance() {
     };
 
     const CreateAttendacePayload = {
-      employeeId: 1002,
+      employeeId: employeeId,
       timeIn,
     };
 

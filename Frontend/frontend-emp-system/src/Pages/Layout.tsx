@@ -1,12 +1,26 @@
 import type { JSX } from "react";
 import { Link, Outlet, useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
 export default function Layout(): JSX.Element {
   const navigate = useNavigate();
 
   const onLogout = () => {
-    localStorage.getItem("token");
-    navigate("login");
+    Swal.fire({
+      title: "Are you sure you want to logout?",
+      showCancelButton: true,
+      confirmButtonText: "Confirm",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          localStorage.getItem("token");
+          navigate("login");
+          Swal.fire("Logout success!", "", "success");
+        } catch (error) {
+          Swal.fire("Error", "Failed to delete the record.", "error");
+        }
+      }
+    });
   };
 
   type MenuItem = {

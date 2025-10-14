@@ -15,6 +15,9 @@ export function usePayroll() {
   const [payDate, setPayDate] = useState("");
   const [selectedDepartment, setSelectedDepartment] = useState("");
 
+  const role = localStorage.getItem('role');
+  const employeeIdLocalStorage = localStorage.getItem('employeeId');
+
   useEffect(() => {
     fetchDepartments();
     fetchEmployees();
@@ -61,7 +64,7 @@ export function usePayroll() {
 
   const onSubmitPayroll = async () => {
     const payrollObject = {
-      employeeId: 1,
+      employeeId: employeeId,
       basicSalary,
       allowances,
       deductions,
