@@ -1,6 +1,10 @@
 ﻿using EmployeeManagementSystem.Application.DTOs.Salary;
 using EmployeeManagementSystem.Application.Interfaces;
+using EmployeeManagementSystem.Domain.Entities;
+using EmployeeManagementSystem.Domain.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
+
 
 namespace EmployeeManagementSystem.API.Controllers
 {
@@ -9,10 +13,12 @@ namespace EmployeeManagementSystem.API.Controllers
     public class SalaryController : ControllerBase
     {
         private readonly ISalaryService _salaryService;
+        private readonly ISalaryRepository _salaryRepository;
 
-        public SalaryController(ISalaryService salaryService)
+        public SalaryController(ISalaryService salaryService , ISalaryRepository salaryRepository)
         {
             _salaryService = salaryService;
+            _salaryRepository = salaryRepository;
         }
 
         [HttpGet("getSalaries")]
@@ -21,6 +27,20 @@ namespace EmployeeManagementSystem.API.Controllers
             var result = await _salaryService.GetAllSalariesAsync();
             return Ok(result);
         }
+
+        [HttpGet("getSalaryByEmployeeId/{employeeId}")]
+        public async Task<ActionResult<IEnumerable<SalaryResponse>>> GetSalaryByEmployeeId(int employeeId)
+        {
+            var result = await _salaryRepository.GetSalaryByEmployeeId(employeeId);
+
+            if (result == null || !result.Any())
+            {
+                return Ok(new List<SalaryResponse>());
+            }
+
+            return Ok(result);
+        }
+
 
         [HttpGet("getSalary/{id}")]
         public async Task<ActionResult<SalaryResponse>> GetSalaryByIdAsync(int id)
