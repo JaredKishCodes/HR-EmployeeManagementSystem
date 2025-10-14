@@ -684,24 +684,23 @@ const Leaves = () => {
                   </div>
                 </div>
                 {editMode ? (
-                  {role === "Admin"  ? (       <select
-                    name="leaveRequestStatus"
-                    id="leaveRequestStatus"
-                    className="focus:ring-primary-600 focus:border-primary-600 dark:focus:ring-primary-500 dark:focus:border-primary-500 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 dark:border-gray-500 dark:bg-gray-600 dark:text-white dark:placeholder-gray-400"
-                    value={leaveRequestStatus}
-                    onChange={(e) => setLeaveRequestStatus(e.target.value)}
-                  >
-                    <option value="">-- Select Status --</option>
-                    {Object.values(LeaveRequestStatus).map((status) => (
-                      <option key={status} value={status}>
-                        {status}
-                      </option>
-                    ))}
-                  </select>) : (<div>dad</div>)}
-
-                ) : (
-                  <div></div>
-                )}
+                  role === "Admin" ? (
+                    <select
+                      name="leaveRequestStatus"
+                      id="leaveRequestStatus"
+                      className="focus:ring-primary-600 focus:border-primary-600 dark:focus:ring-primary-500 dark:focus:border-primary-500 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 dark:border-gray-500 dark:bg-gray-600 dark:text-white dark:placeholder-gray-400"
+                      value={leaveRequestStatus}
+                      onChange={(e) => setLeaveRequestStatus(e.target.value)}
+                    >
+                      <option value="">-- Select Status --</option>
+                      {Object.values(LeaveRequestStatus).map((status) => (
+                        <option key={status} value={status}>
+                          {status}
+                        </option>
+                      ))}
+                    </select>
+                  ) : null
+                ) : null}
 
                 <button
                   type="submit"
