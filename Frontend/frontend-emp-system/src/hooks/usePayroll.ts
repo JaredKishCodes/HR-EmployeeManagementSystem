@@ -3,8 +3,10 @@ import { Department } from "../Types/department";
 import { Employee } from "../Types/employee";
 import { toast } from "react-toastify";
 import api from "../api";
+import type { Payroll } from "../Types/Payroll";
 
 export function usePayroll() {
+  const [salaries, setSalaries] = useState<Payroll[]>([]);
   const [departmentId, setDepartmentId] = useState<number>(0);
   const [departments, setDepartments] = useState<Department[]>([]);
   const [employeeId, setEmployeeId] = useState<number>(0);
@@ -15,12 +17,16 @@ export function usePayroll() {
   const [payDate, setPayDate] = useState("");
   const [selectedDepartment, setSelectedDepartment] = useState("");
 
-  const role = localStorage.getItem('role');
-  const employeeIdLocalStorage = localStorage.getItem('employeeId');
+  const role = localStorage.getItem("role");
+  const employeeIdLocalStorage = Number(localStorage.getItem("employeeId"));
 
   useEffect(() => {
-    fetchDepartments();
-    fetchEmployees();
+    if (role === "Admin") {
+      fetchDepartments();
+      fetchEmployees();
+    } else {
+      getSalaryByEmployeeId(employeeIdLocalStorage);
+    }
   }, []);
 
   const fetchDepartments = async () => {
@@ -37,6 +43,11 @@ export function usePayroll() {
     } catch (error) {
       console.error(console.error);
     }
+  };
+
+  const getSalaryByEmployeeId = async (id: number) => {
+    const response = await api.get(`/Salary/getSalaryByEmployeeId/${id}`);
+    setSalaries(response.data);
   };
 
   const getEmployeesByDepartment = async (deptId: number) => {
@@ -81,6 +92,7 @@ export function usePayroll() {
   };
 
   return {
+    role,
     departmentId,
     setDepartmentId,
     departments,
