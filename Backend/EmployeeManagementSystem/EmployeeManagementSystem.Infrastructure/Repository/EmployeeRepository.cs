@@ -79,5 +79,18 @@ namespace EmployeeManagementSystem.Infrastructure.Repository
                 .FirstOrDefaultAsync(e => e.UserId == userId);
         }
 
+        public async Task<Employee?> SearchEmployee(string searchTerm)
+        {
+            var employees = _context.Employees.AsQueryable();
+
+            if (!string.IsNullOrEmpty(searchTerm))
+            {
+                employees = employees.Where( e => e.FirstName.Contains(searchTerm) || e.LastName.Contains(searchTerm) || e.Email.Contains(searchTerm));
+            }
+
+            return await employees.FirstOrDefaultAsync();
+
+
+        }
     }
 }

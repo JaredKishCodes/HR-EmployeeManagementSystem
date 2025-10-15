@@ -19,6 +19,7 @@ namespace EmployeeManagementSystem.API.Controllers
         }
 
         // POST: api/Department
+        [Authorize(Roles = "Admin,SystemAdministrator,AdminStaff,DepartmentHeads")]
         [HttpPost]
         public async Task<IActionResult> CreateDepartment([FromBody] CreateDepartment createDepartment)
         {
@@ -30,7 +31,7 @@ namespace EmployeeManagementSystem.API.Controllers
         }
 
         // GET: api/Department
-        [Authorize (Roles ="Admin")]
+        [Authorize(Roles = "Admin,SystemAdministrator,AdminStaff,DepartmentHeads")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<DepartmentResponse>>> GetAllDepartments()
         {
@@ -39,6 +40,7 @@ namespace EmployeeManagementSystem.API.Controllers
         }
 
         // GET: api/Department/{id}
+        [Authorize(Roles = "Admin,Employee,SystemAdministrator,AdminStaff,DepartmentHeads")]
         [HttpGet("{id:int}")]
         public async Task<ActionResult<DepartmentResponse>> GetDepartmentById(int id)
         {
@@ -50,6 +52,7 @@ namespace EmployeeManagementSystem.API.Controllers
         }
 
         // PUT: api/Department/{id}
+        [Authorize(Roles = "Admin,SystemAdministrator,AdminStaff,DepartmentHeads")]
         [HttpPut("{id:int}")]
         public async Task<IActionResult> UpdateDepartment(int id, [FromBody] CreateDepartment updateDepartment)
         {
@@ -68,6 +71,7 @@ namespace EmployeeManagementSystem.API.Controllers
         }
 
         // DELETE: api/Department/{id}
+        [Authorize(Roles = "Admin,SystemAdministrator,AdminStaff,DepartmentHeads")]
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> DeleteDepartment(int id)
         {

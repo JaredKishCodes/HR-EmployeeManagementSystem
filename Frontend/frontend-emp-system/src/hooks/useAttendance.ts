@@ -17,27 +17,30 @@ export function useAttendance() {
   const [editingId, setEditingId] = useState<number | null>(null);
   const [isOpen, setIsOpen] = useState(false);
 
-  const role = localStorage.getItem('role');
-  const employeeId = Number(localStorage.getItem('employeeId'));
+  const role = localStorage.getItem("role");
+  const employeeId = Number(localStorage.getItem("employeeId"));
+
   useEffect(() => {
-    if(role === "Admin"){
+    if (role === "Admin") {
       fetchAttendance();
-    }
-    else{
+    } else {
       getAttendanceByEmployeeid(employeeId);
-    } 
+    }
   }, []);
 
-
-  const getAttendanceByEmployeeid = async (id:number) =>{
-    const response = await api.get(`/Attendance/getAttendanceByEmployeeId/${id}`)
-    setAttendance(response.data)
-  }
+  const getAttendanceByEmployeeid = async (id: number) => {
+    const response = await api.get(
+      `/Attendance/getAttendanceByEmployeeId/${id}`,
+    );
+    setAttendance(response.data);
+    console.log(response.data);
+  };
 
   const fetchAttendance = async () => {
     const result = await AttendanceService.getAllAttendance();
     setAttendance(result);
   };
+  
   //handle submit form
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

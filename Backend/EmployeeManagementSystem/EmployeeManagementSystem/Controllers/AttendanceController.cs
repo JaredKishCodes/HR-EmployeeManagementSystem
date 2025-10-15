@@ -2,6 +2,7 @@
 using EmployeeManagementSystem.Application.Interfaces;
 using EmployeeManagementSystem.Domain.Entities;
 using EmployeeManagementSystem.Domain.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EmployeeManagementSystem.API.Controllers
@@ -20,13 +21,14 @@ namespace EmployeeManagementSystem.API.Controllers
         }
 
         //  GET all attendances
+        [Authorize(Roles = "Admin,SystemAdministrator,AdminStaff,DepartmentHeads")]
         [HttpGet]
         public async Task<IActionResult> GetAllAttendances()
         {
             var attendances = await _attendanceService.GetAllAttendancesAsync();
             return Ok(attendances);
         }
-
+        [Authorize(Roles = "Admin,SystemAdministrator,AdminStaff,DepartmentHeads")]
         [HttpGet("getAttendanceByEmployeeId/{employeeId}")]
         public async Task<IActionResult> GetAttendanceByEmployeeId(int employeeId)
         {
@@ -37,7 +39,7 @@ namespace EmployeeManagementSystem.API.Controllers
             }
             return Ok(attendances);
         }
-
+        [Authorize(Roles = "Admin,Employee,SystemAdministrator,AdminStaff,DepartmentHeads")]
         //  GET attendance by Id
         [HttpGet("{id}")]
         public async Task<IActionResult> GetAttendanceById(int id)
@@ -52,7 +54,7 @@ namespace EmployeeManagementSystem.API.Controllers
                 return NotFound(new { message = ex.Message });
             }
         }
-
+        [Authorize(Roles = "Admin,SystemAdministrator,AdminStaff,DepartmentHeads")]
         //  POST create new attendance
         [HttpPost]
         public async Task<IActionResult> CreateAttendance([FromBody] CreateAttendanceDto dto)
@@ -70,7 +72,7 @@ namespace EmployeeManagementSystem.API.Controllers
                 return BadRequest(new { message = ex.Message });
             }
         }
-
+        [Authorize(Roles = "Admin,Employee,SystemAdministrator,AdminStaff,DepartmentHeads")]
         //  PUT update attendance
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateAttendance(int id, [FromBody] UpdateAttendanceDto dto)
@@ -88,7 +90,7 @@ namespace EmployeeManagementSystem.API.Controllers
                 return NotFound(new { message = ex.Message });
             }
         }
-
+        [Authorize(Roles = "Admin,SystemAdministrator,AdminStaff,DepartmentHeads")]
         // DELETE attendance
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAttendance(int id)

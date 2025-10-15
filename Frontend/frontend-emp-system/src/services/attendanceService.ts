@@ -1,14 +1,6 @@
 import axios from "axios";
 import type { IAttendanceCreateRequest, IAttendanceResponse, IAttendanceUpdateRequest } from "../Types/attendance";
-
-
-const api = axios.create(
-    {
-        baseURL:"https://localhost:7273/api",
-         headers: {
-         "Content-Type": "application/json",
-        },
-    });
+import api from "../api";
 
 
 export const getAllAttendance = async ():Promise<IAttendanceResponse[]> => {

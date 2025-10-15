@@ -29,7 +29,7 @@ namespace EmployeeManagementSystem.API.Controllers
             }
             return Ok(employees);
         }
-        [Authorize(Roles = "Admin, Employee, SystemAdministrator, AdminStaff, DepartmentHeads,")]
+        [Authorize(Roles = "Admin,Employee,SystemAdministrator,AdminStaff,DepartmentHeads,")]
         [HttpGet("getEmployeesByDepartment")]
         public async Task<IActionResult> GetEmployeesByDepartmentAsync(int departmentId)
         {
@@ -40,14 +40,14 @@ namespace EmployeeManagementSystem.API.Controllers
             }
             return Ok(employees);
         }
-        [Authorize(Roles = "Admin, Employee, SystemAdministrator, AdminStaff, DepartmentHeads,")]
+        [Authorize(Roles = "Admin,Employee,SystemAdministrator,AdminStaff,DepartmentHeads")]
         [HttpGet("{id:int}")]
         public async Task<ActionResult<EmployeeResponseDto>> GetEmployeeById(int id)
         {
             var employee = await _employeeService.GetEmployeeByIdAsync(id);
             return Ok(employee);
         }
-        [Authorize(Roles = "Admin, SystemAdministrator, AdminStaff, DepartmentHeads,")]
+        [Authorize(Roles = "Admin,SystemAdministrator,AdminStaff,DepartmentHeads")]
         [HttpPost]
         public async Task<ActionResult<EmployeeResponseDto>> CreateEmployee(CreateEmployeeDto createEmployeeDto)
         {
@@ -63,7 +63,7 @@ namespace EmployeeManagementSystem.API.Controllers
             }
             return Ok(employee);
         }
-        [Authorize(Roles = "Admin, Employee, SystemAdministrator, AdminStaff, DepartmentHeads,")]
+        [Authorize(Roles = "Admin,SystemAdministrator,AdminStaff,DepartmentHeads")]
         [HttpPut("{id}")]
         public async Task<ActionResult<EmployeeResponseDto>> UpdateEmployee(int id, UpdateEmployeeDto updateEmployeeDto)
         {
@@ -82,7 +82,7 @@ namespace EmployeeManagementSystem.API.Controllers
                 return NotFound(ex.Message);
             }
         }
-        [Authorize(Roles = "Admin, SystemAdministrator, AdminStaff, DepartmentHeads,")]
+        [Authorize(Roles = "Admin,SystemAdministrator,AdminStaff,DepartmentHeads")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteEmployee(int id)
         {

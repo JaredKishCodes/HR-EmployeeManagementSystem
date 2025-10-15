@@ -2,6 +2,7 @@
 using EmployeeManagementSystem.Application.Interfaces;
 using EmployeeManagementSystem.Domain.Entities;
 using EmployeeManagementSystem.Domain.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,6 +20,7 @@ namespace EmployeeManagementSystem.API.Controllers
             _leaveRequestRepository = leaveRequestRepository;
         }
 
+        [Authorize(Roles = "Admin,SystemAdministrator,AdminStaff,DepartmentHeads")]
         [HttpGet("GetAllLeaveRequests")]
         public async Task<ActionResult<LeaveRequestResponseDto>> GetAllLeaveRequests()
         {
@@ -29,7 +31,7 @@ namespace EmployeeManagementSystem.API.Controllers
             }
             return Ok(leaveRequests);
         }
-
+        [Authorize(Roles = "Admin,Employee,SystemAdministrator,AdminStaff,DepartmentHeads")]
         [HttpGet("getLeaveRequestByEmployeeId/{employeeId}")]
         public async Task<ActionResult<IEnumerable<LeaveRequestResponseDto>>> GetLeaveRequestByEmployeeId(int employeeId)
         {
@@ -40,14 +42,14 @@ namespace EmployeeManagementSystem.API.Controllers
             }
             return Ok(leaveRequests);
         }
-
+        [Authorize(Roles = "Admin,Employee,SystemAdministrator,AdminStaff,DepartmentHeads")]
         [HttpGet("{id:int}")]
         public async Task<ActionResult<LeaveRequestResponseDto>> GetLeaveRequestById(int id)
         {
             var leaveRequest = await _leaveRequestService.GetLeaveRequestByIdAsync(id);
             return Ok(leaveRequest);
         }
-
+        [Authorize(Roles = "Admin,Employee,SystemAdministrator,AdminStaff,DepartmentHeads")]
         [HttpPost("CreateLeaveRequest")]
         public async Task<ActionResult<LeaveRequestResponseDto>> CreateLeaveRequestAsync([FromBody]CreateLeaveRequestDto createLeaveRequestDto)
         {
@@ -62,7 +64,7 @@ namespace EmployeeManagementSystem.API.Controllers
             }
             return Ok(leaveRequest);
         }
-
+        [Authorize(Roles = "Admin,Employee,SystemAdministrator,AdminStaff,DepartmentHeads")]
         [HttpPut("{id}")]
         public async Task<ActionResult<LeaveRequestResponseDto>> UpdateLeaveRequestDto( int id, [FromBody] UpdateLeaveRequestDto updateLeaveRequestDto)
         {
@@ -80,7 +82,7 @@ namespace EmployeeManagementSystem.API.Controllers
 
             return Ok(leaveRequest);
         }
-
+        [Authorize(Roles = "Admin,Employee,SystemAdministrator,AdminStaff,DepartmentHeads")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteLeaveRequest(int id)
         {

@@ -2,6 +2,7 @@
 using EmployeeManagementSystem.Application.Interfaces;
 using EmployeeManagementSystem.Domain.Entities;
 using EmployeeManagementSystem.Domain.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 
@@ -20,14 +21,14 @@ namespace EmployeeManagementSystem.API.Controllers
             _salaryService = salaryService;
             _salaryRepository = salaryRepository;
         }
-
+        [Authorize(Roles = "Admin,SystemAdministrator,AdminStaff,DepartmentHeads")]
         [HttpGet("getSalaries")]
         public async Task<ActionResult<IEnumerable<SalaryResponse>>> GetSalariesAsync()
         {
             var result = await _salaryService.GetAllSalariesAsync();
             return Ok(result);
         }
-
+        [Authorize(Roles = "Admin,Employee,SystemAdministrator,AdminStaff,DepartmentHeads")]
         [HttpGet("getSalaryByEmployeeId/{employeeId}")]
         public async Task<ActionResult<IEnumerable<SalaryResponse>>> GetSalaryByEmployeeId(int employeeId)
         {
@@ -41,7 +42,7 @@ namespace EmployeeManagementSystem.API.Controllers
             return Ok(result);
         }
 
-
+        [Authorize(Roles = "Admin,Employee,SystemAdministrator,AdminStaff,DepartmentHeads")]
         [HttpGet("getSalary/{id}")]
         public async Task<ActionResult<SalaryResponse>> GetSalaryByIdAsync(int id)
         {
@@ -51,7 +52,7 @@ namespace EmployeeManagementSystem.API.Controllers
 
             return Ok(result);
         }
-
+        [Authorize(Roles = "Admin,SystemAdministrator,AdminStaff,DepartmentHeads")]
         [HttpPost("addSalary")]
         public async Task<ActionResult<SalaryResponse>> AddSalary([FromBody] AddSalaryDto addSalaryDto)
         {
@@ -59,7 +60,7 @@ namespace EmployeeManagementSystem.API.Controllers
 
             return Ok(result);
         }
-
+        [Authorize(Roles = "Admin,SystemAdministrator,AdminStaff,DepartmentHeads")]
         [HttpPut("updateSalary/{id}")]
         public async Task<ActionResult<SalaryResponse>> UpdateSalaryAsync(int id, [FromBody] UpdateSalaryDto updateSalaryDto)
         {
@@ -70,6 +71,7 @@ namespace EmployeeManagementSystem.API.Controllers
             return Ok(result);
         }
 
+        [Authorize(Roles = "Admin,SystemAdministrator,AdminStaff,DepartmentHeads")]
         [HttpDelete("deleteSalary/{id}")]
         public async Task<IActionResult> DeleteSalaryAsync(int id)
         {
