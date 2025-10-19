@@ -156,5 +156,22 @@ namespace EmployeeManagementSystem.Application.Services
             };
         }
 
+        public async Task<IEnumerable<AttendanceResponseDto>> GetAttendaceByEmployeeId(int employeeId)
+        {
+            var employeeAttendance = await _attendanceRepository.GetAttendaceByEmployeeId(employeeId);
+
+            return employeeAttendance.Select(x => new AttendanceResponseDto
+            {
+                Id = x.Id,
+                EmployeeId = x.EmployeeId,
+                EmployeeFirstName = x.Employee?.FirstName,
+                EmployeeLastName = x.Employee?.LastName,
+                Date = x.Date.ToString("yyyy-MM-ddTHH:mm:ss"),
+                TimeIn = x.TimeIn.ToOffset(PhilippineOffset).ToString("yyyy-MM-ddTHH:mm:ss"),
+                TimeOut = x.TimeOut?.ToOffset(PhilippineOffset).ToString("yyyy-MM-ddTHH:mm:ss"),
+                AttendanceStatus = x.AttendanceStatus,
+                TotalHours = x.TotalHours,
+            });
+        }
     }
 }

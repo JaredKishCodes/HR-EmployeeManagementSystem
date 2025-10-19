@@ -8,3 +8,5 @@ export interface Payroll {
   totalSalary: number;
   payDate: Date; 
 }
+
+

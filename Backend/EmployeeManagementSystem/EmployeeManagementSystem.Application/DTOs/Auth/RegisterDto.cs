@@ -12,6 +12,9 @@ namespace EmployeeManagementSystem.Application.DTOs.Auth
         [Required(ErrorMessage = "Last Name is required.")]
         public string LastName { get; set; } = string.Empty;
 
+        [Required(ErrorMessage = "Phone Number is required.")]
+        public string? PhoneNumber { get; set; }
+
         [Required(ErrorMessage = "Email is required.")]
         [EmailAddress(ErrorMessage = "Invalid email format.")]
         public string Email { get; set; } = string.Empty;

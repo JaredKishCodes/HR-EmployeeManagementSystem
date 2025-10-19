@@ -17,6 +17,7 @@ const Login = () => {
   const [registerPassword, setRegisterPassword] = useState("");
   const [confirmRegisterPassword, setConfirmRegisterPassword] = useState("");
   const [registerEmail, setRegisterEmail] = useState("");
+  const [registerPhoneNumber ,setPhoneNumber] = useState("");
 
   const onLogin = async (e: React.FormEvent) => {
     e.preventDefault();

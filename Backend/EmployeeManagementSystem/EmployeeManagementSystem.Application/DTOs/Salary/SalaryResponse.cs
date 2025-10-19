@@ -4,7 +4,6 @@ namespace EmployeeManagementSystem.Application.DTOs.Salary
     public class SalaryResponse
     {
         public int Id { get; set; }
-
         public string? EmployeeName { get; set; }
         public string? DepartmentName { get; set; }
         public decimal BasicSalary { get; set; }

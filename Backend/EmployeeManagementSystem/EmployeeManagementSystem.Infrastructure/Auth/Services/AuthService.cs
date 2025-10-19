@@ -83,7 +83,8 @@ namespace EmployeeManagementSystem.Infrastructure.Auth.Services
                 Email = registerDto.Email,
                 UserName = registerDto.Email,
                 FirstName = registerDto.FirstName,
-                LastName = registerDto.LastName
+                LastName = registerDto.LastName,
+                PhoneNumber = registerDto.PhoneNumber
             };
 
             var createdUser = await _userManager.CreateAsync(newUser, registerDto.Password);
@@ -109,7 +110,7 @@ namespace EmployeeManagementSystem.Infrastructure.Auth.Services
                 FirstName = newUser.FirstName,
                 LastName = newUser.LastName,
                 Email = newUser.Email,
-                PhoneNumber = null,
+                PhoneNumber = newUser.PhoneNumber,
                 Position = Domain.Enum.Position.User,
                 HireDate = DateTime.UtcNow,
                 Status = Domain.Enum.Status.Active,
@@ -134,7 +135,7 @@ namespace EmployeeManagementSystem.Infrastructure.Auth.Services
                 Id = newUser.Id, // Change this if your AppUser.Id is string or Guid
                 Email = newUser.Email!,
                 FirstName = newUser.FirstName,
-                LastName = newUser.LastName
+                LastName = newUser.LastName,               
             }, roles.ToList());
 
             return new AuthResponseDto
@@ -143,6 +144,7 @@ namespace EmployeeManagementSystem.Infrastructure.Auth.Services
                 Email = newUser.Email,
                 FirstName = newUser.FirstName,
                 LastName = newUser.LastName,
+                PhoneNumber = newUser.PhoneNumber
 
             };
         }

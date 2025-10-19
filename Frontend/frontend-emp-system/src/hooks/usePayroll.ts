@@ -48,6 +48,8 @@ export function usePayroll() {
   const getSalaryByEmployeeId = async (id: number) => {
     const response = await api.get(`/Salary/getSalaryByEmployeeId/${id}`);
     setSalaries(response.data);
+    console.log(response.data);
+    
   };
 
   const getEmployeesByDepartment = async (deptId: number) => {
@@ -113,5 +115,7 @@ export function usePayroll() {
     handleDepartmentChange,
     selectedDepartment,
     setSelectedDepartment,
+    salaries,
+    setSalaries
   };
 }

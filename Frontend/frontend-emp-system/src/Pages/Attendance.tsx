@@ -36,7 +36,7 @@ const Attendance = (props: Props) => {
   } = useAttendance();
   return (
     <div>
-      <div className="relative overflow-x-auto sm:rounded-lg">
+      <div className="relative max-h-dvh overflow-x-auto sm:rounded-lg">
         <button
           onClick={handleAddButton}
           type="button"
@@ -85,86 +85,58 @@ const Attendance = (props: Props) => {
               </th>
             </tr>
           </thead>
-          {attendance.map((attendance) => (
-            <tbody key={attendance.id}>
-              <tr className="border-b border-gray-200 bg-white hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-600">
-                <td className="w-4 p-4">
-                  <div className="flex items-center">
-                    <input
-                      id="checkbox-table-search-1"
-                      type="checkbox"
-                      className="h-4 w-4 rounded-sm border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600 dark:focus:ring-offset-gray-800"
-                    />
-                    <label
-                      htmlFor="checkbox-table-search-1"
-                      className="sr-only"
-                    >
-                      checkbox
-                    </label>
-                  </div>
-                </td>
-                <th
-                  scope="row"
-                  className="px-6 py-4 font-medium whitespace-nowrap text-gray-900 dark:text-white"
-                >
-                  {attendance.employeeId}
-                </th>
-              
-                <td className="px-6 py-4">
-                  {attendance.employeeFirstName}{" "}
-                  <span>{attendance.employeeLastName} </span>{" "}
-                </td>
-                <td className="px-6 py-4">{" "}
-                  {new Date(attendance.date).toLocaleString("en-US", {
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric",
-                    
-                  })}</td>
-                <td className="px-6 py-4">
-                  {" "}
-                  {new Date(attendance.timeIn).toLocaleString("en-US", {
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric",
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  })}
-                </td>
-                <td className="px-6 py-4">
-                  {" "}
-                  {new Date(attendance.timeOut).toLocaleString("en-US", {
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric",
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  })}
-                </td>
-                <td className="px-6 py-4">{attendance.totalHours} hours</td>
-                <td className="px-6 py-4">
-                  {attendanceStatusMap[Number(attendance.attendanceStatus)]}
-                </td>
-
-                <td className="py-4 pl-7">
-                  <a
-                    onClick={() => handleEdit(attendance.id)}
-                    className="cursor-pointer font-medium text-blue-600 hover:underline dark:text-blue-500"
-                  >
-                    Edit
-                  </a>
-                </td>
-                <td className="py-4 pr-7">
-                  <a
-                    onClick={() => handleDelete(attendance.id)}
-                    className="cursor-pointer font-medium text-red-600 hover:underline dark:text-blue-500"
-                  >
-                    Delete
-                  </a>
-                </td>
-              </tr>
-            </tbody>
-          ))}
+           <tbody>
+    {attendance.length === 0 ? (
+      <tr>
+        <td colSpan={9} className="px-6 py-4 text-center text-gray-500 dark:text-gray-400">
+          No attendance records found
+        </td>
+      </tr>
+    ) : (
+      attendance.map((attendance) => (
+        <tr
+          key={attendance.id}
+          className="border-b border-gray-200 bg-white hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-600"
+        >
+          <td className="w-4 p-4">
+            <input type="checkbox" className="h-4 w-4 rounded-sm" />
+          </td>
+          <td className="px-6 py-4">{attendance.employeeId}</td>
+          <td className="px-6 py-4">
+            {attendance.employeeFirstName} {attendance.employeeLastName}
+          </td>
+          <td className="px-6 py-4">
+            {new Date(attendance.date).toLocaleDateString("en-US")}
+          </td>
+          <td className="px-6 py-4">
+            {new Date(attendance.timeIn).toLocaleString("en-US", {
+              hour: "2-digit",
+              minute: "2-digit",
+            })}
+          </td>
+          <td className="px-6 py-4">
+            {new Date(attendance.timeOut).toLocaleString("en-US", {
+              hour: "2-digit",
+              minute: "2-digit",
+            })}
+          </td>
+          <td className="px-6 py-4">{attendance.totalHours} hours</td>
+          <td className="px-6 py-4">
+            {attendanceStatusMap[Number(attendance.attendanceStatus)]}
+          </td>
+          <td className="py-4 px-6">
+            <a onClick={() => handleEdit(attendance.id)} className="text-blue-600 cursor-pointer">
+              Edit
+            </a>{" "}
+            |{" "}
+            <a onClick={() => handleDelete(attendance.id)} className="text-red-600 cursor-pointer">
+              Delete
+            </a>
+          </td>
+        </tr>
+      ))
+    )}
+  </tbody>
         </table>
 
         <nav

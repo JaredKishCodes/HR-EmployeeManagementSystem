@@ -53,8 +53,9 @@ namespace EmployeeManagementSystem.API.Controllers
             {
                 return NotFound(new { message = ex.Message });
             }
-        }
-        [Authorize(Roles = "Admin,SystemAdministrator,AdminStaff,DepartmentHeads")]
+        }     
+
+        [Authorize(Roles = "Admin,Employee,SystemAdministrator,AdminStaff,DepartmentHeads")]
         //  POST create new attendance
         [HttpPost]
         public async Task<IActionResult> CreateAttendance([FromBody] CreateAttendanceDto dto)

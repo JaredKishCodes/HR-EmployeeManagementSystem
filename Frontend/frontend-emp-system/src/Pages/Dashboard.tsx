@@ -63,18 +63,8 @@ const Dashboard = () => {
         </ul>
       </div>
 
-      {/* Quick Links / Actions (Optional) */}
-      <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
-        <button className="rounded-lg bg-indigo-500 p-4 text-white shadow transition hover:bg-indigo-600">
-          Add Employee
-        </button>
-        <button className="rounded-lg bg-green-500 p-4 text-white shadow transition hover:bg-green-600">
-          Process Payroll
-        </button>
-        <button className="rounded-lg bg-yellow-500 p-4 text-white shadow transition hover:bg-yellow-600">
-          View Leaves
-        </button>
-      </div>
+     
+     
     </div>
   );
 };

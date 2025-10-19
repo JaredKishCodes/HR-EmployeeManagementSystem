@@ -41,7 +41,7 @@ namespace EmployeeManagementSystem.Infrastructure.Repository
 
         public  async Task<IEnumerable<Attendance>> GetAttendaceByEmployeeId(int employeeId)
         {
-          return  await _context.Attendances.Where(x => x.EmployeeId == employeeId).ToListAsync();
+          return  await _context.Attendances.Include(a => a.Employee).Where(x => x.EmployeeId == employeeId).ToListAsync();
         }
 
         public async Task<Attendance> GetAttendanceByIdAsync(int id)
@@ -61,7 +61,7 @@ namespace EmployeeManagementSystem.Infrastructure.Repository
 
                 if (attendance.TimeOut.HasValue)
                 {
-                    existingAttendance.TotalHours = (decimal)(attendance.TimeIn - attendance.TimeOut.Value).TotalHours;
+                    existingAttendance.TotalHours = (decimal)(attendance.TimeOut.Value - attendance.TimeIn).TotalHours;
                 }
 
                 _context.Attendances.Update(existingAttendance);

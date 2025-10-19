@@ -140,6 +140,23 @@ namespace EmployeeManagementSystem.Application.Services
                  };
         }
 
+        public async Task<IEnumerable<SalaryResponse>> GetSalariesByEmployeeId(int employeeId)
+        {
+            var salaries = await salaryRepository.GetSalaryByEmployeeId(employeeId);
+
+            return salaries.Select(salary => new SalaryResponse
+            {
+                Id = salary?.Id ?? 0,
+                EmployeeName = salary?.Employee?.FirstName ?? "Unknown", // Null check added
+                DepartmentName = salary?.Employee?.Department?.Name ?? "Unknown",  // Null check added
+                BasicSalary = salary?.BasicSalary ?? 0,
+                Allowance = salary?.Allowances ?? 0,
+                Deductions = salary?.Deductions ?? 0,
+                PayDate = salary?.PayDate ?? DateTime.MinValue,
+                TotalSalary = salary?.TotalSalary ?? 0
+            });
+        }
+
         
     }
 }
