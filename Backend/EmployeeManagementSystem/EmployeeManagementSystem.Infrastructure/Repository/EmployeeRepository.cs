@@ -85,7 +85,9 @@ namespace EmployeeManagementSystem.Infrastructure.Repository
 
             if (!string.IsNullOrEmpty(searchTerm))
             {
-                employees = employees.Where( e => e.FirstName.Contains(searchTerm) || e.LastName.Contains(searchTerm) || e.Email.Contains(searchTerm));
+                employees = employees.Where( e => e.FirstName.ToLower().Contains(searchTerm) 
+                                                || e.LastName.ToLower().Contains(searchTerm) 
+                                                  || e.Email.ToLower().Contains(searchTerm);
             }
 
             return await employees.FirstOrDefaultAsync();
