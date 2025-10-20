@@ -17,7 +17,7 @@ const Login = () => {
   const [registerPassword, setRegisterPassword] = useState("");
   const [confirmRegisterPassword, setConfirmRegisterPassword] = useState("");
   const [registerEmail, setRegisterEmail] = useState("");
-  const [registerPhoneNumber ,setPhoneNumber] = useState("");
+  const [registerPhoneNumber ,setRegisterPhoneNumber] = useState("");
 
   const onLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -65,6 +65,7 @@ const Login = () => {
     const registerForm = {
       firstName: registerFirstName,
       lastName: registerLastName,
+      phoneNumber : registerPhoneNumber,
       email: registerEmail,
       password: registerPassword,
       confirmPassword: confirmRegisterPassword,
@@ -76,11 +77,13 @@ const Login = () => {
         registerForm,
       );
       console.log("Registration successful:", res.data);
+      toast.success("Registration successful")
 
       // Optional: auto-login or show success message
       setHasAccount(true);
     } catch (err: any) {
       console.error("Registration failed:", err.response?.data || err.message);
+      toast.error("Registration failed")
     }
   };
 
@@ -237,9 +240,28 @@ const Login = () => {
                 />
               </div>
             </div>
+         <div className="flex flex-col sm:flex-row sm:gap-4">
+            {/* Phone Number */}
+            <div className="flex flex-1 flex-col text-left">
+              <label
+                htmlFor="phoneNumber"
+                className="mb-1 text-sm font-medium text-gray-200"
+              >
+                Phone Number
+              </label>
+              <input
+                type="tel"
+                id="phoneNumber"
+                className="w-full rounded-lg border border-gray-600 bg-gray-800 px-4 py-2 text-gray-50 outline-none focus:border-gray-400 focus:ring-1 focus:ring-gray-400"
+                placeholder="Enter phone number"
+                onChange={(e) => setRegisterPhoneNumber(e.target.value)}
+                value={registerPhoneNumber}
+                required
+              />
+            </div>
 
             {/* Email */}
-            <div className="flex flex-col text-left">
+            <div className="flex flex-col flex-1 text-left">
               <label
                 htmlFor="email"
                 className="mb-1 text-sm font-medium text-gray-200"
@@ -249,13 +271,16 @@ const Login = () => {
               <input
                 type="email"
                 id="email"
-                className="rounded-lg border border-gray-600 bg-gray-800 px-4 py-2 text-gray-50 outline-none focus:border-gray-400 focus:ring-1 focus:ring-gray-400"
+                className="w-full text-sm rounded-lg border border-gray-600 bg-gray-800 px-4 py-2 text-gray-50 outline-none focus:border-gray-400 focus:ring-1 focus:ring-gray-400"
                 placeholder="Enter your email"
                 onChange={(e) => setRegisterEmail(e.target.value)}
                 value={registerEmail}
                 required
               />
             </div>
+          </div>
+
+          
 
             {/* Password */}
             <div className="flex flex-col text-left">

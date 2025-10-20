@@ -62,7 +62,7 @@ const EmployeeDetails = () => {
                 employee.status === "Active" ? "text-green-600" : "text-red-600"
               }`}
             >
-              {employee.status}
+              {employee.status || "Not assigned"}
             </span>
           </div>
           <div className="flex justify-between border-b pb-2">

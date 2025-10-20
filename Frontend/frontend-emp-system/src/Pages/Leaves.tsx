@@ -34,12 +34,6 @@ const Leaves = () => {
   const [leaveRequestStatus, setLeaveRequestStatus] = useState("");
   const [approvedBy, setApprovedBy] = useState("");
 
-  useEffect(() => {
-    if (role === "Admin") {
-      fetchLeaveRequests();
-    }
-  }, []);
-
   const fetchLeaveRequests = async () => {
     try {
       const response = await api.get(`/LeaveRequest/GetAllLeaveRequests`);
@@ -94,7 +88,7 @@ const Leaves = () => {
             startDate: cleanStartDate,
             endDate: cleanEndDate,
             leaveRequestStatus: LeaveRequestStatusApiMap[leaveRequestStatus],
-            approvedBy: 1,
+            approvedBy: Number(approvedBy),
             reason,
           }
         : {
@@ -155,6 +149,13 @@ const Leaves = () => {
         const response = await api.delete(`/LeaveRequest/${id}`);
         console.log("Leave Request deleted successfully", response.data);
         toast.success("Leave Request deleted successfully");
+
+        if (role === "Admin") {
+        fetchLeaveRequests();
+      } else {
+        getLeaveRequestsByEmployeeId(employeeId);
+      }
+
       } catch (error) {
         console.error("Failed to delete leaveRequest", error);
       }
@@ -175,12 +176,15 @@ const Leaves = () => {
     }
   }, []);
 
-  const resetForm = () => {
-    setLeaveType("");
-    setStartDate("");
-    setEndDate("");
-    setReason("");
-  };
+ const resetForm = () => {
+  setLeaveType("");
+  setStartDate("");
+  setEndDate("");
+  setReason("");
+  setLeaveRequestStatus("");
+  setApprovedBy("");
+};
+
 
   const leaveTypeMap: Record<number, string> = {
     0: "Vacation",
@@ -281,7 +285,13 @@ const Leaves = () => {
             </thead>
 
             <tbody>
-              {leaveRequests.map((leaveRequest) => (
+              {leaveRequests.length === 0 ? (
+              <tr>
+                <td colSpan={9} className="px-6 py-4 text-center text-gray-500 dark:text-gray-400">
+                  No leave request records found
+                </td>
+              </tr>
+            ) : ( leaveRequests.map((leaveRequest) => (
                 <tr
                   key={leaveRequest.id}
                   className="border-b border-gray-200 bg-white hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-600"
@@ -354,7 +364,8 @@ const Leaves = () => {
                     </a>
                   </td>
                 </tr>
-              ))}
+              )))}
+             
             </tbody>
           </table>
 

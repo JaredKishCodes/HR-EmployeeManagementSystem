@@ -173,93 +173,6 @@ const Payroll = () => {
           </form>
         </div>
       ) : null}
-      {role === "Employee" ? (
-        <div className="rounded-lg bg-white p-4 shadow-lg dark:border-gray-700">
-          <div>
-            <div className="relative overflow-x-auto sm:rounded-lg">
-              {/* Table */}
-              <table className="w-full text-left text-sm text-gray-500 rtl:text-right dark:text-gray-400">
-                <thead className="bg-gray-50 text-xs text-gray-700 uppercase dark:bg-gray-700 dark:text-gray-400">
-                  <tr>
-                    <th scope="col" className="p-4">
-                      <div className="flex items-center">
-                        <input
-                          id="checkbox-all-search"
-                          type="checkbox"
-                          className="h-4 w-4 rounded-sm border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600 dark:focus:ring-offset-gray-800"
-                        />
-                        <label
-                          htmlFor="checkbox-all-search"
-                          className="sr-only"
-                        >
-                          checkbox
-                        </label>
-                      </div>
-                    </th>
-                    <th scope="col" className="px-6 py-3">
-                      Employee Id
-                    </th>
-                    <th scope="col" className="px-6 py-3">
-                      Basic Salary
-                    </th>
-                    <th scope="col" className="px-6 py-3">
-                      Allowances
-                    </th>
-                    <th scope="col" className="px-6 py-3">
-                      Deductions
-                    </th>
-                    <th scope="col" className="px-6 py-3">
-                      Pay Date
-                    </th>
-                    <th scope="col" className="px-6 py-3">
-                      Total Hours
-                    </th>
-                    <th scope="col" className="px-6 py-3">
-                      Total Salary
-                    </th>
-                  </tr>
-                </thead>
-                <tbody></tbody>
-              </table>
-
-              {/* Pagination */}
-              <nav
-                className="flex flex-wrap items-center justify-between pt-4 md:flex-row"
-                aria-label="Table navigation"
-              >
-                <span className="mb-4 block w-full text-sm font-normal text-gray-500 md:mb-0 md:inline md:w-auto dark:text-gray-400">
-                  Showing{" "}
-                  <span className="font-semibold text-gray-900 dark:text-white">
-                    1-10
-                  </span>{" "}
-                  of{" "}
-                  <span className="font-semibold text-gray-900 dark:text-white">
-                    100
-                  </span>
-                </span>
-                <ul className="inline-flex h-8 -space-x-px text-sm rtl:space-x-reverse">
-                  <li>
-                    <a
-                      href="#"
-                      className="ms-0 flex h-8 items-center justify-center rounded-s-lg border border-gray-300 bg-white px-3 leading-tight text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-                    >
-                      Previous
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="#"
-                      className="flex h-8 items-center justify-center border border-gray-300 bg-white px-3 leading-tight text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-                    >
-                      1
-                    </a>
-                  </li>
-                </ul>
-              </nav>
-            </div>
-          </div>
-        </div>
-      ) : null}
 
     {role === "Employee" ? (
       <div className="relative max-h-dvh overflow-x-auto sm:rounded-lg">
@@ -291,7 +204,7 @@ const Payroll = () => {
             {salaries.length === 0 ? (
               <tr>
                 <td colSpan={9} className="px-6 py-4 text-center text-gray-500 dark:text-gray-400">
-                  No attendance records found
+                  No payroll records found
                 </td>
               </tr>
             ) : (
