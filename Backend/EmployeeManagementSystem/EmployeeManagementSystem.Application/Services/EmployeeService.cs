@@ -63,24 +63,24 @@ namespace EmployeeManagementSystem.Application.Services
 
 
         public async Task<IEnumerable<EmployeeResponseDto>> GetAllEmployeesAsync()
-        {   
+        {
             var employees = await _employeeRepository.GetAllEmployeesAsync();
-            
 
-            return employees.Select(x => new EmployeeResponseDto
-            {
-                Id = x.Id,
-                FirstName = x.FirstName,
-                LastName = x.LastName,
-                Email = x.Email,
-                PhoneNumber = x.PhoneNumber,
-                Position = x.Position,
-                HireDate = x.HireDate,
-                Status = x.Status,
-                DepartmentName = x.Department?.Name,
-                
-               
-            });
+            // Ensure that the employees list is not null and contains valid Employee objects
+            return employees
+                .Where(x => x != null) // Filter out null entries
+                .Select(x => new EmployeeResponseDto
+                {
+                    Id = x.Id,
+                    FirstName = x.FirstName,
+                    LastName = x.LastName,
+                    Email = x.Email,
+                    PhoneNumber = x.PhoneNumber,
+                    Position = x.Position,
+                    HireDate = x.HireDate,
+                    Status = x.Status,
+                    DepartmentName = x.Department?.Name,
+                });
         }
 
         public async Task<EmployeeResponseDto> GetEmployeeByIdAsync(int id)
@@ -111,6 +111,39 @@ namespace EmployeeManagementSystem.Application.Services
 
             return employeeDto;
         }
+
+        public async Task<List<EmployeeResponseDto>> SearchEmployee(string searchTerm)
+        {
+            var employees = await _employeeRepository.SearchEmployee(searchTerm);
+
+            if (employees == null || !employees.Any())
+                return new List<EmployeeResponseDto>();
+
+            var employeeDtos = new List<EmployeeResponseDto>();
+
+            foreach (var e in employees)
+            {
+                var department = await _departmentRepository.GetDepartmentByIdAsync(e?.Department?.Id ?? 0);
+
+                employeeDtos.Add(new EmployeeResponseDto
+                {
+                    Id = e.Id,
+                    FirstName = e.FirstName,
+                    LastName = e.LastName,
+                    Email = e.Email,
+                    PhoneNumber = e.PhoneNumber,
+                    Position = e.Position,
+                    HireDate = e.HireDate,
+                    Status = e.Status,
+                    //DepartmentId = e.DepartmentId ?? 0,
+                    DepartmentName = department?.Name // if your DTO has a DepartmentName field
+                });
+            }
+
+            return employeeDtos;
+        }
+
+
 
 
         public async Task<EmployeeResponseDto> UpdateEmployeeAsync(int id, UpdateEmployeeDto updateEmployeeDto)

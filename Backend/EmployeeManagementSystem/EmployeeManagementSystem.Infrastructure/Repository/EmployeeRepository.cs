@@ -79,7 +79,8 @@ namespace EmployeeManagementSystem.Infrastructure.Repository
                 .FirstOrDefaultAsync(e => e.UserId == userId);
         }
 
-        public async Task<Employee?> SearchEmployee(string searchTerm)
+
+        public async Task<List<Employee?>> SearchEmployee(string searchTerm)
         {
             var employees = _context.Employees.AsQueryable();
 
@@ -87,10 +88,10 @@ namespace EmployeeManagementSystem.Infrastructure.Repository
             {
                 employees = employees.Where( e => e.FirstName.ToLower().Contains(searchTerm) 
                                                 || e.LastName.ToLower().Contains(searchTerm) 
-                                                  || e.Email.ToLower().Contains(searchTerm);
+                                                  || e.Email.ToLower().Contains(searchTerm));
             }
 
-            return await employees.FirstOrDefaultAsync();
+            return await employees.ToListAsync();
 
 
         }
